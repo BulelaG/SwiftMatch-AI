@@ -66,7 +66,10 @@ export class HomeComponent implements OnInit {
   claudeAuditNarrative: string | null = null;
   claudeAuditSource: string | null = null;
   activeDetailTab: 'feasibility' | 'bbbee' | 'bom' | 'claude' = 'feasibility';
-  candidateFilter: 'all' | 'eligible' = 'all';
+  candidateFilter: 'all' | 'eligible' | 'shortlisted' = 'all';
+  candidateSearchQuery: string = '';
+  shortlistedIds: string[] = [];
+  copiedSummaryToast: boolean = false;
   showAuditMemo: boolean = false;
 
   // Responsible AI model card
@@ -136,10 +139,50 @@ export class HomeComponent implements OnInit {
   }
 
   get filteredMatches(): any[] {
+    let list = this.matches;
     if (this.candidateFilter === 'eligible') {
-      return this.matches.filter(m => m.eligible);
+      list = list.filter(m => m.eligible);
+    } else if (this.candidateFilter === 'shortlisted') {
+      list = list.filter(m => this.shortlistedIds.includes(m.sme.id));
     }
-    return this.matches;
+    if (this.candidateSearchQuery && this.candidateSearchQuery.trim()) {
+      const q = this.candidateSearchQuery.toLowerCase().trim();
+      list = list.filter(m => 
+        (m.sme?.businessName && m.sme.businessName.toLowerCase().includes(q)) ||
+        (m.sme?.location && m.sme.location.toLowerCase().includes(q)) ||
+        (m.sme?.owner && m.sme.owner.toLowerCase().includes(q)) ||
+        (m.sme?.category && m.sme.category.toLowerCase().includes(q))
+      );
+    }
+    return list;
+  }
+
+  toggleShortlist(smeId: string, event?: Event): void {
+    if (event) event.stopPropagation();
+    const idx = this.shortlistedIds.indexOf(smeId);
+    if (idx > -1) {
+      this.shortlistedIds.splice(idx, 1);
+    } else {
+      this.shortlistedIds.push(smeId);
+    }
+  }
+
+  isShortlisted(smeId: string): boolean {
+    return this.shortlistedIds.includes(smeId);
+  }
+
+  setQuantity(qty: number): void {
+    this.requiredQuantity = qty;
+  }
+
+  copySourcingSummary(m: any): void {
+    if (!m) return;
+    const summary = `SWIFTMATCH AI ESD VENDOR SELECTION\n---------------------------------\nSupplier: ${m.sme?.businessName} (${m.sme?.owner}, ${m.sme?.location})\nOrder: ${this.requiredQuantity} units (${this.rfqText})\nBudget: R${(this.budgetZAR || 0).toLocaleString()} (Recognized at 135%: R${Math.round((this.budgetZAR || 0) * 1.35).toLocaleString()})\nDelivery: ${this.resolvedSite?.name || this.targetLocation} in ${this.maxTurnaroundDays} days\nMatch Fit: ${m.matchPercentage}% · Level 1 EME Verified`;
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(summary);
+      this.copiedSummaryToast = true;
+      setTimeout(() => this.copiedSummaryToast = false, 3000);
+    }
   }
 
   private buildPayload(): MatchRequest {

@@ -150,6 +150,12 @@
                        [(ngModel)]="requiredQuantity"
                        [class.is-invalid]="isSubmitted && errors.requiredQuantity"
                        min="1">
+                <div class="quick-qty-pills">
+                  <button type="button" class="btn-qty-pill" [class.active]="requiredQuantity === 50" (click)="setQuantity(50)">50</button>
+                  <button type="button" class="btn-qty-pill" [class.active]="requiredQuantity === 150" (click)="setQuantity(150)">150</button>
+                  <button type="button" class="btn-qty-pill" [class.active]="requiredQuantity === 300" (click)="setQuantity(300)">300</button>
+                  <button type="button" class="btn-qty-pill" [class.active]="requiredQuantity === 500" (click)="setQuantity(500)">500</button>
+                </div>
                 <div *ngIf="isSubmitted && errors.requiredQuantity" class="invalid-feedback">
                   {{ errors.requiredQuantity }}
                 </div>
@@ -174,10 +180,15 @@
                 <div *ngIf="isSubmitted && errors.budgetZAR" class="invalid-feedback">
                   {{ errors.budgetZAR }}
                 </div>
-                <p class="form-help">
-                  Procurement budget incl. VAT. 
-                  <strong *ngIf="unitBudgetZAR > 0" class="text-accent">(~R{{ unitBudgetZAR.toLocaleString() }} / unit)</strong>
-                </p>
+                <div class="budget-meta-row">
+                  <span class="form-help">
+                    Procurement budget incl. VAT. 
+                    <strong *ngIf="unitBudgetZAR > 0" class="text-accent">(~R{{ unitBudgetZAR.toLocaleString() }} / unit)</strong>
+                  </span>
+                  <span class="badge-bbbee-est" *ngIf="budgetZAR > 0">
+                    <i class="bi bi-shield-check"></i> Est. B-BBEE Recognition: <strong>R{{ (budgetZAR * 1.35) | number:'1.0-0' }}</strong> (135% Level 1)
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -349,6 +360,23 @@
               <h3 class="sidebar-title">Ranked Suppliers</h3>
               <span class="candidate-count">{{ filteredMatches.length }}</span>
             </div>
+
+            <!-- Real-time Candidate Search Box -->
+            <div class="sidebar-search-box">
+              <i class="bi bi-search"></i>
+              <input type="text" 
+                     class="sidebar-search-input" 
+                     placeholder="Filter by name, township (e.g. Soweto)..." 
+                     [(ngModel)]="candidateSearchQuery">
+              <button *ngIf="candidateSearchQuery" 
+                      type="button" 
+                      class="btn-clear-search" 
+                      (click)="candidateSearchQuery = ''"
+                      title="Clear search">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+
             <!-- Filter Pills -->
             <div class="candidate-filter-pills">
               <button type="button" 
@@ -361,13 +389,24 @@
                       class="filter-pill" 
                       [class.active]="candidateFilter === 'eligible'" 
                       (click)="candidateFilter = 'eligible'">
-                Eligible Only ({{ eligibleCount }})
+                Eligible ({{ eligibleCount }})
+              </button>
+              <button type="button" 
+                      class="filter-pill" 
+                      [class.active]="candidateFilter === 'shortlisted'" 
+                      (click)="candidateFilter = 'shortlisted'">
+                <i class="bi bi-bookmark-fill"></i> Saved ({{ shortlistedIds.length }})
               </button>
             </div>
           </div>
 
           <!-- Candidate Cards List -->
           <div class="candidate-cards-list">
+            <div *ngIf="filteredMatches.length === 0" class="empty-candidates-notice">
+              <i class="bi bi-search"></i>
+              <span>No suppliers match this filter or search.</span>
+            </div>
+
             <div *ngFor="let m of filteredMatches; let i = index" 
                  class="candidate-nav-card"
                  [class.active-card]="m.sme.id === activeCandidate.sme.id"
@@ -377,8 +416,17 @@
                   <i *ngIf="i === 0" class="bi bi-trophy-fill"></i>
                   <span>#{{ i + 1 }}</span>
                 </div>
-                <div class="score-badge" [class.score-high]="m.matchPercentage >= 90">
-                  {{ m.matchPercentage }}% Fit
+                <div class="nav-card-top-right">
+                  <button type="button" 
+                          class="btn-nav-shortlist" 
+                          [class.active-shortlist]="isShortlisted(m.sme.id)"
+                          (click)="toggleShortlist(m.sme.id, $event)"
+                          [title]="isShortlisted(m.sme.id) ? 'Remove from shortlist' : 'Add to shortlist'">
+                    <i class="bi" [class.bi-bookmark-fill]="isShortlisted(m.sme.id)" [class.bi-bookmark]="!isShortlisted(m.sme.id)"></i>
+                  </button>
+                  <div class="score-badge" [class.score-high]="m.matchPercentage >= 90">
+                    {{ m.matchPercentage }}% Fit
+                  </div>
                 </div>
               </div>
 
@@ -430,6 +478,21 @@
 
               <!-- Quick Action Buttons -->
               <div class="hero-actions">
+                <button type="button" 
+                        class="btn-secondary-sm" 
+                        (click)="toggleShortlist(activeCandidate.sme.id)"
+                        [class.btn-shortlist-active]="isShortlisted(activeCandidate.sme.id)"
+                        title="Pin this supplier to your shortlist">
+                  <i class="bi" [class.bi-bookmark-fill]="isShortlisted(activeCandidate.sme.id)" [class.bi-bookmark]="!isShortlisted(activeCandidate.sme.id)"></i>
+                  <span>{{ isShortlisted(activeCandidate.sme.id) ? 'Shortlisted' : 'Shortlist' }}</span>
+                </button>
+                <button type="button" 
+                        class="btn-secondary-sm" 
+                        (click)="copySourcingSummary(activeCandidate)" 
+                        title="Copy formal decision summary for Teams/Slack/Email">
+                  <i class="bi" [class.bi-check2]="copiedSummaryToast" [class.bi-clipboard]="!copiedSummaryToast"></i>
+                  <span>{{ copiedSummaryToast ? 'Copied!' : 'Copy Summary' }}</span>
+                </button>
                 <button type="button" class="btn-primary-sm" (click)="openMakerExperience(activeCandidate)">
                   <i class="bi bi-phone"></i>
                   <span>Maker Mobile View</span>
@@ -438,10 +501,6 @@
                   <i class="bi bi-printer"></i>
                   <span>Memo</span>
                 </button>
-                <a [href]="'http://localhost:4200/trader-detail/' + activeCandidate.sme.id" target="_blank" class="btn-secondary-sm">
-                  <i class="bi bi-shop"></i>
-                  <span>Catalog</span>
-                </a>
               </div>
             </div>
 
