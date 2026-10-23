@@ -14,17 +14,14 @@
     </div>
 
     <div class="sm-meta-group">
-      <div class="sm-theme-group" role="group" aria-label="Colour theme">
-        <button *ngFor="let t of themes"
-                type="button"
-                class="sm-theme-toggle"
-                (click)="setTheme(t.id)"
-                [attr.aria-pressed]="theme === t.id"
-                [title]="t.description">
-          <i class="bi" [ngClass]="t.icon" aria-hidden="true"></i>
-          <span class="d-none d-sm-inline">{{ t.label }}</span>
-        </button>
-      </div>
+      <button type="button"
+              class="sm-theme-toggle"
+              (click)="toggleTheme()"
+              [attr.aria-pressed]="isDarkMode"
+              [attr.aria-label]="isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'">
+        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode" aria-hidden="true"></i>
+        <span class="d-none d-sm-inline">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
+      </button>
 
       <div class="sm-status-chip" [title]="engineReady ? 'Semantic engine ready' : 'Engine warming up or API offline'">
         <span class="sm-live-dot" [class.offline]="!engineReady" aria-hidden="true"></span>
