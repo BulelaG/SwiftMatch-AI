@@ -30,24 +30,16 @@
 
 .uber-brand {
   display: flex;
-  flex-direction: column;
+  align-items: center;
   text-decoration: none;
-  line-height: 1.05;
 }
 
 .uber-brand-title {
   font-family: var(--sm-font-heading);
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   color: #FFFFFF;
-}
-
-.uber-brand-sub {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #A3A3A3;
 }
 
 /* Nav dropdown pill buttons */
@@ -124,42 +116,110 @@
   color: #FFFFFF;
 }
 
-.uber-theme-pill {
-  background: #1A1A1A;
+/* Nav Dropdown Wrapper */
+.uber-dropdown-wrapper {
+  position: relative;
+}
+
+.uber-nav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 280px;
+  background-color: #121212;
   border: 1px solid #2B2B2B;
-  color: #FFFFFF;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+  z-index: 200;
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dropdown-header {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #737373;
+  padding: 6px 10px;
+}
+
+.dropdown-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #1F1F1F;
+}
+
+.hub-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.hub-badge {
+  font-size: 11px;
+  color: #9E9E9E;
+  margin-top: 2px;
+}
+
+/* Engine Health Status Chip */
+.uber-engine-chip {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.15s ease;
+  gap: 8px;
+  font-size: 12px;
+  color: #C2C2C2;
+  background-color: #141414;
+  border: 1px solid #262626;
+  padding: 6px 14px;
+  border-radius: var(--sm-radius-pill, 9999px);
 }
 
-.uber-theme-pill:hover {
-  background-color: #262626;
-  border-color: #404040;
+.engine-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #1BB38A;
+  box-shadow: 0 0 8px #1BB38A;
 }
 
-/* Uber Solid White User Pill: Bulela */
-.uber-user-pill {
+.engine-live-dot.offline {
+  background-color: #FBBF24;
+  box-shadow: 0 0 8px #FBBF24;
+}
+
+.engine-chip-text strong {
+  color: #FFFFFF;
+}
+
+/* Uber Solid White Corporate Account Pill */
+.uber-company-pill {
   background-color: #FFFFFF;
   color: #000000;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  padding: 8px 22px;
+  padding: 8px 18px;
   border-radius: var(--sm-radius-pill, 9999px);
   cursor: pointer;
   letter-spacing: -0.01em;
-  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.12);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.12);
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
-.uber-user-pill:hover {
-  background-color: #F0F0F0;
+.uber-company-pill:hover {
+  background-color: #EDEDED;
   transform: translateY(-1px);
 }
 

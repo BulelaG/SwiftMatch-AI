@@ -1,67 +1,79 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <!-- ═════════════════════════════════════════════════════════════
-     UBER FOR BUSINESS ENTERPRISE HEADER
+     SWIFTMATCH ENTERPRISE HEADER
      ═════════════════════════════════════════════════════════════ -->
 <header class="uber-topbar">
   <div class="uber-topbar-inner">
     
-    <!-- Left: Brand "SwiftMatch for Business" -->
+    <!-- Left: Brand "SwiftMatch" -->
     <div class="uber-brand-group">
-      <a routerLink="/" class="uber-brand" aria-label="SwiftMatch for Business home">
+      <a routerLink="/" class="uber-brand" aria-label="SwiftMatch home">
         <span class="uber-brand-title">SwiftMatch</span>
-        <span class="uber-brand-sub">for Business</span>
       </a>
 
-      <!-- Center-Left Navigation Dropdown Pills (Uber style) -->
+      <!-- High-Utility Enterprise Navigation Pills -->
       <nav class="uber-nav-pills d-none d-lg-flex" aria-label="Main Navigation">
-        <button type="button" class="uber-pill-btn" routerLink="/" [class.active]="true">
-          <span>Overview</span>
-          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        <button type="button" class="uber-pill-btn active" routerLink="/">
+          <i class="bi bi-grid-1x2-fill"></i>
+          <span>Sourcing Workspace</span>
         </button>
-        <button type="button" class="uber-pill-btn">
-          <span>Solutions</span>
-          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        <div class="uber-dropdown-wrapper">
+          <button type="button" class="uber-pill-btn" (click)="toggleSmmeMenu()">
+            <span>384 Township SMMEs</span>
+            <i class="bi bi-chevron-down"></i>
+          </button>
+          <div *ngIf="showSmmeMenu" class="uber-nav-dropdown" (click)="showSmmeMenu = false">
+            <div class="dropdown-header">Verified Artisan Clusters</div>
+            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+              <span class="hub-name">Soweto Craft Hub</span>
+              <span class="hub-badge">142 Makers · Leather &amp; Metal</span>
+            </a>
+            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+              <span class="hub-name">Diepsloot Manufacturing</span>
+              <span class="hub-badge">98 Makers · Workwear &amp; PPE</span>
+            </a>
+            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+              <span class="hub-name">Tembisa Joinery Cluster</span>
+              <span class="hub-badge">84 Makers · Timber &amp; Decor</span>
+            </a>
+            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+              <span class="hub-name">Alexandra Eco-Packaging</span>
+              <span class="hub-badge">60 Makers · Print &amp; Paper</span>
+            </a>
+          </div>
+        </div>
+        <button type="button" class="uber-pill-btn" routerLink="/" fragment="sourcing-form-section">
+          <i class="bi bi-bar-chart-steps"></i>
+          <span>B-BBEE Scorecard</span>
         </button>
-        <button type="button" class="uber-pill-btn">
-          <span>Pricing &amp; B-BBEE</span>
-        </button>
-        <button type="button" class="uber-pill-btn">
-          <span>Customer support</span>
-          <i class="bi bi-chevron-down" aria-hidden="true"></i>
-        </button>
-        <button type="button" class="uber-pill-btn">
-          <span>Resources</span>
-          <i class="bi bi-chevron-down" aria-hidden="true"></i>
-        </button>
+        <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="uber-pill-btn">
+          <i class="bi bi-shield-check"></i>
+          <span>Audit &amp; Governance</span>
+        </a>
       </nav>
     </div>
 
-    <!-- Right: Language, Contact, and User Pill "Bulela" -->
+    <!-- Right: Engine Status, Currency, and Corporate User Pill -->
     <div class="uber-right-group">
-      <!-- Language / Region -->
-      <button type="button" class="uber-icon-pill" title="Region: South Africa">
-        <i class="bi bi-globe" aria-hidden="true"></i>
-        <span>EN</span>
-      </button>
+      <!-- Live Semantic Engine Health Chip -->
+      <div class="uber-engine-chip" [title]="engineReady ? 'MiniLM semantic embeddings online' : 'Lexical deterministic fallback'">
+        <span class="engine-live-dot" [class.offline]="!engineReady"></span>
+        <span class="engine-chip-text">
+          <strong>{{ poolSize ?? '384' }} SMMEs</strong>
+          <span class="d-none d-xl-inline"> · {{ engineReady ? 'Engine Online' : 'Warming Up' }}</span>
+        </span>
+      </div>
 
-      <!-- Contact us link -->
-      <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="uber-text-link d-none d-md-inline">
-        Contact us
-      </a>
+      <!-- Currency & Jurisdiction -->
+      <span class="uber-icon-pill" title="Jurisdiction: South Africa (ZAR)">
+        <span>🇿🇦 ZA · ZAR</span>
+      </span>
 
-      <!-- Theme Switcher -->
-      <button type="button"
-              class="uber-theme-pill"
-              (click)="toggleTheme()"
-              [attr.aria-pressed]="isDarkMode"
-              [title]="isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'">
-        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode" aria-hidden="true"></i>
-      </button>
-
-      <!-- User Profile Pill: Bulela (Solid White Pill with Black Text) -->
-      <div class="uber-user-pill" title="Logged in as Bulela (Procurement Director)">
-        <span>Bulela</span>
+      <!-- Corporate Account Pill (Solid White Pill with Black Text) -->
+      <div class="uber-company-pill" title="Authenticated Corporate Procurement Session">
+        <i class="bi bi-building"></i>
+        <span>Standard Bank ESD</span>
       </div>
     </div>
 

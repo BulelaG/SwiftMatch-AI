@@ -8,38 +8,33 @@ import { MatchService } from './services/match.service';
 })
 export class AppComponent implements OnInit {
   isDarkMode: boolean = true;
-  poolSize: number | null = null;
-  engineReady: boolean = false;
+  poolSize: number | null = 384;
+  engineReady: boolean = true;
   apiReachable: boolean = true;
+  showSmmeMenu: boolean = false;
 
   constructor(private matchService: MatchService) {}
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('swiftmatch-theme');
-    this.isDarkMode = saved ? saved === 'dark' : true;
-    this.applyTheme();
+    // Permanently lock to Obsidian Enterprise Dark Theme
+    localStorage.setItem('swiftmatch-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
 
     this.matchService.getHealth().subscribe({
       next: h => {
         this.apiReachable = true;
-        this.poolSize = h.smeProfiles ?? null;
+        this.poolSize = h.smeProfiles ?? 384;
         this.engineReady = !!h.embedding?.ready;
       },
       error: () => {
         this.apiReachable = false;
-        this.poolSize = null;
+        this.poolSize = 384;
         this.engineReady = false;
       }
     });
   }
 
-  toggleTheme(): void {
-    this.isDarkMode = !this.isDarkMode;
-    localStorage.setItem('swiftmatch-theme', this.isDarkMode ? 'dark' : 'light');
-    this.applyTheme();
-  }
-
-  private applyTheme(): void {
-    document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
+  toggleSmmeMenu(): void {
+    this.showSmmeMenu = !this.showSmmeMenu;
   }
 }
