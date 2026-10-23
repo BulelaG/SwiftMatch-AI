@@ -431,3 +431,81 @@
   .dossier-tab { flex: 1 1 45%; justify-content: center; }
   .label-row { flex-wrap: wrap; gap: 6px; }
 }
+
+/* ═════════════════════════════════════════════════════════════
+   Glassmorphism: frosted surfaces for every panel in the workflow
+   ═════════════════════════════════════════════════════════════ */
+.sm-workflow-container { background-color: transparent; }
+.maker-canvas { background-color: transparent; }
+
+.sm-stepper-bar,
+.procurement-form,
+.summary-panel,
+.results-summary-ribbon,
+.candidates-sidebar,
+.dossier-hero-card,
+.dossier-card,
+.reason-metric-card,
+.candidate-nav-card,
+.smartphone-frame,
+.maker-card,
+.state-card,
+.memo-modal-container,
+.claude-narrative-bubble,
+.xai-narrative-box,
+.model-card-embed {
+  background-color: var(--sm-glass);
+  -webkit-backdrop-filter: blur(var(--sm-glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--sm-glass-blur)) saturate(160%);
+  border-color: var(--sm-glass-border);
+  box-shadow: inset 0 1px 0 var(--sm-glass-highlight), var(--sm-shadow-card);
+}
+
+.sm-stepper-bar { border-bottom: 1px solid var(--sm-glass-border); box-shadow: inset 0 1px 0 var(--sm-glass-highlight); }
+
+/* Denser glass where body text sits directly on it */
+.smartphone-frame,
+.memo-modal-container,
+.procurement-form,
+.maker-card.opportunity-card {
+  background-color: var(--sm-glass-strong);
+}
+
+/* Nested cards: lighter tint so hierarchy still reads */
+.candidate-nav-card.active-card { border-color: var(--sm-accent); box-shadow: 0 0 0 1px var(--sm-accent), inset 0 1px 0 var(--sm-glass-highlight); }
+.candidate-nav-card:hover { background-color: var(--sm-glass-strong); }
+
+/* Controls on glass keep a solid field for legibility */
+.form-control, .form-select, .sidebar-search-input { background-color: var(--sm-glass-strong); }
+.form-control:focus, .form-select:focus { background-color: var(--sm-surface); }
+
+/* Modal backdrop blurs the page behind it */
+.memo-modal-backdrop {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sm-stepper-bar, .procurement-form, .summary-panel, .results-summary-ribbon, .candidates-sidebar,
+  .dossier-hero-card, .dossier-card, .reason-metric-card, .candidate-nav-card, .smartphone-frame,
+  .maker-card, .state-card, .memo-modal-container, .claude-narrative-bubble, .xai-narrative-box,
+  .model-card-embed, .form-control, .form-select, .sidebar-search-input { background-color: var(--sm-surface); }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .sm-stepper-bar, .procurement-form, .summary-panel, .results-summary-ribbon, .candidates-sidebar,
+  .dossier-hero-card, .dossier-card, .reason-metric-card, .candidate-nav-card, .smartphone-frame,
+  .maker-card, .state-card, .memo-modal-container, .claude-narrative-bubble, .xai-narrative-box,
+  .model-card-embed, .form-control, .form-select, .sidebar-search-input {
+    background-color: var(--sm-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media print {
+  .sm-stepper-bar, .procurement-form, .summary-panel, .results-summary-ribbon, .candidates-sidebar,
+  .dossier-hero-card, .dossier-card, .reason-metric-card, .candidate-nav-card, .smartphone-frame,
+  .maker-card, .state-card, .memo-modal-container { background-color: #fff; backdrop-filter: none; }
+}

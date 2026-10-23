@@ -1,41 +1,70 @@
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
-<header class="sm-topbar">
-  <div class="sm-topbar-inner">
-    <div class="sm-brand-group">
-      <a routerLink="/" class="sm-brand" aria-label="SwiftMatch home">
-        <span class="sm-brand-mark" aria-hidden="true">
-          <i class="bi bi-shield-check"></i>
-        </span>
-        <span class="sm-brand-title">SwiftMatch</span>
+<!-- ═════════════════════════════════════════════════════════════
+     UBER FOR BUSINESS ENTERPRISE HEADER
+     ═════════════════════════════════════════════════════════════ -->
+<header class="uber-topbar">
+  <div class="uber-topbar-inner">
+    
+    <!-- Left: Brand "SwiftMatch for Business" -->
+    <div class="uber-brand-group">
+      <a routerLink="/" class="uber-brand" aria-label="SwiftMatch for Business home">
+        <span class="uber-brand-title">SwiftMatch</span>
+        <span class="uber-brand-sub">for Business</span>
       </a>
-      <span class="sm-separator" aria-hidden="true">/</span>
-      <span class="sm-program-tag">SME–corporate opportunity matching</span>
+
+      <!-- Center-Left Navigation Dropdown Pills (Uber style) -->
+      <nav class="uber-nav-pills d-none d-lg-flex" aria-label="Main Navigation">
+        <button type="button" class="uber-pill-btn" routerLink="/" [class.active]="true">
+          <span>Overview</span>
+          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="uber-pill-btn">
+          <span>Solutions</span>
+          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="uber-pill-btn">
+          <span>Pricing &amp; B-BBEE</span>
+        </button>
+        <button type="button" class="uber-pill-btn">
+          <span>Customer support</span>
+          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="uber-pill-btn">
+          <span>Resources</span>
+          <i class="bi bi-chevron-down" aria-hidden="true"></i>
+        </button>
+      </nav>
     </div>
 
-    <div class="sm-meta-group">
-      <button type="button"
-              class="sm-theme-toggle"
-              (click)="toggleTheme()"
-              [attr.aria-pressed]="isDarkMode"
-              [attr.aria-label]="isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'">
-        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode" aria-hidden="true"></i>
-        <span class="d-none d-sm-inline">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
+    <!-- Right: Language, Contact, and User Pill "Bulela" -->
+    <div class="uber-right-group">
+      <!-- Language / Region -->
+      <button type="button" class="uber-icon-pill" title="Region: South Africa">
+        <i class="bi bi-globe" aria-hidden="true"></i>
+        <span>EN</span>
       </button>
 
-      <div class="sm-status-chip" [title]="engineReady ? 'Semantic engine ready' : 'Engine warming up or API offline'">
-        <span class="sm-live-dot" [class.offline]="!engineReady" aria-hidden="true"></span>
-        <span class="sm-chip-text">
-          <span class="d-none d-sm-inline">Pilot pool: </span><strong>{{ poolSize ?? '–' }} profiles</strong>
-          <span class="d-none d-md-inline"> · {{ engineReady ? 'engine ready' : (apiReachable ? 'engine warming up' : 'API offline') }}</span>
-        </span>
-      </div>
-
-      <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="sm-catalog-link d-none d-md-inline-flex" title="Kasi-eCo, the grassroots marketplace the supplier profiles are modelled on (opens in a new tab)">
-        <span>Kasi-eCo</span>
-        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
+      <!-- Contact us link -->
+      <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="uber-text-link d-none d-md-inline">
+        Contact us
       </a>
+
+      <!-- Theme Switcher -->
+      <button type="button"
+              class="uber-theme-pill"
+              (click)="toggleTheme()"
+              [attr.aria-pressed]="isDarkMode"
+              [title]="isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'">
+        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode" aria-hidden="true"></i>
+      </button>
+
+      <!-- User Profile Pill: Bulela (Solid White Pill with Black Text) -->
+      <div class="uber-user-pill" title="Logged in as Bulela (Procurement Director)">
+        <span>Bulela</span>
+      </div>
     </div>
+
   </div>
 </header>
 
@@ -43,7 +72,7 @@
   <router-outlet></router-outlet>
 </main>
 
-<footer class="sm-footer">
+<footer class="sm-footer uber-footer">
   <div class="sm-footer-inner">
     <div class="sm-footer-left">
       <span>Built for the <strong>YES AI Hackathon 2026</strong></span>
@@ -51,7 +80,7 @@
       <span>Challenge 4: SME–corporate opportunity matching</span>
     </div>
     <div class="sm-footer-right">
-      <span>Prototype with synthetic supplier data</span>
+      <span>POPIA &amp; B-BBEE Level 1 Verification Engine</span>
       <span class="sm-bullet" aria-hidden="true">•</span>
       <span>Swift House</span>
     </div>

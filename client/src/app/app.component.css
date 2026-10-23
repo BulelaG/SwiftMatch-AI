@@ -1,164 +1,185 @@
-/* ── SwiftMatch Enterprise Topbar & Footer ── */
+/* ── Uber for Business Enterprise Topbar & Footer ── */
 
-.sm-topbar {
-  background-color: var(--sm-surface);
-  border-bottom: 1px solid var(--sm-border);
+.uber-topbar {
+  background-color: var(--sm-canvas);
+  border-bottom: 1px solid var(--sm-border-subtle);
   position: sticky;
   top: 0;
   z-index: 100;
+  height: 64px;
+  display: flex;
+  align-items: center;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.sm-topbar-inner {
-  max-width: 1120px;
+.uber-topbar-inner {
+  max-width: 1320px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 24px;
-  height: 56px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.sm-brand-group {
+.uber-brand-group {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 28px;
 }
 
-.sm-brand {
+.uber-brand {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
   text-decoration: none;
-  color: var(--sm-ink);
+  line-height: 1.05;
 }
 
-.sm-brand-mark {
-  width: 28px;
-  height: 28px;
-  background-color: var(--sm-accent-subtle);
-  color: var(--sm-accent);
-  border-radius: var(--sm-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  border: 1px solid rgba(27, 179, 138, 0.25);
-}
-
-.sm-brand-title {
+.uber-brand-title {
   font-family: var(--sm-font-heading);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  color: var(--sm-ink);
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
 }
 
-.sm-separator {
-  color: var(--sm-border-strong);
-  font-size: 14px;
-}
-
-.sm-program-tag {
+.uber-brand-sub {
   font-size: 13px;
-  color: var(--sm-muted);
-  font-weight: 400;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #A3A3A3;
 }
 
-.sm-meta-group {
+/* Nav dropdown pill buttons */
+.uber-nav-pills {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 6px;
 }
 
-/* ── Theme Switcher Button ── */
-.sm-theme-toggle {
-  background-color: var(--sm-canvas);
-  border: 1px solid var(--sm-border);
-  color: var(--sm-ink);
-  font-size: 12px;
+.uber-pill-btn {
+  background: transparent;
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--sm-radius-pill, 9999px);
+  padding: 8px 16px;
+  font-size: 14px;
   font-weight: 500;
-  padding: 4px 10px;
-  border-radius: var(--sm-radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.uber-pill-btn i {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.uber-pill-btn:hover,
+.uber-pill-btn.active {
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+}
+
+/* Right utility controls */
+.uber-right-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.uber-icon-pill {
+  background: transparent;
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--sm-radius-pill, 9999px);
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: background-color 0.15s ease;
 }
 
-.sm-theme-toggle:hover {
-  background-color: var(--sm-surface-subtle);
-  border-color: var(--sm-accent);
-  color: var(--sm-accent);
+.uber-icon-pill:hover {
+  background-color: #1A1A1A;
 }
 
-.sm-theme-toggle i {
-  color: var(--sm-accent);
-  font-size: 13px;
+.uber-text-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--sm-radius-pill, 9999px);
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-.sm-status-chip {
+.uber-text-link:hover {
+  background-color: #1A1A1A;
+  color: #FFFFFF;
+}
+
+.uber-theme-pill {
+  background: #1A1A1A;
+  border: 1px solid #2B2B2B;
+  color: #FFFFFF;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--sm-muted);
-  background-color: var(--sm-canvas);
-  padding: 4px 10px;
-  border-radius: var(--sm-radius-sm);
-  border: 1px solid var(--sm-border);
-}
-
-.sm-status-chip strong {
-  color: var(--sm-ink);
-  font-weight: 600;
-}
-
-.sm-live-dot {
-  width: 6px;
-  height: 6px;
-  background-color: var(--sm-accent);
-  border-radius: 50%;
-  box-shadow: 0 0 6px var(--sm-accent);
-}
-
-.sm-catalog-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--sm-muted);
-  text-decoration: none;
-  padding: 4px 8px;
-  border-radius: var(--sm-radius-sm);
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
   transition: all 0.15s ease;
 }
 
-.sm-catalog-link:hover {
-  color: var(--sm-accent);
-  background-color: var(--sm-accent-subtle);
+.uber-theme-pill:hover {
+  background-color: #262626;
+  border-color: #404040;
+}
+
+/* Uber Solid White User Pill: Bulela */
+.uber-user-pill {
+  background-color: #FFFFFF;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 22px;
+  border-radius: var(--sm-radius-pill, 9999px);
+  cursor: pointer;
+  letter-spacing: -0.01em;
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.12);
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.uber-user-pill:hover {
+  background-color: #F0F0F0;
+  transform: translateY(-1px);
 }
 
 .sm-main {
-  min-height: calc(100vh - 56px - 48px);
+  min-height: calc(100vh - 64px - 56px);
 }
 
 /* ── Footer ── */
-.sm-footer {
-  background-color: var(--sm-surface);
-  border-top: 1px solid var(--sm-border);
-  padding: 14px 0;
-  font-size: 12px;
+.uber-footer {
+  background-color: var(--sm-canvas);
+  border-top: 1px solid var(--sm-border-subtle);
+  padding: 20px 0;
+  font-size: 13px;
   color: var(--sm-muted);
-  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .sm-footer-inner {
-  max-width: 1120px;
+  max-width: 1320px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -171,25 +192,21 @@
 }
 
 .sm-footer-left strong {
-  color: var(--sm-ink);
+  color: #FFFFFF;
 }
 
 .sm-bullet {
-  color: var(--sm-border-strong);
+  color: #333333;
 }
 
-@media (max-width: 640px) {
-  .sm-program-tag, .sm-separator {
-    display: none;
+@media (max-width: 768px) {
+  .uber-topbar-inner {
+    padding: 0 16px;
   }
   .sm-footer-inner {
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     text-align: center;
+    padding: 0 16px;
   }
-}
-
-.sm-live-dot.offline {
-  background-color: var(--sm-warning);
-  box-shadow: 0 0 6px var(--sm-warning);
 }

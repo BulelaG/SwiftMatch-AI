@@ -338,6 +338,20 @@ export class HomeComponent implements OnInit {
     setTimeout(() => this.claudeNotice = null, 3500);
   }
 
+  scrollToForm(): void {
+    const el = document.getElementById('sourcing-form-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  selectScenarioAndScroll(index: number): void {
+    if (this.presetRfqs && this.presetRfqs[index]) {
+      this.applyPreset(this.presetRfqs[index]);
+    }
+    this.scrollToForm();
+  }
+
   // ── Validation ──
   validateForm(): boolean {
     this.errors = {};

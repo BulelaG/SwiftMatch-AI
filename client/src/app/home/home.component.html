@@ -47,46 +47,229 @@
   </nav>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- SCREEN 1: SOURCING REQUEST                                  -->
+  <!-- SCREEN 1: SOURCING REQUEST (UBER FOR BUSINESS HERO & SETUP) -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <div *ngIf="currentScreen === 'request'" class="screen-view">
-    <div class="page-container">
+    <div class="page-container-uber">
 
-      <header class="page-header">
-        <nav class="header-breadcrumb" aria-label="Breadcrumb">
-          <span class="crumb-root">Procurement</span>
-          <span class="crumb-sep" aria-hidden="true">/</span>
-          <span class="crumb-current" aria-current="page">New sourcing request</span>
-        </nav>
-
-        <div class="header-main">
-          <div>
-            <h1 class="page-title">Create a sourcing request</h1>
-            <p class="page-subtitle">
-              Describe what you need. SwiftMatch ranks verified youth-owned suppliers and explains every score.
-            </p>
+      <!-- ── UBER FOR BUSINESS HERO SECTION ── -->
+      <section class="uber-hero-section">
+        <div class="uber-hero-left">
+          
+          <!-- Connected Progress Icon Bar -->
+          <div class="uber-progress-bar" aria-label="Setup progress">
+            <div class="progress-step-item active">
+              <span class="step-icon-circle"><i class="bi bi-briefcase-fill"></i></span>
+            </div>
+            <div class="progress-step-line active"></div>
+            <div class="progress-step-item">
+              <span class="step-icon-circle"><i class="bi bi-credit-card-2-front-fill"></i></span>
+            </div>
+            <div class="progress-step-line"></div>
+            <div class="progress-step-item">
+              <span class="step-icon-circle"><i class="bi bi-cpu-fill"></i></span>
+            </div>
+            <div class="progress-step-line"></div>
+            <div class="progress-step-item">
+              <span class="step-icon-circle"><i class="bi bi-file-earmark-check-fill"></i></span>
+            </div>
           </div>
 
-          <div class="preset-group" *ngIf="presetRfqs.length">
-            <span class="preset-label" id="preset-label">Demo scenarios:</span>
-            <div class="preset-buttons" role="group" aria-labelledby="preset-label">
-              <button *ngFor="let p of presetRfqs"
-                      type="button"
-                      class="preset-btn"
-                      (click)="applyPreset(p)"
-                      [title]="p.title">
-                <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
-                <span>{{ p.title.split(':')[0] }}</span>
-              </button>
+          <!-- Headline -->
+          <h1 class="uber-hero-headline">
+            Welcome, Bulela.<br>
+            Let's get set up.
+          </h1>
+
+          <!-- Subtitle -->
+          <p class="uber-hero-subtext">
+            You're only a few steps away from setting up your company's ESD procurement account. With a single platform, you can create sourcing programs to meet all your corporate gifting, apparel, joinery, and supply chain transformation needs.
+          </p>
+
+          <!-- Primary CTA Button (Pure White Pill) -->
+          <div class="uber-hero-actions">
+            <button type="button" class="uber-cta-btn" (click)="scrollToForm()">
+              <span>Sign up your request</span>
+            </button>
+            <button type="button" class="uber-cta-secondary" (click)="selectScenarioAndScroll(0)">
+              <i class="bi bi-play-circle-fill"></i>
+              <span>Try demo scenario</span>
+            </button>
+          </div>
+
+          <!-- Status notice if Claude / preset applied -->
+          <div *ngIf="claudeNotice" class="uber-status-badge" role="status" aria-live="polite">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ claudeNotice }}</span>
+          </div>
+        </div>
+
+        <!-- Right Side: Illustrated Enterprise Dashboard Terminal Preview -->
+        <div class="uber-hero-right">
+          <div class="uber-illustration-frame">
+            <div class="illustration-window">
+              <div class="window-topbar">
+                <div class="window-dots">
+                  <span class="dot d-red"></span>
+                  <span class="dot d-yellow"></span>
+                  <span class="dot d-green"></span>
+                </div>
+                <div class="window-title">SwiftMatch for Business</div>
+              </div>
+
+              <div class="window-grid">
+                <!-- Mini Sidebar -->
+                <div class="window-side">
+                  <div class="side-pill active"><i class="bi bi-speedometer2"></i> Setup</div>
+                  <div class="side-pill"><i class="bi bi-search"></i> Discover</div>
+                  <div class="side-pill"><i class="bi bi-shield-check"></i> Scorecard</div>
+                  <div class="side-pill"><i class="bi bi-people"></i> 384 SMMEs</div>
+                </div>
+
+                <!-- Mini Main View -->
+                <div class="window-main">
+                  <!-- Match Stat Card -->
+                  <div class="mini-kpi-card">
+                    <div class="kpi-top">
+                      <span class="kpi-label">B-BBEE Spend Recognition</span>
+                      <span class="kpi-badge">+4.4 Pts</span>
+                    </div>
+                    <div class="kpi-value">135% Level 1 EME</div>
+                    <div class="kpi-sparkline">
+                      <span class="bar-spark" style="height: 35%"></span>
+                      <span class="bar-spark" style="height: 60%"></span>
+                      <span class="bar-spark" style="height: 45%"></span>
+                      <span class="bar-spark" style="height: 85%"></span>
+                      <span class="bar-spark active" style="height: 100%"></span>
+                    </div>
+                  </div>
+
+                  <!-- Featured Artisan Preview -->
+                  <div class="mini-artisan-card">
+                    <div class="artisan-row">
+                      <div class="artisan-icon"><i class="bi bi-shop"></i></div>
+                      <div>
+                        <div class="artisan-title">Zandile Leathercraft</div>
+                        <div class="artisan-sub">Soweto Hub • 100% Youth Owned</div>
+                      </div>
+                      <span class="artisan-pill">96% Fit</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </section>
 
-        <div *ngIf="claudeNotice" class="status-banner" role="status" aria-live="polite">
-          <i class="bi bi-info-circle-fill" aria-hidden="true"></i>
-          <span>{{ claudeNotice }}</span>
+      <!-- ── "WHAT FITS YOUR COMPANY'S NEEDS?" SECTION ── -->
+      <section class="uber-needs-section">
+        <h2 class="uber-needs-headline">What fits your company's needs?</h2>
+
+        <div class="uber-needs-grid">
+          
+          <!-- Card 1: Executive Gifting -->
+          <div class="uber-need-card" (click)="selectScenarioAndScroll(0)">
+            <div class="need-card-icon">
+              <i class="bi bi-briefcase"></i>
+            </div>
+            <h3 class="need-card-title">Executive Gifting &amp; Leather</h3>
+            <p class="need-card-desc">
+              Handcrafted genuine leather conference folios, desk stationery, and VIP gift sets for executive leadership summits.
+            </p>
+            <div class="need-card-tags">
+              <span class="need-pill">Soweto Hub</span>
+              <span class="need-pill">150 units</span>
+              <span class="need-pill">Level 1 EME</span>
+            </div>
+            <div class="need-card-footer">
+              <span>Configure request</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+
+          <!-- Card 2: Corporate Workwear -->
+          <div class="uber-need-card" (click)="selectScenarioAndScroll(1)">
+            <div class="need-card-icon">
+              <i class="bi bi-shield-shaded"></i>
+            </div>
+            <h3 class="need-card-title">Corporate Apparel &amp; Workwear</h3>
+            <p class="need-card-desc">
+              SABS-compliant workwear, reflective safety overalls, corporate uniforms, and branded security apparel.
+            </p>
+            <div class="need-card-tags">
+              <span class="need-pill">Diepsloot Hub</span>
+              <span class="need-pill">500 units</span>
+              <span class="need-pill">100% Youth-Owned</span>
+            </div>
+            <div class="need-card-footer">
+              <span>Configure request</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+
+          <!-- Card 3: Timber & Joinery -->
+          <div class="uber-need-card" (click)="selectScenarioAndScroll(2)">
+            <div class="need-card-icon">
+              <i class="bi bi-hammer"></i>
+            </div>
+            <h3 class="need-card-title">Office Millwork &amp; Fittings</h3>
+            <p class="need-card-desc">
+              Bespoke boardroom timber display stands, acoustic fittings, and sustainable handcrafted office woodwork.
+            </p>
+            <div class="need-card-tags">
+              <span class="need-pill">Tembisa Hub</span>
+              <span class="need-pill">50 units</span>
+              <span class="need-pill">Artisan Verified</span>
+            </div>
+            <div class="need-card-footer">
+              <span>Configure request</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+
+          <!-- Card 4: Custom Specification -->
+          <div class="uber-need-card card-custom-spec" (click)="scrollToForm()">
+            <div class="need-card-icon">
+              <i class="bi bi-magic"></i>
+            </div>
+            <h3 class="need-card-title">Custom Sourcing Specification</h3>
+            <p class="need-card-desc">
+              Paste raw unformatted tender documents or emails. Claude AI extracts BOM, volume, and compliance parameters.
+            </p>
+            <div class="need-card-tags">
+              <span class="need-pill">Any Sector</span>
+              <span class="need-pill">384 Makers</span>
+              <span class="need-pill">AI Extraction</span>
+            </div>
+            <div class="need-card-footer">
+              <span>Open form editor</span>
+              <i class="bi bi-arrow-right"></i>
+            </div>
+          </div>
+
         </div>
-      </header>
+      </section>
+
+      <!-- ── SOURCING SPECIFICATION FORM CONTAINER ── -->
+      <div id="sourcing-form-section" class="sourcing-form-wrapper">
+
+        <header class="page-header">
+          <nav class="header-breadcrumb" aria-label="Breadcrumb">
+            <span class="crumb-root">Procurement</span>
+            <span class="crumb-sep" aria-hidden="true">/</span>
+            <span class="crumb-current" aria-current="page">Sourcing Parameters</span>
+          </nav>
+
+          <div class="header-main">
+            <div>
+              <h2 class="page-title">Procurement Specification Details</h2>
+              <p class="page-subtitle">
+                Fine-tune requirement parameters, volume, delivery timeline, and mandatory compliance standards.
+              </p>
+            </div>
+          </div>
+        </header>
 
       <div class="form-layout">
         <form class="procurement-form" (ngSubmit)="submitProcurementRequest()" novalidate aria-describedby="form-error-summary">
@@ -342,8 +525,9 @@
           </div>
         </aside>
       </div>
+      </div> <!-- end sourcing-form-wrapper -->
 
-    </div>
+    </div> <!-- end page-container-uber -->
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
