@@ -6,6 +6,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .sm-topbar-inner {
@@ -42,7 +43,7 @@
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  border: 1px solid rgba(22, 116, 91, 0.2);
+  border: 1px solid rgba(27, 179, 138, 0.25);
 }
 
 .sm-brand-title {
@@ -54,7 +55,7 @@
 }
 
 .sm-separator {
-  color: #D1D5DB;
+  color: var(--sm-border-strong);
   font-size: 14px;
 }
 
@@ -67,7 +68,34 @@
 .sm-meta-group {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+}
+
+/* ── Theme Switcher Button ── */
+.sm-theme-toggle {
+  background-color: var(--sm-canvas);
+  border: 1px solid var(--sm-border);
+  color: var(--sm-ink);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--sm-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sm-theme-toggle:hover {
+  background-color: var(--sm-surface-subtle);
+  border-color: var(--sm-accent);
+  color: var(--sm-accent);
+}
+
+.sm-theme-toggle i {
+  color: var(--sm-accent);
+  font-size: 13px;
 }
 
 .sm-status-chip {
@@ -92,6 +120,7 @@
   height: 6px;
   background-color: var(--sm-accent);
   border-radius: 50%;
+  box-shadow: 0 0 6px var(--sm-accent);
 }
 
 .sm-catalog-link {
@@ -123,6 +152,7 @@
   padding: 14px 0;
   font-size: 12px;
   color: var(--sm-muted);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .sm-footer-inner {
@@ -140,8 +170,12 @@
   gap: 8px;
 }
 
+.sm-footer-left strong {
+  color: var(--sm-ink);
+}
+
 .sm-bullet {
-  color: #D1D5DB;
+  color: var(--sm-border-strong);
 }
 
 @media (max-width: 640px) {

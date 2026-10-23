@@ -15,6 +15,15 @@
 
     <!-- Center/Right Status & Verified Pool Indicator -->
     <div class="sm-meta-group">
+      <!-- Theme Switcher Pill -->
+      <button type="button" 
+              class="sm-theme-toggle" 
+              (click)="toggleTheme()" 
+              [title]="isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'">
+        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode"></i>
+        <span class="d-none d-sm-inline">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
+      </button>
+
       <div class="sm-status-chip">
         <span class="sm-live-dot"></span>
         <span class="sm-chip-text"><span class="d-none d-sm-inline">Vetted Pool: </span><strong>384 SMMEs</strong></span>
