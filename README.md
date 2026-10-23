@@ -8,14 +8,39 @@
 
 ## 📌 Executive Summary
 
-South Africa's Top 100 Corporates spend over **R40 Billion annually** on Enterprise & Supplier Development (ESD) and preferential procurement. Yet, procurement managers struggle with a 6-week administrative bottleneck to discover, verify, and match compliant township makers. Simultaneously, over **60% of youth-owned township artisans** operate solely through WhatsApp without visibility on corporate ERPs like SAP Ariba or Coupa.
+South Africa's Top 100 Corporates spend over **R40 Billion annually** on Enterprise & Supplier Development (ESD) and preferential procurement under the B-BBEE Codes of Good Practice. Yet, procurement managers struggle with a 6-week administrative bottleneck to discover, verify, and match compliant township makers. Simultaneously, over **60% of youth-owned township artisans** operate solely through WhatsApp without visibility on corporate ERPs like SAP Ariba or Coupa.
 
-**SwiftMatch AI** bridges this chasm:
-1. **Corporate Demand-Side Intelligence:** Natural-language RFQ ingestion parsed with **Anthropic Claude 3.5 Sonnet**.
-2. **Multi-Factor Semantic Matching:** Deterministic 5-factor scoring engine (Semantic Fit 35%, Production Capacity 25%, Compliance 15%, Geographic Proximity 15%, Verified Reputation 10%).
-3. **Responsible AI & Explainability:** Transparent breakdown of scores with delivery & compliance risk advisories.
-4. **WhatsApp-Native Artisan Dispatch:** Instant dispatch of RFQs to makers via WhatsApp with bilingual tone adaptation (isiZulu / English).
-5. **Supply-Side Backbone:** Deep-linked to the verified grassroots marketplace catalog on [Kasi-eCo](http://localhost:4200).
+**SwiftMatch AI** bridges this chasm with an **Investor-Grade 3-Screen Platform**:
+1. **Screen 1 — Corporate Sourcing Request:** Natural-language RFQ ingestion parsed with **Anthropic Claude 3.5 Sonnet** + one-click demo presets.
+2. **Screen 2 — Matching Results & Explainability:** Multi-factor deterministic ranking (5 scoring factors) + reason-first cards + **B-BBEE Scorecard Impact Panel** (+4.4 points boost, 135% recognition) + **Workshop Economics / BOM Estimator** (with 20% protected margin floor).
+3. **Screen 3 — Maker Mobile Hub (390px):** Mobile-first WhatsApp order dispatch + instant Accept/Decline PO workflow + **Supplier Readiness Gap Advisor** (actionable roadmap to close compliance gaps and 3x contract size).
+4. **Supply-Side Backbone:** Deep-linked to the verified grassroots marketplace catalog on [Kasi-eCo](http://localhost:4200).
+
+---
+
+## 💎 Investor-Grade Feature Architecture
+
+### 1. B-BBEE Scorecard Optimization Engine (`calculateBbbeePoints`)
+- **Preferential Procurement (Element 400):** Calculates recognized spend under the amended dti Codes (Level 1 EME = 135% recognition factor). A R85,000 spend translates to R114,750 in recognized procurement.
+- **Enterprise & Supplier Development (Element 500):** Computes direct scorecard point contributions (+1.7 Element 400, +2.7 Element 500 ESD bonus = +4.4 points boost).
+- **Executive Summary:** Generates compliance-ready audit text for corporate ESD reporting committees.
+
+### 2. Workshop Economics & BOM Estimator (`estimateBillOfMaterials`)
+- **Automated Cost Breakdown:** Dynamic model allocating 45% Raw Materials, 35% Artisan Labor, and 20% Net Profit Margin.
+- **Margin Protection Guardrail:** Enforces a 20% profit floor to prevent township SMMEs from unsustainable underbidding.
+- **Milestone Payment Architecture:** Recommends standard 30% upfront deposit upon sample sign-off and 70% upon delivery confirmation.
+
+### 3. Supplier Readiness Gap Advisor
+- **Diagnostic Audit:** Categorizes supplier compliance into *Good Standing* (CIPC, SARS Tax PIN), *Immediate Gaps* (COIDA Letter of Good Standing, business banking), and *Growth Accreditations* (ISO 9001).
+- **Direct Redirection:** Provides links to registration portals (e.g. DoEL compensation fund) to systematically advance SMMEs up the corporate procurement ladder.
+
+### 4. Linear & Stripe-Inspired Enterprise Visual System
+- **Canvas:** `#F8F9F8` (neutral light canvas)
+- **Surface:** `#FFFFFF` (crisp surface cards)
+- **Ink:** `#171C1A` (high-contrast typography)
+- **Muted:** `#6C746F` (accessible secondary meta)
+- **Accent:** `#16745B` (emerald ESD credibility tone)
+- **Typography:** Inter (interface UI) + Poppins (authoritative headings)
 
 ---
 
