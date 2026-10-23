@@ -53,4 +53,13 @@ export class MatchService {
   draftClaudeWhatsApp(payload: { smeId: string; rfq: any }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/claude/whatsapp`, payload);
   }
+
+  // ── New Investor-Grade Capability Endpoints ──
+  estimateBom(payload: { rfq: any; smeId?: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/bom`, payload);
+  }
+
+  getBbbeeScore(payload: { budgetZAR: number; smeId?: string }): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/bbbee/score`, payload);
+  }
 }

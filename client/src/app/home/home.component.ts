@@ -66,12 +66,24 @@ export class HomeComponent implements OnInit {
   makerDeclined: boolean = false;
   dispatchFeedback: string | null = null;
 
+  // Screen 2: BOM & B-BBEE Panels
+  bomData: any = null;
+  isBomLoading: boolean = false;
+  bbbeeData: any = null;
+  isBbbeeLoading: boolean = false;
+
   constructor(
     private matchService: MatchService,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    // Set screen synchronously from URL queryParam snapshot FIRST
+    const snapScreen = this.route.snapshot.queryParamMap.get('screen');
+    if (snapScreen && ['request', 'results', 'maker'].includes(snapScreen)) {
+      this.currentScreen = snapScreen as 'request' | 'results' | 'maker';
+    }
+    // Also subscribe for dynamic navigation changes
     this.route.queryParams.subscribe(params => {
       if (params['screen'] && ['request', 'results', 'maker'].includes(params['screen'])) {
         this.currentScreen = params['screen'];
@@ -184,12 +196,17 @@ export class HomeComponent implements OnInit {
           this.selectedMatch = this.matches[0];
           this.activeMaker = this.matches[0].sme;
         }
+        // Reset investor panels so they reload fresh for this search
+        this.bomData = null;
+        this.bbbeeData = null;
         // Transition to Screen 2
         this.currentScreen = 'results';
       },
       error: err => {
         console.error('Submission error:', err);
         this.isSubmitting = false;
+        this.bomData = null;
+        this.bbbeeData = null;
         // Transition to Screen 2 with available matches
         this.currentScreen = 'results';
       }
@@ -295,6 +312,71 @@ export class HomeComponent implements OnInit {
       error: () => {
         this.isGeneratingAudit = false;
         this.claudeAuditNarrative = `${match.sme.businessName} provides an optimal fit with verified monthly production of ${match.sme.monthlyCapacityUnits} units, providing a 1.67x safety buffer over the requested ${this.requiredQuantity} units. Full statutory compliance (CIPC, SARS Tax PIN) verified on the YES database with active delivery within ${match.distanceKm} km.`;
+      }
+    });
+  }
+
+  loadBomEstimate(): void {
+    if (this.bomData) { return; }
+    this.isBomLoading = true;
+    const rfq = {
+      rawPrompt: this.rfqText,
+      budgetZAR: this.budgetZAR,
+      requiredQuantity: this.requiredQuantity,
+      maxTurnaroundDays: this.maxTurnaroundDays
+    };
+    this.matchService.estimateBom({ rfq, smeId: this.featuredMatch?.sme?.id }).subscribe({
+      next: data => { this.bomData = data; this.isBomLoading = false; },
+      error: () => {
+        this.isBomLoading = false;
+        // deterministic fallback
+        const qty = this.requiredQuantity || 150;
+        const budget = this.budgetZAR || 85000;
+        this.bomData = {
+          totalBudgetZAR: budget,
+          unitBudgetZAR: Math.round(budget / qty),
+          costBreakdown: {
+            rawMaterialsZAR: Math.round(budget * 0.45),
+            artisanLaborZAR: Math.round(budget * 0.35),
+            netProfitMarginZAR: Math.round(budget * 0.20),
+            profitMarginPercentage: 20
+          },
+          lineItems: [
+            { item: 'Grade-A Raw Stock & Hardware', estimatedCost: Math.round(budget * 0.315) },
+            { item: 'Packaging, Embossing & Branding', estimatedCost: Math.round(budget * 0.135) },
+            { item: 'Workshop Wages (5 Youth Artisans)', estimatedCost: Math.round(budget * 0.2975) },
+            { item: 'Quality Vetting & Ground Courier', estimatedCost: Math.round(budget * 0.0525) }
+          ],
+          marginProtectionNote: 'Net artisan margin protected at 20% to prevent unviable underbidding.',
+          recommendedPaymentSchedule: '30% upfront deposit on sample sign-off · 70% upon delivery confirmation.'
+        };
+      }
+    });
+  }
+
+  loadBbbeeScore(): void {
+    if (this.bbbeeData) { return; }
+    this.isBbbeeLoading = true;
+    this.matchService.getBbbeeScore({ budgetZAR: this.budgetZAR, smeId: this.featuredMatch?.sme?.id }).subscribe({
+      next: data => { this.bbbeeData = data; this.isBbbeeLoading = false; },
+      error: () => {
+        this.isBbbeeLoading = false;
+        const budget = this.budgetZAR || 85000;
+        const recognized = Math.round(budget * 1.35);
+        const e400 = +(Math.min(2.5, budget / 50000)).toFixed(2);
+        const e500 = +(Math.min(5.0, e400 * 1.6)).toFixed(1);
+        this.bbbeeData = {
+          actualSpendZAR: budget,
+          recognizedSpendZAR: recognized,
+          procurementRecognitionMultiplier: '135% (Level 1 EME)',
+          bbbeeLevel: 1,
+          scorecardImpact: {
+            element400Points: e400,
+            element500EsdPoints: e500,
+            totalScorecardBoost: +(e400 + e500).toFixed(1)
+          },
+          executiveSummary: `Procuring R${budget.toLocaleString()} from this Level 1 EME counts as R${recognized.toLocaleString()} toward preferential procurement spend, earning approximately +${(e400 + e500).toFixed(1)} B-BBEE scorecard points.`
+        };
       }
     });
   }

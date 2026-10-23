@@ -1,7 +1,7 @@
-<!-- ═════════════════════════════════════════════════════════════
-     SWIFTMATCH AI — ENTERPRISE WORKFLOW STAGE
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SWIFTMATCH AI â€” ENTERPRISE WORKFLOW STAGE
      Screen 1: Procurement Request  |  Screen 2: Matching Results  |  Screen 3: Maker Experience
-     ═════════════════════════════════════════════════════════════ -->
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
 
 <div class="sm-workflow-container">
 
@@ -35,9 +35,9 @@
     </div>
   </nav>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- SCREEN 1: CORPORATE PROCUREMENT REQUEST                     -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div *ngIf="currentScreen === 'request'" class="screen-view">
     <div class="page-container">
 
@@ -287,7 +287,7 @@
               </div>
               <div class="meta-item">
                 <dt>Average Turnaround</dt>
-                <dd>14–21 Days</dd>
+                <dd>14â€“21 Days</dd>
               </div>
               <div class="meta-item">
                 <dt>Scoring Model</dt>
@@ -305,9 +305,9 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- SCREEN 2: MATCHING RESULTS & EXPLAINABILITY                 -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div *ngIf="currentScreen === 'results'" class="screen-view">
     <div class="page-container">
 
@@ -340,7 +340,7 @@
             <div class="featured-header">
               <div class="featured-badge">
                 <i class="bi bi-star-fill"></i>
-                <span>Featured Best-Fit Supplier • Rank #1</span>
+                <span>Featured Best-Fit Supplier â€¢ Rank #1</span>
               </div>
               <div class="match-score-badge">
                 {{ featuredMatch.matchPercentage }}% Fit
@@ -356,7 +356,7 @@
                 <h2 class="supplier-name">{{ featuredMatch.sme.businessName }}</h2>
                 <p class="supplier-owner">
                   <span>Founder: <strong>{{ featuredMatch.sme.owner }}</strong> ({{ featuredMatch.sme.ownerAge }} yrs)</span>
-                  <span class="text-sep">•</span>
+                  <span class="text-sep">â€¢</span>
                   <span><i class="bi bi-geo-alt"></i> {{ featuredMatch.sme.location }} ({{ featuredMatch.distanceKm }} km from site)</span>
                 </p>
                 <p class="supplier-desc">{{ featuredMatch.sme.description }}</p>
@@ -443,6 +443,109 @@
                   {{ claudeAuditNarrative }}
                 </div>
               </div>
+
+              <!-- â”€â”€ B-BBEE SCORECARD IMPACT PANEL â”€â”€ -->
+              <div class="investor-panel bbbee-panel">
+                <div class="investor-panel-header" (click)="loadBbbeeScore()">
+                  <div class="panel-header-left">
+                    <i class="bi bi-bar-chart-steps"></i>
+                    <div>
+                      <h4 class="investor-panel-title">B-BBEE Scorecard Impact</h4>
+                      <p class="investor-panel-desc">Element 400 &amp; 500 procurement points earned by engaging this Level 1 EME supplier.</p>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-text-action" *ngIf="!bbbeeData && !isBbbeeLoading" (click)="loadBbbeeScore(); $event.stopPropagation()">
+                    <i class="bi bi-calculator"></i> <span>Calculate</span>
+                  </button>
+                  <span *ngIf="isBbbeeLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Calculatingâ€¦</span>
+                </div>
+                <div *ngIf="bbbeeData" class="bbbee-grid">
+                  <div class="bbbee-stat-row">
+                    <div class="bbbee-stat">
+                      <span class="bstat-label">Actual Spend</span>
+                      <strong class="bstat-val">R{{ bbbeeData.actualSpendZAR.toLocaleString() }}</strong>
+                    </div>
+                    <div class="bbbee-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="bbbee-stat accent-stat">
+                      <span class="bstat-label">Recognized Spend (135%)</span>
+                      <strong class="bstat-val">R{{ bbbeeData.recognizedSpendZAR.toLocaleString() }}</strong>
+                    </div>
+                  </div>
+                  <div class="bbbee-points-row">
+                    <div class="bpoint-box">
+                      <span class="bpoint-label">Element 400 Points</span>
+                      <span class="bpoint-num">+{{ bbbeeData.scorecardImpact.element400Points }}</span>
+                      <span class="bpoint-sub">Preferential Procurement</span>
+                    </div>
+                    <div class="bpoint-box">
+                      <span class="bpoint-label">Element 500 Points</span>
+                      <span class="bpoint-num">+{{ bbbeeData.scorecardImpact.element500EsdPoints }}</span>
+                      <span class="bpoint-sub">ESD Contribution</span>
+                    </div>
+                    <div class="bpoint-box bpoint-total">
+                      <span class="bpoint-label">Total Scorecard Boost</span>
+                      <span class="bpoint-num">+{{ bbbeeData.scorecardImpact.totalScorecardBoost }}</span>
+                      <span class="bpoint-sub">dti Codes of Good Practice</span>
+                    </div>
+                  </div>
+                  <p class="bbbee-summary-line">{{ bbbeeData.executiveSummary }}</p>
+                </div>
+              </div>
+
+              <!-- â”€â”€ WORKSHOP ECONOMICS / BOM PANEL â”€â”€ -->
+              <div class="investor-panel bom-panel">
+                <div class="investor-panel-header" (click)="loadBomEstimate()">
+                  <div class="panel-header-left">
+                    <i class="bi bi-receipt-cutoff"></i>
+                    <div>
+                      <h4 class="investor-panel-title">Workshop Economics â€” Bill of Materials</h4>
+                      <p class="investor-panel-desc">AI-estimated cost breakdown with artisan margin protection guardrail.</p>
+                    </div>
+                  </div>
+                  <button type="button" class="btn-text-action" *ngIf="!bomData && !isBomLoading" (click)="loadBomEstimate(); $event.stopPropagation()">
+                    <i class="bi bi-calculator"></i> <span>Estimate</span>
+                  </button>
+                  <span *ngIf="isBomLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Estimatingâ€¦</span>
+                </div>
+                <div *ngIf="bomData" class="bom-content">
+                  <div class="bom-summary-row">
+                    <div class="bom-summary-stat">
+                      <span class="bom-stat-label">Total Budget</span>
+                      <strong>R{{ bomData.totalBudgetZAR.toLocaleString() }}</strong>
+                    </div>
+                    <div class="bom-summary-stat">
+                      <span class="bom-stat-label">Unit Budget</span>
+                      <strong>R{{ bomData.unitBudgetZAR.toLocaleString() }} / unit</strong>
+                    </div>
+                    <div class="bom-summary-stat accent-stat">
+                      <span class="bom-stat-label">Net Margin (Protected)</span>
+                      <strong class="text-accent">{{ bomData.costBreakdown.profitMarginPercentage }}%</strong>
+                    </div>
+                  </div>
+                  <table class="bom-table">
+                    <thead>
+                      <tr>
+                        <th>Cost Line Item</th>
+                        <th class="text-right">Estimated Cost (ZAR)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of bomData.lineItems">
+                        <td>{{ item.item }}</td>
+                        <td class="text-right">R{{ item.estimatedCost.toLocaleString() }}</td>
+                      </tr>
+                      <tr class="bom-margin-row">
+                        <td><strong>Artisan Net Profit Margin</strong></td>
+                        <td class="text-right text-accent"><strong>R{{ bomData.costBreakdown.netProfitMarginZAR.toLocaleString() }}</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="bom-footer-notes">
+                    <span class="margin-guard-badge"><i class="bi bi-shield-check"></i> {{ bomData.marginProtectionNote }}</span>
+                    <span class="payment-sched-note"><i class="bi bi-calendar2-check"></i> {{ bomData.recommendedPaymentSchedule }}</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Action Strip -->
@@ -487,7 +590,7 @@
                     <td>
                       <div class="table-supplier-cell">
                         <span class="cell-name">{{ m.sme.businessName }}</span>
-                        <span class="cell-sub">{{ m.sme.owner }} • {{ m.sme.location }}</span>
+                        <span class="cell-sub">{{ m.sme.owner }} â€¢ {{ m.sme.location }}</span>
                       </div>
                     </td>
                     <td><span class="category-tag">{{ m.sme.category }}</span></td>
@@ -515,9 +618,9 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <!-- SCREEN 3: MAKER EXPERIENCE (MOBILE-FIRST 390px ARTISAN HUB) -->
-  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
   <div *ngIf="currentScreen === 'maker'" class="screen-view maker-canvas">
     <div class="maker-viewport-wrapper">
 
@@ -529,7 +632,7 @@
         </button>
         <div class="device-pill">
           <i class="bi bi-phone"></i>
-          <span>Artisan Mobile View • 390px Optimized</span>
+          <span>Artisan Mobile View â€¢ 390px Optimized</span>
         </div>
       </div>
 
@@ -545,7 +648,7 @@
             </div>
             <div class="maker-identity">
               <h1 class="maker-name">{{ activeMaker.businessName }}</h1>
-              <span class="maker-owner-line">{{ activeMaker.owner }} • {{ activeMaker.location }}</span>
+              <span class="maker-owner-line">{{ activeMaker.owner }} â€¢ {{ activeMaker.location }}</span>
             </div>
           </div>
           <div class="maker-badge-row">
@@ -661,6 +764,73 @@
             <li>Digital confirmation and specification packet sent to <strong>{{ activeMaker.cell }}</strong> on WhatsApp.</li>
             <li>Grassroots field manager from Kasi-eCo hub coordinates quality check & courier collection.</li>
           </ol>
+        </div>
+
+        <!-- Card: Supplier Readiness Gap Advisor -->
+        <div class="maker-card readiness-gap-card">
+          <div class="gap-card-header">
+            <i class="bi bi-graph-up-arrow"></i>
+            <div>
+              <h3 class="card-title">Supplier Readiness Gap Advisor</h3>
+              <p class="gap-card-subtitle">Unlock bigger corporate contracts by closing these gaps.</p>
+            </div>
+          </div>
+
+          <!-- Already good -->
+          <div class="gap-section">
+            <div class="gap-section-label gap-ok">
+              <i class="bi bi-check-circle-fill"></i> Already in Good Standing
+            </div>
+            <div class="gap-item gap-done">
+              <i class="bi bi-patch-check-fill"></i>
+              <div>
+                <span class="gap-item-title">CIPC Registration</span>
+                <span class="gap-item-action">Verified — No action required</span>
+              </div>
+            </div>
+            <div class="gap-item gap-done">
+              <i class="bi bi-patch-check-fill"></i>
+              <div>
+                <span class="gap-item-title">SARS Tax Compliance PIN</span>
+                <span class="gap-item-action">Good Standing — Renew annually on SARS eFiling</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gaps to close -->
+          <div class="gap-section">
+            <div class="gap-section-label gap-warn">
+              <i class="bi bi-exclamation-triangle-fill"></i> Gaps to Close for Bigger Contracts
+            </div>
+            <div class="gap-item gap-missing" *ngIf="!activeMaker?.compliance?.coidaRegistered">
+              <i class="bi bi-clock-history"></i>
+              <div>
+                <span class="gap-item-title">COIDA Letter of Good Standing</span>
+                <span class="gap-item-action">Register at <a href="https://www.compensation.co.za" target="_blank" class="gap-link">compensation.co.za</a> — Required for contracts above R50 000</span>
+              </div>
+            </div>
+            <div class="gap-item gap-missing">
+              <i class="bi bi-clock-history"></i>
+              <div>
+                <span class="gap-item-title">Formal Business Bank Account</span>
+                <span class="gap-item-action">Open via FNB Business Zero — Required for direct EFT purchase orders</span>
+              </div>
+            </div>
+            <div class="gap-item gap-growth">
+              <i class="bi bi-star"></i>
+              <div>
+                <span class="gap-item-title">ISO 9001 Quality Certification</span>
+                <span class="gap-item-action">Opens JSE-listed corporate supply chains — SANAS-accredited bodies available</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gap-cta-row">
+            <span class="gap-impact-note">
+              <i class="bi bi-lightning-charge"></i>
+              Closing 2 gaps could unlock contracts 3x your current contract ceiling.
+            </span>
+          </div>
         </div>
 
       </div>

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 const { matchSmeToRfq } = require('./services/matchingEngine');
-const { parseRFQ, generateExplanation, draftWhatsAppMessage } = require('./services/claudeEngine');
+const { parseRFQ, generateExplanation, draftWhatsAppMessage, estimateBillOfMaterials, calculateBbbeePoints } = require('./services/claudeEngine');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -168,6 +168,36 @@ app.get('/api/ecosystem/metrics', (req, res) => {
       'Geographic Underservice: Sebokeng and Hammanskraal artisan clusters'
     ]
   });
+});
+
+// ── POST: Bill of Materials Estimator ──
+app.post('/api/bom', async (req, res) => {
+  const { rfq, smeId } = req.body;
+  if (!rfq) return res.status(400).json({ error: 'rfq object is required' });
+
+  const targetSme = smes.find(s => s.id === smeId) || smes[0];
+
+  try {
+    const result = await estimateBillOfMaterials(rfq, targetSme);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── POST: B-BBEE Scorecard Impact Calculator ──
+app.post('/api/bbbee/score', (req, res) => {
+  const { budgetZAR, smeId } = req.body;
+  if (!budgetZAR) return res.status(400).json({ error: 'budgetZAR is required' });
+
+  const targetSme = smes.find(s => s.id === smeId) || smes[0];
+
+  try {
+    const result = calculateBbbeePoints(budgetZAR, targetSme);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {
