@@ -1,63 +1,49 @@
-<!-- ── SwiftMatch AI — Minimal Dark Topbar ── -->
-<header class="swiftmatch-topbar">
-  <nav class="sm-nav container-fluid px-4 d-flex align-items-center justify-content-between">
-
-    <!-- Brand -->
-    <a routerLink="/home" class="sm-brand d-flex align-items-center gap-2">
-      <span class="sm-logo-icon">
-        <i class="bi bi-lightning-charge-fill"></i>
-      </span>
-      <span class="sm-brand-text">
-        SwiftMatch <span class="sm-brand-ai">AI</span>
-      </span>
-    </a>
-
-    <!-- Centre Badges -->
-    <div class="d-flex align-items-center gap-2">
-      <span class="sm-badge-pill">
-        <span class="sm-pulse"></span>
-        Powered by Kasi-eCo
-      </span>
-      <span class="sm-badge-pill sm-badge-yes">
-        YES AI Hackathon 2026
-      </span>
+<!-- ── SwiftMatch AI — Enterprise Header ── -->
+<header class="sm-topbar">
+  <div class="sm-topbar-inner">
+    <!-- Brand & Platform Scope -->
+    <div class="sm-brand-group">
+      <a routerLink="/home" class="sm-brand">
+        <span class="sm-brand-mark">
+          <i class="bi bi-shield-check"></i>
+        </span>
+        <span class="sm-brand-title">SwiftMatch</span>
+      </a>
+      <span class="sm-separator">/</span>
+      <span class="sm-program-tag">YES ESD Sourcing Portal</span>
     </div>
 
-    <!-- Right: Status -->
-    <div class="d-flex align-items-center gap-3">
-      <span class="sm-status-dot"></span>
-      <span class="sm-status-text">Engine Live</span>
-      <a href="http://localhost:4200" target="_blank" class="sm-link-pill">
-        <i class="bi bi-box-arrow-up-right me-1"></i>Kasi-eCo
+    <!-- Center/Right Status & Verified Pool Indicator -->
+    <div class="sm-meta-group">
+      <div class="sm-status-chip">
+        <span class="sm-live-dot"></span>
+        <span class="sm-chip-text"><span class="d-none d-sm-inline">Vetted Pool: </span><strong>384 SMMEs</strong></span>
+      </div>
+      <a href="http://localhost:4200" target="_blank" class="sm-catalog-link d-none d-md-inline-flex" title="Open Grassroots Kasi-eCo Catalog">
+        <span>Kasi-eCo Catalog</span>
+        <i class="bi bi-arrow-up-right"></i>
       </a>
     </div>
-
-  </nav>
+  </div>
 </header>
 
-<!-- ── Main Router Outlet ── -->
-<main class="sm-main-outlet">
+<!-- ── Main Application Outlet ── -->
+<main class="sm-main">
   <router-outlet></router-outlet>
 </main>
 
-<!-- ── Minimal Dark Footer ── -->
+<!-- ── Subtle Enterprise Footer ── -->
 <footer class="sm-footer">
-  <div class="container-fluid px-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
-
-    <div class="d-flex align-items-center gap-3">
-      <span class="sm-footer-brand">SwiftMatch <span class="sm-brand-ai">AI</span></span>
-      <span class="sm-footer-divider">|</span>
-      <span class="sm-footer-muted">Challenge 4 — ESD Tech Enablement</span>
+  <div class="sm-footer-inner">
+    <div class="sm-footer-left">
+      <span>Built for <strong>YES AI Hackathon 2026</strong></span>
+      <span class="sm-bullet">•</span>
+      <span>Challenge 4: ESD Tech Enablement</span>
     </div>
-
-    <div class="d-flex align-items-center gap-3">
-      <span class="sm-footer-muted">Built with Angular · Express · Claude AI</span>
-      <span class="sm-footer-divider">|</span>
-      <span class="sm-badge-pill">
-        <i class="bi bi-shield-check me-1"></i> POPIA Compliant
-      </span>
-      <span class="sm-footer-muted">© 2026 Swift House</span>
+    <div class="sm-footer-right">
+      <span>POPIA & B-BBEE Verified Flow</span>
+      <span class="sm-bullet">•</span>
+      <span>Powered by Kasi-eCo Engine</span>
     </div>
-
   </div>
 </footer>

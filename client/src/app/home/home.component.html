@@ -1,534 +1,671 @@
-<!-- ── Dark Obsidian Carbon Background ── -->
-<div class="carbon-stage min-vh-100 text-light py-4 position-relative overflow-hidden">
-  
-  <!-- Subtle Ambient Glow Orbs -->
-  <div class="glow-orb-emerald" style="top: -80px; left: 10%;"></div>
-  <div class="glow-orb-amber" style="bottom: 10%; right: 5%;"></div>
+<!-- ═════════════════════════════════════════════════════════════
+     SWIFTMATCH AI — ENTERPRISE WORKFLOW STAGE
+     Screen 1: Procurement Request  |  Screen 2: Matching Results  |  Screen 3: Maker Experience
+     ═════════════════════════════════════════════════════════════ -->
 
-  <div class="container-fluid px-3 px-lg-5 position-relative" style="z-index: 2;">
-    
-    <!-- ── Top Global Navigation Bar ── -->
-    <header class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary border-opacity-25 gap-3">
-      <div class="d-flex align-items-center gap-3">
-        <div class="brand-badge-box">
-          <i class="bi bi-cpu text-emerald fs-4"></i>
-        </div>
-        <div>
-          <div class="d-flex align-items-center gap-2">
-            <h4 class="fw-extrabold m-0 tracking-tight text-white font-heading">SwiftMatch<span class="text-emerald">.AI</span></h4>
-            <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2 py-0-5 small border border-emerald-subtle">
-              v1.0 Hackathon Build
-            </span>
-          </div>
-          <small class="text-muted d-block" style="font-size: 0.75rem;">
-            Enterprise SME Procurement Matching • Powered by Kasi-eCo Verified Network
-          </small>
-        </div>
+<div class="sm-workflow-container">
+
+  <!-- TOP WORKFLOW STEPPERS (Enterprise Linear Style) -->
+  <nav class="sm-stepper-bar" aria-label="Workflow Navigation">
+    <div class="sm-stepper-inner">
+      <div class="stepper-item" 
+           [class.active]="currentScreen === 'request'"
+           (click)="navigateTo('request')">
+        <span class="step-num">1</span>
+        <span class="step-label">Procurement Request</span>
       </div>
+      <div class="stepper-sep"><i class="bi bi-chevron-right"></i></div>
 
-      <!-- Navigation Tabs -->
-      <div class="d-flex align-items-center gap-2">
-        <div class="btn-group p-1 glass-toggle-group">
-          <button type="button" 
-                  class="btn btn-sm" 
-                  [ngClass]="selectedTab === 'match' ? 'btn-emerald active shadow-sm' : 'text-muted'"
-                  (click)="selectedTab = 'match'">
-            <i class="bi bi-lightning-charge me-1"></i> Procurement Matcher
-          </button>
-          <button type="button" 
-                  class="btn btn-sm" 
-                  [ngClass]="selectedTab === 'ecosystem' ? 'btn-emerald active shadow-sm' : 'text-muted'"
-                  (click)="selectedTab = 'ecosystem'">
-            <i class="bi bi-graph-up-arrow me-1"></i> YES Impact Dashboard
-          </button>
-        </div>
-
-        <a href="http://localhost:4200" target="_blank" class="btn btn-sm btn-glass text-light d-none d-md-inline-flex align-items-center gap-1">
-          <i class="bi bi-shop text-emerald"></i>
-          <span>View Kasi-eCo Portal</span>
-          <i class="bi bi-box-arrow-up-right ms-1 text-muted" style="font-size: 0.7rem;"></i>
-        </a>
+      <div class="stepper-item" 
+           [class.active]="currentScreen === 'results'"
+           (click)="navigateTo('results')">
+        <span class="step-num">2</span>
+        <span class="step-label">Matching Results</span>
+        <span class="step-badge" *ngIf="matches.length > 0">{{ matches.length }}</span>
       </div>
-    </header>
+      <div class="stepper-sep"><i class="bi bi-chevron-right"></i></div>
 
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!-- TAB 1: CORPORATE PROCUREMENT MATCHER                   -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <div *ngIf="selectedTab === 'match'">
-      
-      <!-- ── Section A: Executive Command Bar ── -->
-      <section class="glass-command-panel p-4 p-lg-5 mb-4 position-relative overflow-hidden">
-        
-        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
-          <div class="d-inline-flex align-items-center gap-2 glass-pill px-3 py-1">
-            <span class="pulse-dot"></span>
-            <span class="text-uppercase fw-bold text-light" style="font-size: 0.72rem; letter-spacing: 0.08em;">
-              Challenge 4: SME Opportunity Matching Engine
-            </span>
-          </div>
-          <small class="text-muted">
-            <i class="bi bi-shield-check text-emerald me-1"></i> POPIA-Compliant & Verified Baseline
-          </small>
+      <div class="stepper-item" 
+           [class.active]="currentScreen === 'maker'"
+           (click)="navigateTo('maker')">
+        <span class="step-num">3</span>
+        <span class="step-label">Maker Experience</span>
+        <span class="step-badge-accent" *ngIf="featuredMatch">Mobile Ready</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 1: CORPORATE PROCUREMENT REQUEST                     -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div *ngIf="currentScreen === 'request'" class="screen-view">
+    <div class="page-container">
+
+      <!-- Header -->
+      <header class="page-header">
+        <div class="header-breadcrumb">
+          <span class="crumb-root">Procurement</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb-current">New Sourcing Request</span>
         </div>
 
-        <h1 class="display-6 fw-extrabold text-white mb-2 font-heading">
-          AI Sourcing for <span class="gradient-text-emerald">Verified Township Makers</span>
-        </h1>
-        <p class="text-muted mb-4" style="max-width: 720px; font-size: 0.98rem; line-height: 1.5;">
-          Ingest raw corporate RFQ briefs, compute multi-factor capacity and compliance feasibility across vetted youth-owned enterprises, and dispatch direct WhatsApp proposals in seconds.
-        </p>
-
-        <!-- Command Input Box -->
-        <div class="command-input-container p-2 mb-3">
-          <!-- Status notice -->
-          <div *ngIf="claudeStatusNotice" class="alert alert-info py-1-5 px-3 mb-2 small d-flex align-items-center gap-2 rounded-2" style="background: rgba(14, 165, 233, 0.15); border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">
-            <i class="bi bi-info-circle-fill"></i>
-            <span>{{ claudeStatusNotice }}</span>
+        <div class="header-main">
+          <div>
+            <h1 class="page-title">Create Procurement Request</h1>
+            <p class="page-subtitle">
+              Specify your requirements to discover vetted, compliance-ready township SMMEs from the YES-approved supplier network.
+            </p>
           </div>
 
-          <div class="d-flex align-items-start gap-2">
-            <span class="pt-2 ps-2 text-emerald fs-4">
-              <i class="bi bi-stars"></i>
-            </span>
-            <textarea class="form-control border-0 bg-transparent text-white p-2 command-textarea" 
-                      rows="3" 
-                      [(ngModel)]="rfqText" 
-                      placeholder="Describe what your organization needs (e.g. 150 bespoke leather conference folios in Sandton, budget R85k)..."></textarea>
-          </div>
-
-          <!-- Parameter Strips -->
-          <div class="row g-2 px-2 pt-2 border-top border-secondary border-opacity-25 align-items-center">
-            <div class="col-6 col-md-2">
-              <div class="input-group input-group-sm">
-                <span class="input-group-text bg-transparent border-0 text-muted">Qty:</span>
-                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="requiredQuantity">
-              </div>
-            </div>
-            <div class="col-6 col-md-3">
-              <div class="input-group input-group-sm">
-                <span class="input-group-text bg-transparent border-0 text-muted">Budget: R</span>
-                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="budgetZAR">
-              </div>
-            </div>
-            <div class="col-6 col-md-2">
-              <div class="input-group input-group-sm">
-                <span class="input-group-text bg-transparent border-0 text-muted">Days:</span>
-                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="maxTurnaroundDays">
-              </div>
-            </div>
-            <div class="col-12 col-md-5 d-flex gap-2 justify-content-end">
-              <button class="btn btn-sm btn-glass text-light px-3 py-2 fw-semibold d-flex align-items-center gap-1"
-                      (click)="smartParseWithClaude()"
-                      [disabled]="isClaudeParsing"
-                      title="Claude 3.5 Sonnet extracts parameters from natural text">
-                <span *ngIf="isClaudeParsing" class="spinner-border spinner-border-sm text-info"></span>
-                <i *ngIf="!isClaudeParsing" class="bi bi-magic text-info"></i>
-                <span style="font-size: 0.8rem;">{{ isClaudeParsing ? 'Parsing...' : 'Claude Parse' }}</span>
-              </button>
-
-              <button class="btn btn-emerald px-3 py-2 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1" 
-                      (click)="executeMatch()" 
-                      [disabled]="isMatching">
-                <span *ngIf="isMatching" class="spinner-border spinner-border-sm"></span>
-                <i *ngIf="!isMatching" class="bi bi-lightning-charge-fill"></i>
-                <span>{{ isMatching ? 'Vectorizing...' : 'Run Match Engine' }}</span>
+          <!-- Presets -->
+          <div class="preset-group">
+            <span class="preset-label">Demo Scenarios:</span>
+            <div class="preset-buttons">
+              <button *ngFor="let p of presetRfqs" 
+                      type="button" 
+                      class="preset-btn"
+                      (click)="applyPreset(p)"
+                      title="Populate: {{ p.title }}">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>{{ p.title.split(':')[0] }}</span>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Quick Preset Pills (Judge Demo Accelerators) -->
-        <div class="d-flex flex-wrap align-items-center gap-2">
-          <small class="text-muted fw-bold me-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">
-            Demo Presets:
-          </small>
-          <button *ngFor="let preset of presetRfqs" 
-                  type="button" 
-                  class="btn btn-sm preset-pill text-nowrap"
-                  (click)="applyPreset(preset)">
-            <span class="text-emerald me-1">⚡</span>
-            <span>{{ preset.title.split(':')[0] }}</span>
-          </button>
+        <div *ngIf="claudeNotice" class="status-banner" role="status">
+          <i class="bi bi-info-circle-fill"></i>
+          <span>{{ claudeNotice }}</span>
         </div>
+      </header>
 
-      </section>
+      <!-- Form Layout -->
+      <div class="form-layout">
+        <form class="procurement-form" (ngSubmit)="submitProcurementRequest()" novalidate>
 
-      <!-- ── Section B: Results Grid + Explainability Split ── -->
-      <div class="row g-4" *ngIf="hasMatched">
-        
-        <!-- Left: Ranked Candidate Cards (7 Cols) -->
-        <div class="col-lg-7">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h5 class="fw-bold m-0 text-white font-heading d-flex align-items-center gap-2">
-              <i class="bi bi-trophy text-warning"></i>
-              Ranked Supplier Matches
-              <span class="badge bg-dark border border-secondary text-light rounded-pill px-2 py-0-5" style="font-size: 0.72rem;">
-                {{ matches.length }} Candidates
-              </span>
-            </h5>
-            <small class="text-muted">Ranked by Multi-Factor Fit</small>
-          </div>
-
-          <div class="d-flex flex-column gap-3">
-            <div *ngFor="let item of matches; let i = index" 
-                 class="glass-card match-card p-4 position-relative"
-                 [ngClass]="{'active-match': selectedMatch?.sme?.id === item.sme.id}"
-                 (click)="selectMatchForAudit(item)">
-              
-              <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start gap-3">
-                
-                <!-- SME Profile Info -->
-                <div class="d-flex gap-3">
-                  <div class="sme-avatar-stage">
-                    <img [src]="item.sme.image" alt="{{ item.sme.businessName }}" class="sme-thumb">
-                    <span class="rank-badge">#{{ i + 1 }}</span>
-                  </div>
-                  <div>
-                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                      <h5 class="fw-bold text-white mb-0">{{ item.sme.businessName }}</h5>
-                      <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2 py-0-5 small" *ngIf="item.sme.youthOwned">
-                        <i class="bi bi-patch-check-fill me-1"></i> Youth Owned
-                      </span>
-                    </div>
-
-                    <p class="text-muted small mb-2">
-                      <i class="bi bi-geo-alt-fill text-emerald me-1"></i>
-                      <span>{{ item.sme.location }} ({{ item.distanceKm }} km from site)</span>
-                      <span class="mx-1">•</span>
-                      <span>Owner: <strong class="text-light">{{ item.sme.owner }} ({{ item.sme.ownerAge }} yrs)</strong></span>
-                    </p>
-
-                    <p class="text-light text-opacity-75 small mb-2 lh-sm line-clamp-2" style="font-size: 0.85rem;">
-                      {{ item.sme.description }}
-                    </p>
-
-                    <!-- Micro Metric Tags -->
-                    <div class="d-flex flex-wrap gap-2 pt-1">
-                      <span class="meta-chip">
-                        <i class="bi bi-box-seam me-1 text-emerald"></i> Cap: {{ item.sme.monthlyCapacityUnits }}/mo
-                      </span>
-                      <span class="meta-chip">
-                        <i class="bi bi-star-fill me-1 text-warning"></i> {{ item.sme.kasiEcoRating }} ({{ item.sme.verifiedOrdersCount }} orders)
-                      </span>
-                      <span class="meta-chip">
-                        <i class="bi bi-people me-1 text-info"></i> {{ item.sme.youthEmployed }} Jobs
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Match Radial Ring Score -->
-                <div class="text-center text-sm-end ms-auto">
-                  <div class="score-circle-wrapper mx-auto" [style.background]="getScoreGradient(item.matchPercentage)">
-                    <div class="score-circle-inner">
-                      <span class="score-number">{{ item.matchPercentage }}%</span>
-                      <small class="score-label">MATCH</small>
-                    </div>
-                  </div>
-
-                  <div class="mt-2 d-flex flex-column gap-1">
-                    <button type="button" 
-                            class="btn btn-sm btn-glass text-light py-1 px-3 text-nowrap"
-                            (click)="selectMatchForAudit(item); $event.stopPropagation()">
-                      <i class="bi bi-search me-1 text-emerald"></i> Audit XAI
-                    </button>
-                    <button type="button" 
-                            class="btn btn-sm btn-whatsapp py-1 px-3 text-nowrap"
-                            (click)="deployToWhatsApp(item); $event.stopPropagation()">
-                      <i class="bi bi-whatsapp me-1"></i> Send RFQ
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
+          <!-- 1. Requirement -->
+          <section class="form-section">
+            <div class="section-header">
+              <h2 class="section-title">1. Requirement Specification</h2>
+              <p class="section-desc">Describe the product, materials, or services needed by your organisation.</p>
             </div>
+
+            <div class="form-group">
+              <div class="label-row">
+                <label for="rfqText" class="form-label">
+                  Procurement Requirement <span class="required">*</span>
+                </label>
+                <button type="button" 
+                        class="btn-text-action" 
+                        (click)="autofillWithClaude()"
+                        [disabled]="isClaudeParsing"
+                        title="Extract structured parameters with Claude AI">
+                  <i class="bi bi-magic"></i>
+                  <span>{{ isClaudeParsing ? 'Extracting...' : 'Claude AI' }}</span>
+                </button>
+              </div>
+              <textarea id="rfqText" 
+                        name="rfqText" 
+                        class="form-control" 
+                        rows="3" 
+                        [(ngModel)]="rfqText"
+                        [class.is-invalid]="isSubmitted && errors.rfqText"
+                        placeholder="e.g. 150 handmade genuine leather conference folios and executive desk pads for leadership summit in Sandton..."></textarea>
+              <div *ngIf="isSubmitted && errors.rfqText" class="invalid-feedback">
+                {{ errors.rfqText }}
+              </div>
+              <p class="form-help">Specify material grade, volume units, or custom branding requirements.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="category" class="form-label">
+                Primary Craft / Industry Sector <span class="required">*</span>
+              </label>
+              <select id="category" 
+                      name="category" 
+                      class="form-select" 
+                      [(ngModel)]="selectedCategory">
+                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+              </select>
+              <p class="form-help">Maps to verified production capabilities in the YES township supplier database.</p>
+            </div>
+          </section>
+
+          <!-- 2. Commercials -->
+          <section class="form-section">
+            <div class="section-header">
+              <h2 class="section-title">2. Commercial & Volume Parameters</h2>
+              <p class="section-desc">Budget allocation and capacity thresholds used for feasibility matching.</p>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label for="quantity" class="form-label">
+                  Required Quantity (Units) <span class="required">*</span>
+                </label>
+                <input type="number" 
+                       id="quantity" 
+                       name="requiredQuantity" 
+                       class="form-control" 
+                       [(ngModel)]="requiredQuantity"
+                       [class.is-invalid]="isSubmitted && errors.requiredQuantity"
+                       min="1">
+                <div *ngIf="isSubmitted && errors.requiredQuantity" class="invalid-feedback">
+                  {{ errors.requiredQuantity }}
+                </div>
+                <p class="form-help">Evaluated against verified artisan monthly capacity.</p>
+              </div>
+
+              <div class="form-group">
+                <label for="budget" class="form-label">
+                  Budget Allocation (ZAR) <span class="required">*</span>
+                </label>
+                <div class="input-affix-wrapper">
+                  <span class="input-prefix">R</span>
+                  <input type="number" 
+                         id="budget" 
+                         name="budgetZAR" 
+                         class="form-control has-prefix" 
+                         [(ngModel)]="budgetZAR"
+                         [class.is-invalid]="isSubmitted && errors.budgetZAR"
+                         min="1000"
+                         step="1000">
+                </div>
+                <div *ngIf="isSubmitted && errors.budgetZAR" class="invalid-feedback">
+                  {{ errors.budgetZAR }}
+                </div>
+                <p class="form-help">Procurement budget inclusive of VAT and delivery.</p>
+              </div>
+            </div>
+
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label for="turnaround" class="form-label">
+                  Maximum Turnaround (Days) <span class="required">*</span>
+                </label>
+                <input type="number" 
+                       id="turnaround" 
+                       name="maxTurnaroundDays" 
+                       class="form-control" 
+                       [(ngModel)]="maxTurnaroundDays"
+                       [class.is-invalid]="isSubmitted && errors.maxTurnaroundDays"
+                       min="1">
+                <div *ngIf="isSubmitted && errors.maxTurnaroundDays" class="invalid-feedback">
+                  {{ errors.maxTurnaroundDays }}
+                </div>
+                <p class="form-help">Calendar days from PO issue to delivery.</p>
+              </div>
+
+              <div class="form-group">
+                <label for="location" class="form-label">
+                  Delivery Location / Site <span class="required">*</span>
+                </label>
+                <input type="text" 
+                       id="location" 
+                       name="targetLocation" 
+                       class="form-control" 
+                       [(ngModel)]="targetLocation"
+                       [class.is-invalid]="isSubmitted && errors.targetLocation">
+                <div *ngIf="isSubmitted && errors.targetLocation" class="invalid-feedback">
+                  {{ errors.targetLocation }}
+                </div>
+                <p class="form-help">Used to compute proximity logistics feasibility.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. Compliance -->
+          <section class="form-section">
+            <div class="section-header">
+              <h2 class="section-title">3. Compliance & Governance Verification</h2>
+              <p class="section-desc">Ensure shortlisted SMMEs fulfill enterprise vendor onboarding criteria.</p>
+            </div>
+
+            <div class="compliance-checklist">
+              <label class="compliance-item">
+                <input type="checkbox" name="requireCipc" [(ngModel)]="requireCipc">
+                <div class="item-text">
+                  <span class="item-title">CIPC Business Registration</span>
+                  <span class="item-sub">Must possess active registration with Companies & Intellectual Property Commission.</span>
+                </div>
+              </label>
+
+              <label class="compliance-item">
+                <input type="checkbox" name="requireTaxPin" [(ngModel)]="requireTaxPin">
+                <div class="item-text">
+                  <span class="item-title">Valid SARS Tax Compliance PIN</span>
+                  <span class="item-sub">Good standing status verified on SARS eFiling system.</span>
+                </div>
+              </label>
+
+              <label class="compliance-item">
+                <input type="checkbox" name="requireYouthOwned" [(ngModel)]="requireYouthOwned">
+                <div class="item-text">
+                  <span class="item-title">100% Youth-Owned SMME</span>
+                  <span class="item-sub">Direct qualification for YES 4 Youth and B-BBEE ESD compliance points.</span>
+                </div>
+              </label>
+
+              <label class="compliance-item">
+                <input type="checkbox" name="requireCoida" [(ngModel)]="requireCoida">
+                <div class="item-text">
+                  <span class="item-title">COIDA Letter of Good Standing (Optional)</span>
+                  <span class="item-sub">Compensation for Occupational Injuries & Diseases Act certification.</span>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <!-- Action Bar -->
+          <div class="form-action-bar">
+            <button type="button" class="btn-secondary-sm" (click)="resetForm()">
+              <i class="bi bi-arrow-counterclockwise"></i>
+              <span>Clear Form</span>
+            </button>
+
+            <button type="submit" class="btn-primary-sm" [disabled]="isSubmitting">
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isSubmitting" class="bi bi-search"></i>
+              <span>{{ isSubmitting ? 'Evaluating Pool...' : 'Search & Evaluate Matches' }}</span>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Sidebar Summary -->
+        <aside class="sidebar-summary">
+          <div class="summary-panel">
+            <h3 class="panel-heading">YES Supplier Vetting</h3>
+            <p class="panel-copy">
+              Suppliers in this network have been pre-onboarded via Kasi-eCo grassroots field hubs and verified against the YES compliance framework.
+            </p>
+
+            <dl class="meta-list">
+              <div class="meta-item">
+                <dt>Pre-Vetted Pool</dt>
+                <dd><strong>384 Verified Makers</strong></dd>
+              </div>
+              <div class="meta-item">
+                <dt>Average Turnaround</dt>
+                <dd>14–21 Days</dd>
+              </div>
+              <div class="meta-item">
+                <dt>Scoring Model</dt>
+                <dd>Multi-Factor Deterministic</dd>
+              </div>
+              <div class="meta-item">
+                <dt>Vendor Compliance</dt>
+                <dd><span class="badge-status badge-ready">Audit-Ready</span></dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 2: MATCHING RESULTS & EXPLAINABILITY                 -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div *ngIf="currentScreen === 'results'" class="screen-view">
+    <div class="page-container">
+
+      <!-- Sourcing Request Summary Ribbon -->
+      <div class="results-summary-ribbon">
+        <div class="ribbon-left">
+          <button type="button" class="btn-back" (click)="navigateTo('request')">
+            <i class="bi bi-arrow-left"></i>
+            <span>Modify Sourcing Request</span>
+          </button>
+          <div class="ribbon-specs">
+            <span class="ribbon-pill"><strong>Qty:</strong> {{ requiredQuantity }} units</span>
+            <span class="ribbon-pill"><strong>Budget:</strong> R{{ budgetZAR.toLocaleString() }}</span>
+            <span class="ribbon-pill"><strong>Site:</strong> {{ targetLocation }}</span>
+            <span class="ribbon-pill"><strong>Deadline:</strong> {{ maxTurnaroundDays }} Days</span>
           </div>
         </div>
+        <div class="ribbon-right">
+          <span class="eval-stat">Evaluated <strong>{{ totalEvaluated }}</strong> vetted suppliers</span>
+        </div>
+      </div>
 
-        <!-- Right: Explainable AI (XAI) Audit Drawer (5 Cols) -->
-        <div class="col-lg-5" *ngIf="selectedMatch">
-          <div class="sticky-top" style="top: 20px;">
-            <div class="glass-panel p-4 p-xl-4-5 shadow-lg border-emerald-subtle">
+      <!-- Results Main Grid -->
+      <div class="results-layout">
+
+        <!-- Left / Top: Featured Best-Fit Match (Rank #1) -->
+        <div class="featured-column" *ngIf="featuredMatch">
+          <div class="featured-card">
+            
+            <div class="featured-header">
+              <div class="featured-badge">
+                <i class="bi bi-star-fill"></i>
+                <span>Featured Best-Fit Supplier • Rank #1</span>
+              </div>
+              <div class="match-score-badge">
+                {{ featuredMatch.matchPercentage }}% Fit
+              </div>
+            </div>
+
+            <!-- Supplier Profile Strip -->
+            <div class="supplier-main-info">
+              <div class="supplier-avatar-wrapper">
+                <img [src]="featuredMatch.sme.image" [alt]="featuredMatch.sme.businessName" class="supplier-avatar">
+              </div>
+              <div class="supplier-headline">
+                <h2 class="supplier-name">{{ featuredMatch.sme.businessName }}</h2>
+                <p class="supplier-owner">
+                  <span>Founder: <strong>{{ featuredMatch.sme.owner }}</strong> ({{ featuredMatch.sme.ownerAge }} yrs)</span>
+                  <span class="text-sep">•</span>
+                  <span><i class="bi bi-geo-alt"></i> {{ featuredMatch.sme.location }} ({{ featuredMatch.distanceKm }} km from site)</span>
+                </p>
+                <p class="supplier-desc">{{ featuredMatch.sme.description }}</p>
+              </div>
+            </div>
+
+            <!-- THE KEY UX DECISION: Explain WHY this supplier matches -->
+            <div class="match-reasoning-panel">
+              <h3 class="panel-subheading">
+                <i class="bi bi-lightbulb"></i> Match Reasoning & Feasibility Analysis
+              </h3>
               
-              <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary border-opacity-25">
-                <div>
-                  <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2-5 py-1 small mb-1">
-                    Responsible AI • Explainability Drawer
-                  </span>
-                  <h5 class="fw-bold text-white mb-0">Audit: {{ selectedMatch.sme.businessName }}</h5>
-                </div>
-                <div class="display-6 fw-extrabold text-emerald font-heading">
-                  {{ selectedMatch.matchPercentage }}%
-                </div>
-              </div>
-
-              <!-- Multi-Factor Radar Progress Bars -->
-              <h6 class="text-uppercase fw-bold text-muted small mb-3 tracking-wide" style="font-size: 0.72rem;">
-                Deterministic Multi-Factor Scoring Matrix
-              </h6>
-
-              <div class="d-flex flex-column gap-2 mb-4">
-                <!-- 1. Semantic Fit -->
-                <div>
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-light">Semantic Craft & Item Relevance</span>
-                    <strong class="text-emerald">{{ selectedMatch.radarScores.semanticFit }}%</strong>
+              <div class="reason-metrics-grid">
+                <!-- Capacity Fit -->
+                <div class="reason-metric-card">
+                  <span class="metric-label">Monthly Production Capacity</span>
+                  <div class="metric-val-row">
+                    <strong class="metric-value">{{ featuredMatch.sme.monthlyCapacityUnits }} units/mo</strong>
+                    <span class="metric-pill pill-positive">1.67x Buffer</span>
                   </div>
-                  <div class="progress progress-dark">
-                    <div class="progress-bar bg-emerald" [style.width.%]="selectedMatch.radarScores.semanticFit"></div>
-                  </div>
+                  <p class="metric-hint">Comfortably absorbs your {{ requiredQuantity }} unit requirement without factory bottleneck.</p>
                 </div>
 
-                <!-- 2. Capacity Buffer -->
-                <div>
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-light">Production Capacity & Lead Time</span>
-                    <strong class="text-emerald">{{ selectedMatch.radarScores.productionCapacity }}%</strong>
+                <!-- Delivery Suitability -->
+                <div class="reason-metric-card">
+                  <span class="metric-label">Delivery Timeline Fit</span>
+                  <div class="metric-val-row">
+                    <strong class="metric-value">{{ featuredMatch.sme.averageTurnaroundDays }} Days Avg</strong>
+                    <span class="metric-pill pill-positive">{{ maxTurnaroundDays - featuredMatch.sme.averageTurnaroundDays }} Days Safety Margin</span>
                   </div>
-                  <div class="progress progress-dark">
-                    <div class="progress-bar bg-info" [style.width.%]="selectedMatch.radarScores.productionCapacity"></div>
-                  </div>
+                  <p class="metric-hint">Historical fulfillment average well within your {{ maxTurnaroundDays }}-day delivery window.</p>
                 </div>
 
-                <!-- 3. Compliance & Governance -->
-                <div>
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-light">CIPC & Statutory Tax Compliance</span>
-                    <strong class="text-emerald">{{ selectedMatch.radarScores.complianceStatus }}%</strong>
+                <!-- Proximity & Logistics -->
+                <div class="reason-metric-card">
+                  <span class="metric-label">Proximity Logistics</span>
+                  <div class="metric-val-row">
+                    <strong class="metric-value">{{ featuredMatch.distanceKm }} km to {{ targetLocation }}</strong>
+                    <span class="metric-pill pill-positive">Same Day Courier</span>
                   </div>
-                  <div class="progress progress-dark">
-                    <div class="progress-bar bg-warning" [style.width.%]="selectedMatch.radarScores.complianceStatus"></div>
-                  </div>
-                </div>
-
-                <!-- 4. Geographic Transit Proximity -->
-                <div>
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-light">Logistical Proximity ({{ selectedMatch.distanceKm }} km)</span>
-                    <strong class="text-emerald">{{ selectedMatch.radarScores.geographicProximity }}%</strong>
-                  </div>
-                  <div class="progress progress-dark">
-                    <div class="progress-bar bg-primary" [style.width.%]="selectedMatch.radarScores.geographicProximity"></div>
-                  </div>
-                </div>
-
-                <!-- 5. Kasi-eCo Verified Order Reputation -->
-                <div>
-                  <div class="d-flex justify-content-between small mb-1">
-                    <span class="text-light">Past Marketplace Trade Reputation</span>
-                    <strong class="text-emerald">{{ selectedMatch.radarScores.reputationAndOrders }}%</strong>
-                  </div>
-                  <div class="progress progress-dark">
-                    <div class="progress-bar bg-success" [style.width.%]="selectedMatch.radarScores.reputationAndOrders"></div>
-                  </div>
+                  <p class="metric-hint">Low transport risk and reduced logistics carbon footprint.</p>
                 </div>
               </div>
 
-              <!-- AI Audit Findings -->
-              <div class="mb-3">
-                <h6 class="text-uppercase fw-bold text-muted small mb-2" style="font-size: 0.72rem;">
-                  Positive Match Justifications
-                </h6>
-                <ul class="list-unstyled d-flex flex-column gap-1 small mb-0">
-                  <li *ngFor="let h of selectedMatch.highlights" class="d-flex align-items-start gap-2 text-light">
-                    <i class="bi bi-check-circle-fill text-emerald pt-0-5"></i>
+              <!-- Positive Highlights & Gap Advisory -->
+              <div class="highlights-box">
+                <div class="highlights-title">Verified Strengths:</div>
+                <ul class="highlights-list">
+                  <li *ngFor="let h of featuredMatch.highlights">
+                    <i class="bi bi-check-circle-fill"></i>
                     <span>{{ h }}</span>
                   </li>
-                </ul>
-              </div>
-
-              <!-- AI Gap Advisory (Crucial for Responsible AI) -->
-              <div class="p-3 rounded-3 bg-warning bg-opacity-10 border border-warning border-opacity-25 mb-4" *ngIf="selectedMatch.gaps && selectedMatch.gaps.length > 0">
-                <div class="d-flex align-items-center gap-2 mb-1 text-warning fw-bold small">
-                  <i class="bi bi-exclamation-triangle-fill"></i>
-                  <span>Delivery & Compliance Risk Advisory</span>
-                </div>
-                <ul class="list-unstyled mb-0 d-flex flex-column gap-1 small text-light text-opacity-90">
-                  <li *ngFor="let g of selectedMatch.gaps">
-                    • {{ g }}
+                  <li>
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Grassroots track record: <strong>{{ featuredMatch.sme.verifiedOrdersCount }} completed orders</strong> on Kasi-eCo marketplace.</span>
                   </li>
                 </ul>
               </div>
 
-              <!-- Claude AI Deep Audit Narrative -->
-              <div class="mb-4">
-                <div class="d-flex align-items-center justify-content-between mb-2">
-                  <span class="badge bg-info-subtle text-info rounded-pill px-2 py-0-5 small" style="font-size: 0.7rem;">
-                    <i class="bi bi-robot me-1"></i> Claude 3.5 Sonnet XAI Audit
+              <!-- Document Readiness Strip -->
+              <div class="docs-readiness-row">
+                <span class="docs-label">Statutory Document Readiness:</span>
+                <div class="docs-badges">
+                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> CIPC Active</span>
+                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> SARS Tax PIN</span>
+                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> B-BBEE Level 1</span>
+                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance.coidaRegistered" [class.pending]="!featuredMatch.sme.compliance.coidaRegistered">
+                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance.coidaRegistered" [class.bi-clock-history]="!featuredMatch.sme.compliance.coidaRegistered"></i>
+                    {{ featuredMatch.sme.compliance.coidaRegistered ? 'COIDA Good Standing' : 'COIDA Verification Pending' }}
                   </span>
-                  <button type="button" 
-                          class="btn btn-sm btn-glass text-info py-0-5 px-2"
-                          style="font-size: 0.72rem;"
-                          (click)="generateClaudeAudit()"
-                          [disabled]="isClaudeAuditing">
-                    <span *ngIf="isClaudeAuditing" class="spinner-border spinner-border-sm me-1"></span>
-                    <i *ngIf="!isClaudeAuditing" class="bi bi-sparkles me-1"></i>
-                    <span>{{ isClaudeAuditing ? 'Generating...' : (claudeAuditNarrative ? 'Refresh AI Narrative' : 'Deep Explainability') }}</span>
-                  </button>
                 </div>
+              </div>
 
-                <div *ngIf="claudeAuditNarrative" class="p-3 rounded-3 bg-dark border border-info border-opacity-30 small text-light lh-base" style="font-size: 0.82rem; white-space: pre-line;">
+              <!-- Claude Deep Explainability -->
+              <div class="claude-narrative-section">
+                <button type="button" 
+                        class="btn-text-action" 
+                        (click)="generateClaudeDeepAudit(featuredMatch)"
+                        [disabled]="isGeneratingAudit">
+                  <i class="bi bi-robot"></i>
+                  <span>{{ isGeneratingAudit ? 'Synthesizing Audit...' : (claudeAuditNarrative ? 'Regenerate Claude XAI Audit' : 'Generate Full Claude 3.5 Sonnet Audit Trail') }}</span>
+                </button>
+                <div *ngIf="claudeAuditNarrative" class="claude-narrative-bubble">
                   {{ claudeAuditNarrative }}
                 </div>
               </div>
+            </div>
 
-              <!-- Action CTAs -->
-              <div class="d-grid gap-2">
-                <button type="button" class="btn btn-emerald py-2 fw-bold shadow-sm" (click)="deployToWhatsApp(selectedMatch)">
-                  <i class="bi bi-whatsapp me-1"></i> Deploy Opportunity via WhatsApp
-                </button>
-                <a href="http://localhost:4200" target="_blank" class="btn btn-sm btn-glass text-light py-2">
-                  <i class="bi bi-shop me-1 text-emerald"></i> Verify Live Kasi-eCo Catalog
-                </a>
-              </div>
+            <!-- Action Strip -->
+            <div class="featured-actions">
+              <button type="button" class="btn-primary-sm" (click)="openMakerExperience(featuredMatch.sme)">
+                <i class="bi bi-phone"></i>
+                <span>Open Maker Mobile View (WhatsApp Dispatch)</span>
+              </button>
+              <a [href]="'http://localhost:4200/trader-detail/' + featuredMatch.sme.id" target="_blank" class="btn-secondary-sm">
+                <i class="bi bi-shop"></i>
+                <span>Verify Kasi-eCo Catalog</span>
+              </a>
+            </div>
 
+          </div>
+
+          <!-- Ranked Alternative Suppliers Table -->
+          <div class="ranked-table-card">
+            <div class="table-header">
+              <h3 class="table-title">Alternative Vetted Suppliers (Ranked Pool)</h3>
+              <p class="table-subtitle">Multi-factor evaluated against capacity, proximity, and compliance.</p>
+            </div>
+
+            <div class="table-responsive">
+              <table class="sm-table">
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Supplier / Founder</th>
+                    <th>Sector</th>
+                    <th>Monthly Capacity</th>
+                    <th>Site Distance</th>
+                    <th>Fit Score</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let m of matches; let i = index" [class.active-row]="m.sme.id === featuredMatch.sme.id">
+                    <td>
+                      <span class="rank-indicator" [class.rank-top]="i === 0">#{{ i + 1 }}</span>
+                    </td>
+                    <td>
+                      <div class="table-supplier-cell">
+                        <span class="cell-name">{{ m.sme.businessName }}</span>
+                        <span class="cell-sub">{{ m.sme.owner }} • {{ m.sme.location }}</span>
+                      </div>
+                    </td>
+                    <td><span class="category-tag">{{ m.sme.category }}</span></td>
+                    <td><strong>{{ m.sme.monthlyCapacityUnits }}</strong> units</td>
+                    <td>{{ m.distanceKm }} km</td>
+                    <td>
+                      <span class="table-score">{{ m.matchPercentage }}%</span>
+                    </td>
+                    <td>
+                      <button type="button" 
+                              class="btn-table-action" 
+                              (click)="openMakerExperience(m.sme)">
+                        View Maker
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <!-- TAB 2: YES ECOSYSTEM IMPACT & MACRO DASHBOARD          -->
-    <!-- ═══════════════════════════════════════════════════════ -->
-    <div *ngIf="selectedTab === 'ecosystem' && ecosystemMetrics">
-      
-      <div class="row g-4 mb-4">
-        <div class="col-md-4">
-          <div class="glass-panel p-4 text-center">
-            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Total Procurement Spend Routed</small>
-            <div class="display-6 fw-extrabold text-emerald mt-1 font-heading">
-              R{{ (ecosystemMetrics.totalMatchedVolumeZAR / 1000000).toFixed(1) }}M
-            </div>
-            <small class="text-light text-opacity-50">Across Sandton Corporate Partners</small>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="glass-panel p-4 text-center">
-            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Youth-Owned SMEs Engaged</small>
-            <div class="display-6 fw-extrabold text-white mt-1 font-heading">
-              {{ ecosystemMetrics.youthSmesEngaged }}
-            </div>
-            <small class="text-light text-opacity-50">Gauteng, Western Cape & KZN</small>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="glass-panel p-4 text-center">
-            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Direct Youth Jobs Sustained</small>
-            <div class="display-6 fw-extrabold text-warning mt-1 font-heading">
-              {{ ecosystemMetrics.youthJobsSustained }}
-            </div>
-            <small class="text-light text-opacity-50">Verified Workshop Artisans</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <!-- Demand Sectors -->
-        <div class="col-lg-6">
-          <div class="glass-panel p-4 h-100">
-            <h5 class="fw-bold text-white mb-3 font-heading">Top Corporate Procurement Demand Sectors</h5>
-            <div class="d-flex flex-column gap-3">
-              <div *ngFor="let s of ecosystemMetrics.topSectors">
-                <div class="d-flex justify-content-between small mb-1">
-                  <span class="text-light">{{ s.name }}</span>
-                  <strong class="text-emerald">{{ s.demandPercentage }}%</strong>
-                </div>
-                <div class="progress progress-dark">
-                  <div class="progress-bar bg-emerald" [style.width.%]="s.demandPercentage"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Supply Gaps (YES Challenge 4 Explicit Requirement) -->
-        <div class="col-lg-6">
-          <div class="glass-panel p-4 h-100">
-            <h5 class="fw-bold text-white mb-3 font-heading">Ecosystem Capability Gaps (YES Priority Action)</h5>
-            <div class="d-flex flex-column gap-3">
-              <div *ngFor="let gap of ecosystemMetrics.supplyGaps" class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 d-flex align-items-start gap-3">
-                <i class="bi bi-info-circle-fill text-warning fs-5"></i>
-                <div class="small text-light">
-                  {{ gap }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- LIVE WHATSAPP DISPATCH MODAL (SMARTPHONE SIMULATOR)    -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<div class="modal fade show d-block" *ngIf="showWhatsAppModal" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
-    <div class="modal-content phone-modal-frame border-0 shadow-lg overflow-hidden">
-      
-      <!-- WhatsApp Top Header -->
-      <div class="p-3 bg-whatsapp-green text-white d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-          <div class="avatar-circle-sm">
-            <i class="bi bi-shop"></i>
-          </div>
-          <div>
-            <h6 class="fw-bold mb-0" style="font-size: 0.95rem;">{{ activeWhatsAppPayload?.businessName }}</h6>
-            <small style="font-size: 0.7rem; opacity: 0.85;">SwiftMatch AI Automated Opportunity Bot</small>
-          </div>
-        </div>
-        <button type="button" class="btn-close btn-close-white" (click)="closeWhatsAppModal()"></button>
-      </div>
-
-      <!-- WhatsApp Chat Stage -->
-      <div class="p-3 chat-stage d-flex flex-column justify-content-between" style="min-height: 420px; background: #e5ddd5;">
-        
-        <div class="whatsapp-bubble p-3 shadow-sm rounded-3">
-          <div class="fw-bold text-dark small mb-1">
-            <i class="bi bi-robot text-success me-1"></i> SwiftMatch AI Opportunity Ping
-          </div>
-          <p class="text-dark small mb-2 white-space-pre-line lh-base" style="font-size: 0.82rem;">
-            {{ activeWhatsAppPayload?.message }}
-          </p>
-          <div class="text-end text-muted" style="font-size: 0.65rem;">
-            Delivered • Just now <i class="bi bi-check2-all text-primary"></i>
-          </div>
-        </div>
-
-        <!-- Claude AI Tone Adaptation CTA -->
-        <div class="my-2">
-          <button type="button" 
-                  class="btn btn-sm btn-dark w-100 py-1-5 text-white border-0 shadow-sm d-flex align-items-center justify-content-center gap-2"
-                  style="background: #128c7e;"
-                  (click)="draftWithClaude()"
-                  [disabled]="isClaudeDrafting">
-            <span *ngIf="isClaudeDrafting" class="spinner-border spinner-border-sm"></span>
-            <i *ngIf="!isClaudeDrafting" class="bi bi-translate"></i>
-            <span style="font-size: 0.78rem;">{{ isClaudeDrafting ? 'Drafting with Claude...' : 'Adapt Tone & Language (Claude Sonnet)' }}</span>
-          </button>
-        </div>
-
-        <!-- Simulated Response Buttons -->
-        <div class="d-flex flex-column gap-2 pt-2">
-          <button type="button" class="btn btn-success btn-sm py-2 fw-bold" (click)="closeWhatsAppModal()">
-            <i class="bi bi-check-circle-fill me-1"></i> [1] Accept & Request PO
-          </button>
-          <button type="button" class="btn btn-outline-dark btn-sm py-1-5 bg-white" (click)="closeWhatsAppModal()">
-            [2] View Specification Details
-          </button>
         </div>
 
       </div>
 
     </div>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- SCREEN 3: MAKER EXPERIENCE (MOBILE-FIRST 390px ARTISAN HUB) -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <div *ngIf="currentScreen === 'maker'" class="screen-view maker-canvas">
+    <div class="maker-viewport-wrapper">
+
+      <!-- Breadcrumb Bar -->
+      <div class="maker-nav-strip">
+        <button type="button" class="btn-back" (click)="navigateTo('results')">
+          <i class="bi bi-arrow-left"></i>
+          <span>Return to Matching Results</span>
+        </button>
+        <div class="device-pill">
+          <i class="bi bi-phone"></i>
+          <span>Artisan Mobile View • 390px Optimized</span>
+        </div>
+      </div>
+
+      <!-- Smartphone Frame Container (Mobile-First Experience) -->
+      <div class="smartphone-frame" *ngIf="activeMaker">
+
+        <!-- Mobile Header -->
+        <div class="maker-app-header">
+          <div class="maker-brand-row">
+            <div class="maker-avatar-block">
+              <img [src]="activeMaker.image" [alt]="activeMaker.businessName" class="maker-avatar">
+              <span class="verified-dot" title="YES-Approved Maker"></span>
+            </div>
+            <div class="maker-identity">
+              <h1 class="maker-name">{{ activeMaker.businessName }}</h1>
+              <span class="maker-owner-line">{{ activeMaker.owner }} • {{ activeMaker.location }}</span>
+            </div>
+          </div>
+          <div class="maker-badge-row">
+            <span class="badge-status badge-ready">YES-Approved SMME</span>
+            <span class="badge-status badge-neutral">Level 1 B-BBEE</span>
+          </div>
+        </div>
+
+        <!-- Notification Banner: When artisan accepts/declines -->
+        <div *ngIf="dispatchFeedback" class="maker-alert" [class.alert-accepted]="makerAccepted" [class.alert-declined]="makerDeclined">
+          <i class="bi" [class.bi-check-circle-fill]="makerAccepted" [class.bi-info-circle-fill]="makerDeclined"></i>
+          <span>{{ dispatchFeedback }}</span>
+        </div>
+
+        <!-- Card: Inbound Corporate Sourcing Opportunity -->
+        <div class="maker-card opportunity-card">
+          <div class="opp-badge">
+            <i class="bi bi-lightning-charge-fill"></i>
+            <span>New Corporate Opportunity Inbound</span>
+          </div>
+
+          <h2 class="opp-title">{{ rfqText }}</h2>
+
+          <div class="opp-details-grid">
+            <div class="opp-stat">
+              <span class="opp-stat-label">Order Quantity</span>
+              <strong class="opp-stat-value">{{ requiredQuantity }} Units</strong>
+            </div>
+            <div class="opp-stat">
+              <span class="opp-stat-label">Allocated Budget</span>
+              <strong class="opp-stat-value text-accent">R{{ budgetZAR.toLocaleString() }}</strong>
+            </div>
+            <div class="opp-stat">
+              <span class="opp-stat-label">Target Delivery</span>
+              <strong class="opp-stat-value">{{ targetLocation }}</strong>
+            </div>
+            <div class="opp-stat">
+              <span class="opp-stat-label">Delivery Timeline</span>
+              <strong class="opp-stat-value">{{ maxTurnaroundDays }} Days Max</strong>
+            </div>
+          </div>
+
+          <!-- Artisan Response Action Buttons -->
+          <div class="artisan-actions" *ngIf="!makerAccepted && !makerDeclined">
+            <button type="button" class="btn-maker-accept" (click)="acceptOpportunity()">
+              <i class="bi bi-check2-circle"></i>
+              <span>Accept Opportunity & Request PO</span>
+            </button>
+            <button type="button" class="btn-maker-decline" (click)="declineOpportunity()">
+              <i class="bi bi-x-circle"></i>
+              <span>Decline (At Capacity)</span>
+            </button>
+          </div>
+
+          <!-- Accepted State -->
+          <div *ngIf="makerAccepted" class="accepted-state">
+            <div class="state-icon"><i class="bi bi-patch-check-fill"></i></div>
+            <div class="state-text">
+              <strong>Order Confirmed</strong>
+              <p>Purchase Order dispatch initiated. Buyer procurement team has been notified.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Maker Capacity & Document Readiness -->
+        <div class="maker-card">
+          <h3 class="card-title">Production Capacity & Workshop Readiness</h3>
+          
+          <div class="capacity-bar-group">
+            <div class="cap-header">
+              <span>Monthly Production Capacity</span>
+              <strong>{{ activeMaker.monthlyCapacityUnits }} Units / Mo</strong>
+            </div>
+            <div class="sm-progress">
+              <div class="sm-progress-fill" [style.width.%]="(requiredQuantity / activeMaker.monthlyCapacityUnits) * 100"></div>
+            </div>
+            <div class="cap-sub">
+              This order will utilise <strong>{{ ((requiredQuantity / activeMaker.monthlyCapacityUnits) * 100) | number:'1.0-0' }}%</strong> of available monthly capacity.
+            </div>
+          </div>
+
+          <!-- Document Status Checklist -->
+          <div class="maker-docs-list">
+            <div class="maker-doc-item">
+              <i class="bi bi-check-circle-fill text-accent"></i>
+              <div class="doc-text">
+                <span class="doc-name">CIPC Registration</span>
+                <span class="doc-meta">Verified Active 2026</span>
+              </div>
+            </div>
+            <div class="maker-doc-item">
+              <i class="bi bi-check-circle-fill text-accent"></i>
+              <div class="doc-text">
+                <span class="doc-name">SARS Tax Compliance PIN</span>
+                <span class="doc-meta">Good Standing eFiling Verified</span>
+              </div>
+            </div>
+            <div class="maker-doc-item">
+              <i class="bi bi-check-circle-fill text-accent"></i>
+              <div class="doc-text">
+                <span class="doc-name">Verified Bank Account</span>
+                <span class="doc-meta">Direct Electronic Settlement Ready</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Next Steps for the Maker -->
+        <div class="maker-card next-steps-card">
+          <h3 class="card-title">What happens next?</h3>
+          <ol class="next-steps-list">
+            <li>SwiftMatch AI verifies PO generation against buyer ESD account.</li>
+            <li>Digital confirmation and specification packet sent to <strong>{{ activeMaker.cell }}</strong> on WhatsApp.</li>
+            <li>Grassroots field manager from Kasi-eCo hub coordinates quality check & courier collection.</li>
+          </ol>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </div>
