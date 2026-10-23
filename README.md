@@ -107,6 +107,16 @@ npm start -- --port 4300                       # http://localhost:4300
 cd ../server && npm run eval
 ```
 
+### Frontend checks
+
+```bash
+cd client
+npm run build                                   # production build
+CHROME_BIN="C:/Program Files/Google/Chrome/Application/chrome.exe" npx ng test --watch=false --browsers=ChromeHeadless
+```
+
+The client is a single Angular feature (`home/`) with three screens. Shell and screens use semantic landmarks, a skip link, keyboard-operable stepper, tabs and candidate list, `aria-current` / `aria-pressed` / `aria-selected` state, visible focus rings, reduced-motion support, and explicit loading, error and empty states for the shortlist. Verified at 390, 768 and 1280 px with no horizontal overflow; screenshots are in `docs/screens/`.
+
 ### API
 
 | Endpoint | Method | Purpose |
@@ -136,7 +146,8 @@ server/
   data/smes.json · rfqs.json · model-card.json
   eval/testset.json · run-eval.js · results.json
 client/src/app/
-  home/                     the three SwiftMatch screens
+  app.component.*           shell: header, skip link, theme, engine status, footer
+  home/                     the three SwiftMatch screens (template, component, styles, spec)
   services/match.service.ts
 docs/
   VIDEO_SCRIPT.md · PITCH_SLIDES.md

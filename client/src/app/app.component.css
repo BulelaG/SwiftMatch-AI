@@ -188,3 +188,8 @@
     text-align: center;
   }
 }
+
+.sm-live-dot.offline {
+  background-color: var(--sm-warning);
+  box-shadow: 0 0 6px var(--sm-warning);
+}

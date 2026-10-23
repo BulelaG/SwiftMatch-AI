@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatchService, MatchRequest } from '../services/match.service';
 
@@ -11,6 +11,7 @@ interface FormErrors {
 }
 
 type Screen = 'request' | 'results' | 'maker';
+type DetailTab = 'feasibility' | 'bbbee' | 'bom' | 'claude';
 
 @Component({
   selector: 'app-home',
@@ -18,10 +19,11 @@ type Screen = 'request' | 'results' | 'maker';
   styleUrls: ['./home.component.css', './home.additions.css']
 })
 export class HomeComponent implements OnInit {
-  // Screen state: 'request' (Screen 1) | 'results' (Screen 2) | 'maker' (Screen 3)
+  // ── Workflow state: 1 request → 2 results → 3 maker ──
   currentScreen: Screen = 'request';
+  today: Date = new Date();
 
-  // Screen 1: Form Model
+  // ── Screen 1: form model ──
   rfqText: string = 'Looking for 150 handmade genuine leather conference folios and executive desk pads for an upcoming leadership summit in Sandton.';
   selectedCategory: string = 'Leathercraft & Corporate Gifts';
   requiredQuantity: number = 150;
@@ -29,7 +31,6 @@ export class HomeComponent implements OnInit {
   maxTurnaroundDays: number = 21;
   targetLocation: string = 'Sandton, Gauteng';
 
-  // Compliance Flags (buyer-selected mandatory checks)
   requireCipc: boolean = true;
   requireTaxPin: boolean = true;
   requireYouthOwned: boolean = true;
@@ -43,40 +44,49 @@ export class HomeComponent implements OnInit {
     'Metal Fabrication & Welding',
     'Art & Decor Ceramics'
   ];
+  quickQuantities: number[] = [50, 150, 300, 500];
 
-  // Validation State
   errors: FormErrors = {};
   isSubmitted: boolean = false;
   isSubmitting: boolean = false;
 
-  // Presets & Claude State
   presetRfqs: any[] = [];
   isClaudeParsing: boolean = false;
   claudeNotice: string | null = null;
 
-  // Screen 2: Matches Data
+  // ── Screen 2: results ──
   matches: any[] = [];
   featuredMatch: any = null;
   selectedMatch: any = null;
   totalEvaluated: number = 0;
   eligibleCount: number = 0;
   engineInfo: any = null;
+  engineHealth: any = null;
   resolvedSite: any = null;
-  isGeneratingAudit: boolean = false;
-  claudeAuditNarrative: string | null = null;
-  claudeAuditSource: string | null = null;
-  activeDetailTab: 'feasibility' | 'bbbee' | 'bom' | 'claude' = 'feasibility';
+  isLoadingMatches: boolean = false;
+  matchError: string | null = null;
+
+  activeDetailTab: DetailTab = 'feasibility';
   candidateFilter: 'all' | 'eligible' | 'shortlisted' = 'all';
   candidateSearchQuery: string = '';
   shortlistedIds: string[] = [];
   copiedSummaryToast: boolean = false;
+  copyFailed: boolean = false;
   showAuditMemo: boolean = false;
 
-  // Responsible AI model card
+  isGeneratingAudit: boolean = false;
+  claudeAuditNarrative: string | null = null;
+  claudeAuditSource: string | null = null;
+
   modelCard: any = null;
   showModelCard: boolean = false;
 
-  // Screen 3: Maker Experience State
+  bomData: any = null;
+  isBomLoading: boolean = false;
+  bbbeeData: any = null;
+  isBbbeeLoading: boolean = false;
+
+  // ── Screen 3: maker ──
   activeMaker: any = null;
   activeMatch: any = null;
   makerAccepted: boolean = false;
@@ -89,12 +99,6 @@ export class HomeComponent implements OnInit {
   whatsappDraft: string | null = null;
   whatsappSource: string | null = null;
   isDraftingWhatsApp: boolean = false;
-
-  // Screen 2: BOM & B-BBEE Panels
-  bomData: any = null;
-  isBomLoading: boolean = false;
-  bbbeeData: any = null;
-  isBbbeeLoading: boolean = false;
 
   constructor(
     private matchService: MatchService,
@@ -112,7 +116,18 @@ export class HomeComponent implements OnInit {
       }
     });
     this.loadPresets();
+    this.matchService.getHealth().subscribe({
+      next: h => this.engineHealth = h,
+      error: () => this.engineHealth = null
+    });
+    this.isLoadingMatches = true;
     this.runMatch(false);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.showAuditMemo) this.closeAuditMemo();
+    if (this.showCounterOfferModal) this.closeCounterOffer();
   }
 
   // ── Derived labels ──
@@ -122,6 +137,14 @@ export class HomeComponent implements OnInit {
       return `Semantic engine: MiniLM-L6-v2 · ${this.engineInfo.dimensions}-d vectors + lexical`;
     }
     return 'Semantic engine: lexical fallback (embeddings unavailable)';
+  }
+
+  get llmModelLabel(): string {
+    return this.engineHealth?.claude?.model || 'Claude';
+  }
+
+  get llmConfigured(): boolean {
+    return !!this.engineHealth?.claude?.configured;
   }
 
   get complianceRequirements(): string[] {
@@ -138,6 +161,17 @@ export class HomeComponent implements OnInit {
     return Math.round((this.budgetZAR || 0) / this.requiredQuantity);
   }
 
+  get averageTurnaroundLabel(): string {
+    const days = this.matches.map(m => m.sme?.averageTurnaroundDays).filter((d: any) => typeof d === 'number');
+    if (!days.length) return 'Not loaded yet';
+    return `${Math.min(...days)}–${Math.max(...days)} days`;
+  }
+
+  get bbbeeBoostLabel(): string | null {
+    const boost = this.bbbeeData?.scorecardImpact?.totalScorecardBoost;
+    return boost != null ? `+${boost} pts` : null;
+  }
+
   get filteredMatches(): any[] {
     let list = this.matches;
     if (this.candidateFilter === 'eligible') {
@@ -145,26 +179,26 @@ export class HomeComponent implements OnInit {
     } else if (this.candidateFilter === 'shortlisted') {
       list = list.filter(m => this.shortlistedIds.includes(m.sme.id));
     }
-    if (this.candidateSearchQuery && this.candidateSearchQuery.trim()) {
-      const q = this.candidateSearchQuery.toLowerCase().trim();
-      list = list.filter(m => 
-        (m.sme?.businessName && m.sme.businessName.toLowerCase().includes(q)) ||
-        (m.sme?.location && m.sme.location.toLowerCase().includes(q)) ||
-        (m.sme?.owner && m.sme.owner.toLowerCase().includes(q)) ||
-        (m.sme?.category && m.sme.category.toLowerCase().includes(q))
+    const q = this.candidateSearchQuery.trim().toLowerCase();
+    if (q) {
+      list = list.filter(m =>
+        [m.sme?.businessName, m.sme?.location, m.sme?.owner, m.sme?.category]
+          .some(v => typeof v === 'string' && v.toLowerCase().includes(q))
       );
     }
     return list;
   }
 
+  trackById(_: number, m: any): string {
+    return m?.sme?.id ?? _;
+  }
+
+  // ── Shortlist & clipboard ──
   toggleShortlist(smeId: string, event?: Event): void {
     if (event) event.stopPropagation();
     const idx = this.shortlistedIds.indexOf(smeId);
-    if (idx > -1) {
-      this.shortlistedIds.splice(idx, 1);
-    } else {
-      this.shortlistedIds.push(smeId);
-    }
+    if (idx > -1) this.shortlistedIds.splice(idx, 1);
+    else this.shortlistedIds.push(smeId);
   }
 
   isShortlisted(smeId: string): boolean {
@@ -173,18 +207,39 @@ export class HomeComponent implements OnInit {
 
   setQuantity(qty: number): void {
     this.requiredQuantity = qty;
+    this.revalidate();
   }
 
   copySourcingSummary(m: any): void {
     if (!m) return;
-    const summary = `SWIFTMATCH AI ESD VENDOR SELECTION\n---------------------------------\nSupplier: ${m.sme?.businessName} (${m.sme?.owner}, ${m.sme?.location})\nOrder: ${this.requiredQuantity} units (${this.rfqText})\nBudget: R${(this.budgetZAR || 0).toLocaleString()} (Recognized at 135%: R${Math.round((this.budgetZAR || 0) * 1.35).toLocaleString()})\nDelivery: ${this.resolvedSite?.name || this.targetLocation} in ${this.maxTurnaroundDays} days\nMatch Fit: ${m.matchPercentage}% · Level 1 EME Verified`;
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(summary);
+    const c = m.sme?.compliance || {};
+    const summary = [
+      'SWIFTMATCH AI — SOURCING SHORTLIST SUMMARY',
+      '------------------------------------------',
+      `Supplier: ${m.sme?.businessName} (${m.sme?.owner}, ${m.sme?.location})`,
+      `Requirement: ${this.rfqText}`,
+      `Volume: ${this.requiredQuantity} units · Budget: R${(this.budgetZAR || 0).toLocaleString()}`,
+      `Delivery: ${this.resolvedSite?.name || this.targetLocation} within ${this.maxTurnaroundDays} days`,
+      `Match score: ${m.matchPercentage}% · ${m.eligible ? 'All mandatory checks passed' : 'INELIGIBLE: ' + (m.ineligibilityReasons || []).join(', ')}`,
+      `On record: CIPC ${c.cipcRegistered ? 'yes' : 'no'} · SARS Tax PIN ${c.taxPinCompliant ? 'yes' : 'no'} · B-BBEE level ${c.bbbeeLevel ?? 'n/a'} · COIDA ${c.coidaRegistered ? 'yes' : 'no'}${m.sme?.youthOwned ? ' · youth-owned' : ''}`,
+      'Shortlist only. Documents to be verified at source before award.'
+    ].join('\n');
+
+    if (!navigator?.clipboard?.writeText) {
+      this.copyFailed = true;
+      setTimeout(() => this.copyFailed = false, 3000);
+      return;
+    }
+    navigator.clipboard.writeText(summary).then(() => {
       this.copiedSummaryToast = true;
       setTimeout(() => this.copiedSummaryToast = false, 3000);
-    }
+    }).catch(() => {
+      this.copyFailed = true;
+      setTimeout(() => this.copyFailed = false, 3000);
+    });
   }
 
+  // ── Data loading ──
   private buildPayload(): MatchRequest {
     return {
       rfqText: this.rfqText,
@@ -224,26 +279,43 @@ export class HomeComponent implements OnInit {
       this.selectedMatch = this.matches[0];
       this.activeMatch = this.matches[0];
       this.activeMaker = this.matches[0].sme;
+    } else {
+      this.featuredMatch = null;
+      this.selectedMatch = null;
+      this.activeMatch = null;
+      this.activeMaker = null;
     }
     this.bomData = null;
     this.bbbeeData = null;
     this.claudeAuditNarrative = null;
     this.claudeAuditSource = null;
+    this.activeDetailTab = 'feasibility';
   }
 
   private runMatch(navigate: boolean): void {
+    this.matchError = null;
     this.matchService.runMatch(this.buildPayload()).subscribe({
       next: res => {
         this.isSubmitting = false;
+        this.isLoadingMatches = false;
         this.applyMatchResponse(res);
         if (navigate) this.currentScreen = 'results';
       },
       error: err => {
         console.error('Match error:', err);
         this.isSubmitting = false;
+        this.isLoadingMatches = false;
+        this.matchError = err?.status === 0
+          ? 'The matching service is not reachable. Start the API server on port 5050 and try again.'
+          : `The matching service returned an error (${err?.status || 'unknown'}). Please try again.`;
         if (navigate) this.currentScreen = 'results';
       }
     });
+  }
+
+  retryMatch(): void {
+    this.isLoadingMatches = true;
+    this.runMatch(false);
   }
 
   applyPreset(preset: any): void {
@@ -266,41 +338,55 @@ export class HomeComponent implements OnInit {
     setTimeout(() => this.claudeNotice = null, 3500);
   }
 
+  // ── Validation ──
   validateForm(): boolean {
     this.errors = {};
     if (!this.rfqText || this.rfqText.trim().length < 10) {
-      this.errors.rfqText = 'Please provide a descriptive procurement specification (at least 10 characters).';
+      this.errors.rfqText = 'Describe the requirement in at least 10 characters.';
     }
     if (!this.requiredQuantity || this.requiredQuantity <= 0) {
       this.errors.requiredQuantity = 'Quantity must be greater than 0.';
     }
     if (!this.budgetZAR || this.budgetZAR <= 0) {
-      this.errors.budgetZAR = 'Please specify a valid budget allocation in ZAR.';
+      this.errors.budgetZAR = 'Enter a budget in rand greater than 0.';
     }
     if (!this.maxTurnaroundDays || this.maxTurnaroundDays <= 0) {
-      this.errors.maxTurnaroundDays = 'Turnaround timeline must be at least 1 day.';
+      this.errors.maxTurnaroundDays = 'Turnaround must be at least 1 day.';
     }
     if (!this.targetLocation || this.targetLocation.trim().length < 3) {
-      this.errors.targetLocation = 'Please specify a delivery location or site address.';
+      this.errors.targetLocation = 'Enter a delivery town or city.';
     }
     return Object.keys(this.errors).length === 0;
   }
 
+  revalidate(): void {
+    if (this.isSubmitted) this.validateForm();
+  }
+
+  get errorCount(): number {
+    return Object.keys(this.errors).length;
+  }
+
   submitProcurementRequest(): void {
     this.isSubmitted = true;
-    if (!this.validateForm()) return;
+    if (!this.validateForm()) {
+      const firstInvalid = document.querySelector<HTMLElement>('.form-control.is-invalid');
+      firstInvalid?.focus();
+      return;
+    }
     this.isSubmitting = true;
+    this.isLoadingMatches = true;
     this.runMatch(true);
   }
 
-  // Claude natural-language extraction (server falls back to rules offline)
   autofillWithClaude(): void {
     if (!this.rfqText || this.rfqText.trim().length < 10) {
-      this.errors.rfqText = 'Enter your procurement requirement before extracting with Claude.';
+      this.isSubmitted = true;
+      this.errors.rfqText = 'Enter the requirement text before extracting.';
       return;
     }
     this.isClaudeParsing = true;
-    this.claudeNotice = 'Extracting structured procurement parameters...';
+    this.claudeNotice = 'Extracting quantity, budget, deadline and site from your text...';
 
     this.matchService.parseRfqWithClaude(this.rfqText).subscribe({
       next: res => {
@@ -316,15 +402,16 @@ export class HomeComponent implements OnInit {
           if (reqs.includes('youthOwned')) this.requireYouthOwned = true;
           if (reqs.includes('coidaRegistered')) this.requireCoida = true;
           this.claudeNotice = res.source === 'claude'
-            ? 'Claude extracted quantity, budget, deadline and site from your text.'
-            : 'Rule-based extraction applied (Claude key not configured).';
+            ? 'Claude filled the fields from your text. Check them before searching.'
+            : 'Fields filled by rule-based extraction (Claude key not configured). Check them before searching.';
+          this.revalidate();
         }
-        setTimeout(() => this.claudeNotice = null, 4000);
+        setTimeout(() => this.claudeNotice = null, 5000);
       },
       error: () => {
         this.isClaudeParsing = false;
-        this.claudeNotice = 'Extraction service unavailable. Please fill the fields manually.';
-        setTimeout(() => this.claudeNotice = null, 4000);
+        this.claudeNotice = 'Extraction service unavailable. Fill the fields manually.';
+        setTimeout(() => this.claudeNotice = null, 5000);
       }
     });
   }
@@ -339,8 +426,9 @@ export class HomeComponent implements OnInit {
     this.isSubmitted = false;
   }
 
-  // ── Screen navigation ──
+  // ── Navigation ──
   navigateTo(screen: Screen): void {
+    if (screen === 'maker' && !this.activeMaker) return;
     this.currentScreen = screen;
   }
 
@@ -350,52 +438,66 @@ export class HomeComponent implements OnInit {
     this.claudeAuditSource = null;
     this.bomData = null;
     this.bbbeeData = null;
-    if (this.activeDetailTab === 'bbbee') {
-      this.loadBbbeeScore();
-    } else if (this.activeDetailTab === 'bom') {
-      this.loadBomEstimate();
+    if (this.activeDetailTab === 'bbbee') this.loadBbbeeScore();
+    else if (this.activeDetailTab === 'bom') this.loadBomEstimate();
+  }
+
+  onCandidateKey(event: KeyboardEvent, match: any): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.selectCandidate(match);
     }
   }
 
-  setDetailTab(tab: 'feasibility' | 'bbbee' | 'bom' | 'claude'): void {
+  setDetailTab(tab: DetailTab): void {
     this.activeDetailTab = tab;
-    if (tab === 'bbbee' && !this.bbbeeData) {
-      this.loadBbbeeScore();
-    } else if (tab === 'bom' && !this.bomData) {
-      this.loadBomEstimate();
-    } else if (tab === 'claude' && !this.claudeAuditNarrative) {
+    if (tab === 'bbbee' && !this.bbbeeData) this.loadBbbeeScore();
+    else if (tab === 'bom' && !this.bomData) this.loadBomEstimate();
+    else if (tab === 'claude' && !this.claudeAuditNarrative && !this.isGeneratingAudit) {
       this.generateClaudeDeepAudit(this.selectedMatch || this.featuredMatch);
     }
   }
 
+  private focusLater(id: string): void {
+    setTimeout(() => document.getElementById(id)?.focus(), 0);
+  }
+
+  // ── Memo dialog ──
   openAuditMemo(): void {
+    this.loadBbbeeScore();
     this.showAuditMemo = true;
+    this.focusLater('memo-close');
   }
 
   closeAuditMemo(): void {
     this.showAuditMemo = false;
+    this.focusLater('memo-open');
   }
 
   printAuditMemo(): void {
     window.print();
   }
 
+  // ── Counter-offer dialog ──
   openCounterOffer(): void {
     this.counterOfferDays = (this.maxTurnaroundDays || 21) + 7;
-    this.counterOfferNotes = `Proposing ${this.counterOfferDays} days to ensure hand-stitched premium craftsmanship with full QA.`;
+    this.counterOfferNotes = `Proposing ${this.counterOfferDays} days so every unit is hand-finished and quality-checked before dispatch.`;
     this.showCounterOfferModal = true;
+    this.focusLater('counterOfferDays');
   }
 
   closeCounterOffer(): void {
     this.showCounterOfferModal = false;
+    this.focusLater('counter-open');
   }
 
   submitCounterOffer(): void {
+    if (!this.counterOfferDays || this.counterOfferDays < 1) return;
     this.showCounterOfferModal = false;
     this.makerCounterOffered = true;
     this.makerAccepted = false;
     this.makerDeclined = false;
-    this.dispatchFeedback = `Negotiated proposal sent to buyer: ${this.counterOfferDays} days turnaround requested. The corporate ESD officer has been notified.`;
+    this.dispatchFeedback = `Counter-proposal sent: ${this.counterOfferDays}-day turnaround requested. The buyer will confirm or decline; your contact details stay private until then.`;
   }
 
   openMakerExperience(match: any): void {
@@ -409,9 +511,10 @@ export class HomeComponent implements OnInit {
     this.whatsappDraft = null;
     this.whatsappSource = null;
     this.currentScreen = 'maker';
+    window.scrollTo({ top: 0 });
   }
 
-  // ── Per-match helpers used by the template ──
+  // ── Per-match helpers ──
   capacityRatio(match: any): number {
     return match?.evidence?.capacity?.capacityRatio ?? 0;
   }
@@ -426,6 +529,12 @@ export class HomeComponent implements OnInit {
     if (km <= 150) return 'Next-day courier';
     if (km <= 600) return '2–3 day freight';
     return 'Inter-provincial freight';
+  }
+
+  capacityUtilisation(match: any): number {
+    const cap = match?.sme?.monthlyCapacityUnits || 0;
+    if (!cap) return 0;
+    return Math.min(999, Math.round((this.requiredQuantity / cap) * 100));
   }
 
   factorRows(match: any): { label: string; weight: number; score: number; evidence: string }[] {
@@ -479,13 +588,15 @@ export class HomeComponent implements OnInit {
   acceptOpportunity(): void {
     this.makerAccepted = true;
     this.makerDeclined = false;
-    this.dispatchFeedback = `Opportunity accepted by ${this.activeMaker?.owner}. Digital Purchase Order #PO-2026-${Math.floor(1000 + Math.random() * 9000)} requested; the buyer now receives your contact details.`;
+    this.makerCounterOffered = false;
+    this.dispatchFeedback = `Accepted. A purchase-order request has been sent to the buyer and your contact details are now shared with them.`;
   }
 
   declineOpportunity(): void {
     this.makerDeclined = true;
     this.makerAccepted = false;
-    this.dispatchFeedback = 'Opportunity declined (at capacity). The next-ranked eligible supplier will be notified. Your profile is not penalised.';
+    this.makerCounterOffered = false;
+    this.dispatchFeedback = 'Declined (at capacity). The next-ranked eligible supplier will be notified. Your profile is not penalised.';
   }
 
   draftWhatsApp(): void {
@@ -516,6 +627,7 @@ export class HomeComponent implements OnInit {
   }
 
   generateClaudeDeepAudit(match: any): void {
+    if (!match) return;
     this.isGeneratingAudit = true;
     const payload = {
       rfq: {
@@ -546,13 +658,13 @@ export class HomeComponent implements OnInit {
       error: () => {
         this.isGeneratingAudit = false;
         this.claudeAuditSource = 'offline';
-        this.claudeAuditNarrative = `${match.sme.businessName} ranks first at ${match.matchPercentage}%: semantic fit ${match.radarScores?.semanticFit}%, capacity ${this.capacityRatio(match)}x of the requested ${this.requiredQuantity} units, ${match.distanceKm} km from site. A procurement officer must still verify documents at source and request a sample before award.`;
+        this.claudeAuditNarrative = `${match.sme.businessName} ranks at ${match.matchPercentage}%: semantic fit ${match.radarScores?.semanticFit}%, capacity ${this.capacityRatio(match)}x of the requested ${this.requiredQuantity} units, ${match.distanceKm} km from site. A procurement officer must still verify documents at source and request a sample before award.`;
       }
     });
   }
 
   loadBomEstimate(): void {
-    if (this.bomData) { return; }
+    if (this.bomData || this.isBomLoading) return;
     this.isBomLoading = true;
     const rfq = {
       rawPrompt: this.rfqText,
@@ -568,6 +680,7 @@ export class HomeComponent implements OnInit {
         const qty = this.requiredQuantity || 150;
         const budget = this.budgetZAR || 85000;
         this.bomData = {
+          quantity: qty,
           totalBudgetZAR: budget,
           unitBudgetZAR: Math.round(budget / qty),
           costBreakdown: {
@@ -582,6 +695,7 @@ export class HomeComponent implements OnInit {
             { item: 'Workshop wages', estimatedCost: Math.round(budget * 0.2975) },
             { item: 'Quality vetting & ground courier', estimatedCost: Math.round(budget * 0.0525) }
           ],
+          method: 'Offline estimate (deterministic split).',
           marginProtectionNote: 'Artisan net margin protected at 20% to prevent unviable underbidding.',
           recommendedPaymentSchedule: '30% deposit on sample sign-off · 70% on delivery confirmation.'
         };
@@ -590,7 +704,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadBbbeeScore(): void {
-    if (this.bbbeeData) { return; }
+    if (this.bbbeeData || this.isBbbeeLoading) return;
     this.isBbbeeLoading = true;
     const currentSme = (this.selectedMatch || this.featuredMatch)?.sme;
     this.matchService.getBbbeeScore({ budgetZAR: this.budgetZAR, smeId: currentSme?.id }).subscribe({
@@ -605,8 +719,9 @@ export class HomeComponent implements OnInit {
           actualSpendZAR: budget,
           recognizedSpendZAR: recognized,
           procurementRecognitionMultiplier: '135% (Level 1 EME)',
-          bbbeeLevel: 1,
+          bbbeeLevel: currentSme?.compliance?.bbbeeLevel ?? 1,
           scorecardImpact: { element400Points: e400, element500EsdPoints: e500, totalScorecardBoost: +(e400 + e500).toFixed(1) },
+          disclaimer: 'Indicative only. Actual points depend on the measured entity\'s total procurement spend.',
           executiveSummary: `Procuring R${budget.toLocaleString()} from this Level 1 EME is recognised as R${recognized.toLocaleString()} of preferential procurement spend, worth approximately +${(e400 + e500).toFixed(1)} scorecard points.`
         };
       }

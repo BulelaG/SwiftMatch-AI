@@ -10,6 +10,7 @@ export class AppComponent implements OnInit {
   isDarkMode: boolean = true;
   poolSize: number | null = null;
   engineReady: boolean = false;
+  apiReachable: boolean = true;
 
   constructor(private matchService: MatchService) {}
 
@@ -20,10 +21,15 @@ export class AppComponent implements OnInit {
 
     this.matchService.getHealth().subscribe({
       next: h => {
+        this.apiReachable = true;
         this.poolSize = h.smeProfiles ?? null;
         this.engineReady = !!h.embedding?.ready;
       },
-      error: () => { this.poolSize = null; }
+      error: () => {
+        this.apiReachable = false;
+        this.poolSize = null;
+        this.engineReady = false;
+      }
     });
   }
 

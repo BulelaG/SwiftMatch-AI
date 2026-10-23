@@ -1,58 +1,59 @@
-<!-- ── SwiftMatch AI — Enterprise Header ── -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
 <header class="sm-topbar">
   <div class="sm-topbar-inner">
-    <!-- Brand & Platform Scope -->
     <div class="sm-brand-group">
-      <a routerLink="/home" class="sm-brand">
-        <span class="sm-brand-mark">
+      <a routerLink="/" class="sm-brand" aria-label="SwiftMatch home">
+        <span class="sm-brand-mark" aria-hidden="true">
           <i class="bi bi-shield-check"></i>
         </span>
         <span class="sm-brand-title">SwiftMatch</span>
       </a>
-      <span class="sm-separator">/</span>
-      <span class="sm-program-tag">YES ESD Sourcing Portal</span>
+      <span class="sm-separator" aria-hidden="true">/</span>
+      <span class="sm-program-tag">SME–corporate opportunity matching</span>
     </div>
 
-    <!-- Center/Right Status & Verified Pool Indicator -->
     <div class="sm-meta-group">
-      <!-- Theme Switcher Pill -->
-      <button type="button" 
-              class="sm-theme-toggle" 
-              (click)="toggleTheme()" 
-              [title]="isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'">
-        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode"></i>
+      <button type="button"
+              class="sm-theme-toggle"
+              (click)="toggleTheme()"
+              [attr.aria-pressed]="isDarkMode"
+              [attr.aria-label]="isDarkMode ? 'Switch to light theme' : 'Switch to dark theme'">
+        <i class="bi" [class.bi-moon-stars-fill]="isDarkMode" [class.bi-sun-fill]="!isDarkMode" aria-hidden="true"></i>
         <span class="d-none d-sm-inline">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
       </button>
 
-      <div class="sm-status-chip">
-        <span class="sm-live-dot"></span>
-        <span class="sm-chip-text"><span class="d-none d-sm-inline">Pilot pool: </span><strong>{{ poolSize ?? '–' }} SME profiles</strong><span class="d-none d-md-inline"> · {{ engineReady ? 'semantic engine ready' : 'engine warming up' }}</span></span>
+      <div class="sm-status-chip" [title]="engineReady ? 'Semantic engine ready' : 'Engine warming up or API offline'">
+        <span class="sm-live-dot" [class.offline]="!engineReady" aria-hidden="true"></span>
+        <span class="sm-chip-text">
+          <span class="d-none d-sm-inline">Pilot pool: </span><strong>{{ poolSize ?? '–' }} profiles</strong>
+          <span class="d-none d-md-inline"> · {{ engineReady ? 'engine ready' : (apiReachable ? 'engine warming up' : 'API offline') }}</span>
+        </span>
       </div>
-      <a href="http://localhost:4200" target="_blank" class="sm-catalog-link d-none d-md-inline-flex" title="Open Grassroots Kasi-eCo Catalog">
-        <span>Kasi-eCo Catalog</span>
-        <i class="bi bi-arrow-up-right"></i>
+
+      <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="sm-catalog-link d-none d-md-inline-flex" title="Kasi-eCo, the grassroots marketplace the supplier profiles are modelled on (opens in a new tab)">
+        <span>Kasi-eCo</span>
+        <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
       </a>
     </div>
   </div>
 </header>
 
-<!-- ── Main Application Outlet ── -->
-<main class="sm-main">
+<main class="sm-main" id="main-content" tabindex="-1">
   <router-outlet></router-outlet>
 </main>
 
-<!-- ── Subtle Enterprise Footer ── -->
 <footer class="sm-footer">
   <div class="sm-footer-inner">
     <div class="sm-footer-left">
-      <span>Built for <strong>YES AI Hackathon 2026</strong></span>
-      <span class="sm-bullet">•</span>
-      <span>Challenge 4: ESD Tech Enablement</span>
+      <span>Built for the <strong>YES AI Hackathon 2026</strong></span>
+      <span class="sm-bullet" aria-hidden="true">•</span>
+      <span>Challenge 4: SME–corporate opportunity matching</span>
     </div>
     <div class="sm-footer-right">
-      <span>POPIA & B-BBEE Verified Flow</span>
-      <span class="sm-bullet">•</span>
-      <span>Powered by Kasi-eCo Engine</span>
+      <span>Prototype with synthetic supplier data</span>
+      <span class="sm-bullet" aria-hidden="true">•</span>
+      <span>Swift House</span>
     </div>
   </div>
 </footer>
