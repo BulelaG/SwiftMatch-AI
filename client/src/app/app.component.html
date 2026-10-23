@@ -1,0 +1,63 @@
+<!-- ── SwiftMatch AI — Minimal Dark Topbar ── -->
+<header class="swiftmatch-topbar">
+  <nav class="sm-nav container-fluid px-4 d-flex align-items-center justify-content-between">
+
+    <!-- Brand -->
+    <a routerLink="/home" class="sm-brand d-flex align-items-center gap-2">
+      <span class="sm-logo-icon">
+        <i class="bi bi-lightning-charge-fill"></i>
+      </span>
+      <span class="sm-brand-text">
+        SwiftMatch <span class="sm-brand-ai">AI</span>
+      </span>
+    </a>
+
+    <!-- Centre Badges -->
+    <div class="d-flex align-items-center gap-2">
+      <span class="sm-badge-pill">
+        <span class="sm-pulse"></span>
+        Powered by Kasi-eCo
+      </span>
+      <span class="sm-badge-pill sm-badge-yes">
+        YES AI Hackathon 2026
+      </span>
+    </div>
+
+    <!-- Right: Status -->
+    <div class="d-flex align-items-center gap-3">
+      <span class="sm-status-dot"></span>
+      <span class="sm-status-text">Engine Live</span>
+      <a href="http://localhost:4200" target="_blank" class="sm-link-pill">
+        <i class="bi bi-box-arrow-up-right me-1"></i>Kasi-eCo
+      </a>
+    </div>
+
+  </nav>
+</header>
+
+<!-- ── Main Router Outlet ── -->
+<main class="sm-main-outlet">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- ── Minimal Dark Footer ── -->
+<footer class="sm-footer">
+  <div class="container-fluid px-4 d-flex flex-column flex-md-row align-items-center justify-content-between gap-2">
+
+    <div class="d-flex align-items-center gap-3">
+      <span class="sm-footer-brand">SwiftMatch <span class="sm-brand-ai">AI</span></span>
+      <span class="sm-footer-divider">|</span>
+      <span class="sm-footer-muted">Challenge 4 — ESD Tech Enablement</span>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <span class="sm-footer-muted">Built with Angular · Express · Claude AI</span>
+      <span class="sm-footer-divider">|</span>
+      <span class="sm-badge-pill">
+        <i class="bi bi-shield-check me-1"></i> POPIA Compliant
+      </span>
+      <span class="sm-footer-muted">© 2026 Swift House</span>
+    </div>
+
+  </div>
+</footer>

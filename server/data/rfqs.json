@@ -1,0 +1,44 @@
+[
+  {
+    "id": "rfq_001",
+    "title": "Corporate Year-End Gifting: 150 Bespoke Leather Conference Folders",
+    "corporateBuyer": "Anglo American Platinum ESD",
+    "buyerContact": "Lerato Khumalo (ESD Procurement Lead)",
+    "rawPrompt": "Looking for 150 handmade genuine leather conference folios and desk pads for our upcoming leadership summit in Sandton. Must be 100% youth-owned, based in Gauteng, delivery required within 3 weeks. Budget R85,000.",
+    "category": "Leathercraft & Corporate Gifts",
+    "requiredQuantity": 150,
+    "budgetZAR": 85000,
+    "maxTurnaroundDays": 21,
+    "targetLocation": "Sandton, Gauteng",
+    "targetCoordinates": { "lat": -26.1076, "lng": 28.0567 },
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant", "bbbeeLevel1"]
+  },
+  {
+    "id": "rfq_002",
+    "title": "Innovation Lab Fitout: 25 Solid Timber Breakout Tables & Planters",
+    "corporateBuyer": "Discovery Vitality Campus",
+    "buyerContact": "Marcus Van Der Merwe (Facilities Manager)",
+    "rawPrompt": "Need 25 custom solid oak and pine timber breakout tables and planter benches for our new Sandton co-working hub. Sustainable local craftsmanship preferred. Budget R120,000. Delivery within 25 days.",
+    "category": "Furniture & Timber Joinery",
+    "requiredQuantity": 25,
+    "budgetZAR": 120000,
+    "maxTurnaroundDays": 25,
+    "targetLocation": "Sandton, Gauteng",
+    "targetCoordinates": { "lat": -26.1076, "lng": 28.0567 },
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"]
+  },
+  {
+    "id": "rfq_003",
+    "title": "Retail Sustainability Campaign: 5,000 Biodegradable Printed Tote Bags",
+    "corporateBuyer": "Woolworths Good Business Journey",
+    "buyerContact": "Ayanda Dube (Ethical Sourcing Director)",
+    "rawPrompt": "Urgent requirement for 5,000 branded biodegradable kraft paper retail bags and printed unbleached cotton tote bags. Delivery to Midrand distribution center within 14 days. Budget R95,000.",
+    "category": "Eco-Packaging & Printing",
+    "requiredQuantity": 5000,
+    "budgetZAR": 95000,
+    "maxTurnaroundDays": 14,
+    "targetLocation": "Midrand, Gauteng",
+    "targetCoordinates": { "lat": -25.9983, "lng": 28.1263 },
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant", "coidaRegistered"]
+  }
+]

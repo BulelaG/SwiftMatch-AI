@@ -1,0 +1,135 @@
+<div class="ambient-glow-wrapper py-4 py-md-5">
+  <!-- Refracting Ambient Glow Orbs -->
+  <div class="glow-orb-emerald" style="top: -60px; left: -80px;"></div>
+  <div class="glow-orb-amber" style="top: 80px; right: -60px;"></div>
+
+  <div class="container position-relative" style="z-index: 1;">
+    
+    <!-- ── Page Header & Search Glass Panel ── -->
+    <div class="glass-panel p-4 p-md-5 mb-5 text-center position-relative overflow-hidden">
+      <!-- Eyebrow Badge -->
+      <div class="d-inline-flex align-items-center gap-2 glass-pill mb-3">
+        <span class="pulse-dot"></span>
+        <span class="text-uppercase fw-bold text-dark" style="font-size: 0.72rem; letter-spacing: 0.08em;">
+          Township Artisans & Micro-Makers
+        </span>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="display-5 fw-extrabold text-dark mb-2">
+        Marketplace <span class="gradient-text">Products & Goods</span>
+      </h1>
+      <p class="text-muted mx-auto mb-4" style="max-width: 580px; font-size: 1.05rem;">
+        Discover authentic handmade furniture, crafts, fashion, and services directly from verified township entrepreneurs across South Africa.
+      </p>
+      
+      <!-- Modern Glass Search Bar -->
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+          <div class="glass-search-box d-flex align-items-center p-1 shadow-sm">
+            <span class="ps-3 text-emerald fs-5">
+              <i class="bi bi-search"></i>
+            </span>
+            <input type="text" 
+                   class="form-control glass-search-input border-0 bg-transparent px-3" 
+                   [(ngModel)]="searchTerm" 
+                   (input)="search()" 
+                   placeholder="Search products by name, description, category...">
+            <button *ngIf="searchTerm" 
+                    class="btn btn-link text-muted p-1 me-1 text-decoration-none" 
+                    type="button" 
+                    (click)="clearSearch()">
+              <i class="bi bi-x-circle-fill"></i>
+            </button>
+            <button class="btn btn-emerald px-4 py-2" type="button" (click)="search()">
+              Search
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="category-chips mt-4 d-flex flex-wrap justify-content-center gap-2" *ngIf="categories.length > 0">
+        <button class="btn btn-sm glass-pill-filter" 
+                [ngClass]="{'active': selectedCategory === 'all'}"
+                (click)="filterByCategory('all')">
+          <i class="bi bi-grid-fill me-1"></i> All Products
+        </button>
+        <button *ngFor="let cat of categories" 
+                class="btn btn-sm glass-pill-filter" 
+                [ngClass]="{'active': selectedCategory === cat}"
+                (click)="filterByCategory(cat)">
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Loading State ── -->
+    <div *ngIf="isLoading" class="text-center py-5 glass-panel p-5 my-4">
+      <div class="spinner-border text-emerald" role="status" style="width: 3rem; height: 3rem;">
+        <span class="visually-hidden">Loading products...</span>
+      </div>
+      <h5 class="fw-bold mt-3 text-dark">Loading Marketplace Goods...</h5>
+      <p class="text-muted small mb-0">Connecting to verified merchant catalogs</p>
+    </div>
+
+    <!-- ── Empty State ── -->
+    <div *ngIf="!isLoading && filteredProducts.length === 0" class="text-center py-5 glass-panel p-5 my-4">
+      <div class="feature-icon-wrapper mx-auto mb-3" style="background: rgba(245, 158, 11, 0.12); color: #d97706; width: 64px; height: 64px; font-size: 1.8rem;">
+        <i class="bi bi-basket3"></i>
+      </div>
+      <h4 class="fw-bold text-dark mb-1">No products found</h4>
+      <p class="text-muted small mb-4" style="max-width: 420px; margin: 0 auto;">
+        We couldn't find any goods matching your current search or category filter.
+      </p>
+      <button class="btn btn-emerald btn-sm px-4 py-2" (click)="clearSearch()">
+        <i class="bi bi-arrow-repeat me-1"></i> View All Products
+      </button>
+    </div>
+
+    <!-- ── Products Grid (Glassmorphic Cards) ── -->
+    <div *ngIf="!isLoading && filteredProducts.length > 0" class="product-grid">
+      <div class="glass-card product-card h-100 d-flex flex-column justify-content-between overflow-hidden" 
+           *ngFor="let product of filteredProducts">
+        
+        <div>
+          <!-- Image Stage -->
+          <div class="product-img-wrapper position-relative">
+            <img [src]="product.image || 'https://placehold.co/400x300/e2e8f0/64748b?text=Product+Photo'" 
+                 class="product-card-img" 
+                 alt="{{ product.p_name }}"
+                 onerror="this.onerror=null; this.src='assets/Kasieco-promo-removebg-preview.png'">
+            
+            <span *ngIf="product.category" class="glass-pill position-absolute top-0 start-0 m-2 text-dark fw-bold" style="font-size: 0.68rem; background: rgba(255, 255, 255, 0.88);">
+              <i class="bi bi-tag-fill text-emerald me-1"></i> {{ product.category }}
+            </span>
+          </div>
+          
+          <!-- Card Body -->
+          <div class="p-3">
+            <h5 class="fw-bold text-dark text-truncate mb-1" title="{{ product.p_name }}">
+              {{ product.p_name }}
+            </h5>
+            <p class="text-muted small text-truncate-2 mb-0 lh-base">
+              {{ product.description || 'Authentic local product handcrafted with pride.' }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="p-3 pt-0">
+          <div class="pt-2 border-top border-secondary border-opacity-10 d-flex align-items-center justify-content-between mb-3">
+            <span class="text-muted small">Direct Price</span>
+            <span class="fw-extrabold text-emerald fs-5">R{{ product.price }}</span>
+          </div>
+          
+          <a [routerLink]="'/product-detail/' + product.id" class="btn btn-emerald btn-sm w-100 py-2 fw-semibold">
+            <i class="bi bi-eye me-1"></i> View Details & Order
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

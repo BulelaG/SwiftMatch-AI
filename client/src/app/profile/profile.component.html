@@ -1,0 +1,147 @@
+<div class="ambient-glow-wrapper py-5">
+  <!-- Refracting Ambient Glow Orbs -->
+  <div class="glow-orb-emerald" style="top: -60px; left: -80px;"></div>
+  <div class="glow-orb-amber" style="bottom: -40px; right: -60px;"></div>
+
+  <div class="container position-relative" style="z-index: 1;">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-7">
+        
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <a routerLink="/product-inventory" class="btn btn-sm btn-glass text-muted d-inline-flex align-items-center gap-1">
+            <i class="bi bi-box-seam text-emerald"></i>
+            <span>Manage Inventory</span>
+          </a>
+          <span class="glass-pill text-muted small">
+            <i class="bi bi-shield-check text-emerald me-1"></i> Verified Account
+          </span>
+        </div>
+
+        <!-- Glassmorphic Profile Card -->
+        <div class="glass-panel p-4 p-md-5 shadow-lg position-relative overflow-hidden">
+          
+          <!-- View Profile Mode -->
+          <div *ngIf="!showUpdateForm">
+            
+            <div class="text-center pb-4 border-bottom border-secondary border-opacity-10 mb-4">
+              <div class="profile-avatar-ring mx-auto mb-3">
+                <img [src]="trader.image || 'https://placehold.co/140x140/e2e8f0/64748b?text=Merchant'" 
+                     alt="{{ trader.businessName || 'Merchant' }}" 
+                     class="profile-avatar-img"
+                     onerror="this.onerror=null; this.src='assets/Kasieco-Dark-Logo.png'">
+              </div>
+
+              <div class="d-inline-flex align-items-center gap-1 glass-pill px-3 py-1 mb-2">
+                <span class="pulse-dot"></span>
+                <span class="fw-bold text-dark small">{{ trader.businessName || 'Township Business' }}</span>
+              </div>
+
+              <h2 class="fw-extrabold text-dark mb-1">{{ trader.fname || 'Merchant' }}</h2>
+              <p class="text-muted small mb-0 d-flex align-items-center justify-content-center gap-1" *ngIf="trader.address">
+                <i class="bi bi-geo-alt-fill text-emerald"></i>
+                <span>{{ trader.address }}</span>
+              </p>
+            </div>
+
+            <!-- Profile Info Grid -->
+            <div class="row g-3 mb-4">
+              <div class="col-sm-6">
+                <div class="p-3 rounded-3 bg-white bg-opacity-70 border border-secondary border-opacity-10 h-100">
+                  <small class="text-muted d-block" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <i class="bi bi-envelope me-1 text-emerald"></i> Account Email
+                  </small>
+                  <strong class="text-dark small text-break">{{ trader.email || 'No email' }}</strong>
+                </div>
+              </div>
+
+              <div class="col-sm-6">
+                <div class="p-3 rounded-3 bg-white bg-opacity-70 border border-secondary border-opacity-10 h-100">
+                  <small class="text-muted d-block" style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <i class="bi bi-whatsapp me-1 text-success"></i> WhatsApp Contact
+                  </small>
+                  <strong class="text-dark small">{{ trader.cell || 'No contact number' }}</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-10">
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-emerald px-4 py-2" (click)="update()">
+                  <i class="bi bi-pencil-square me-1"></i> Edit Profile
+                </button>
+                <a routerLink="/product-inventory" class="btn btn-glass px-3 py-2 text-dark">
+                  <i class="bi bi-box-seam me-1"></i> My Catalog
+                </a>
+              </div>
+
+              <button type="button" class="btn btn-sm btn-glass text-danger border-danger-subtle px-3 py-2" (click)="deleteProfile()">
+                <i class="bi bi-trash3 me-1"></i> Delete Profile
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Edit Profile Mode -->
+          <div *ngIf="showUpdateForm">
+            <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+              <h4 class="fw-bold text-dark mb-0">Update Merchant Profile</h4>
+              <button type="button" class="btn btn-sm btn-glass text-muted" (click)="update()">
+                <i class="bi bi-x-lg me-1"></i> Cancel
+              </button>
+            </div>
+
+            <form (submit)="updateProfile()">
+              <div class="mb-3">
+                <label for="profileImage" class="form-label fw-semibold small text-dark mb-1">
+                  Profile / Logo Image URL
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       id="profileImage" 
+                       name="profileImage" 
+                       [(ngModel)]="trader.image" 
+                       placeholder="https://...">
+                <div class="text-center mt-3" *ngIf="trader.image">
+                  <img [src]="trader.image" alt="Preview" class="rounded-circle shadow-sm" style="width: 80px; height: 80px; object-fit: cover;">
+                </div>
+              </div>
+
+              <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                  <label for="fname" class="form-label fw-semibold small text-dark mb-1">Full Name</label>
+                  <input type="text" class="form-control" id="fname" name="fname" [(ngModel)]="trader.fname">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="businessName" class="form-label fw-semibold small text-dark mb-1">Business Name</label>
+                  <input type="text" class="form-control" id="businessName" name="businessName" [(ngModel)]="trader.businessName">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="email" class="form-label fw-semibold small text-dark mb-1">Email Address</label>
+                  <input type="email" class="form-control" id="email" name="email" [(ngModel)]="trader.email">
+                </div>
+
+                <div class="col-md-6">
+                  <label for="phoneNumber" class="form-label fw-semibold small text-dark mb-1">WhatsApp Cell</label>
+                  <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" [(ngModel)]="trader.cell">
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-10">
+                <button type="button" class="btn btn-glass px-3" (click)="update()">Cancel</button>
+                <button type="submit" class="btn btn-emerald px-4">
+                  <i class="bi bi-check2 me-1"></i> Save Changes
+                </button>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

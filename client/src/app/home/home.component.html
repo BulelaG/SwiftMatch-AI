@@ -1,0 +1,534 @@
+<!-- ── Dark Obsidian Carbon Background ── -->
+<div class="carbon-stage min-vh-100 text-light py-4 position-relative overflow-hidden">
+  
+  <!-- Subtle Ambient Glow Orbs -->
+  <div class="glow-orb-emerald" style="top: -80px; left: 10%;"></div>
+  <div class="glow-orb-amber" style="bottom: 10%; right: 5%;"></div>
+
+  <div class="container-fluid px-3 px-lg-5 position-relative" style="z-index: 2;">
+    
+    <!-- ── Top Global Navigation Bar ── -->
+    <header class="d-flex flex-wrap justify-content-between align-items-center pb-3 mb-4 border-bottom border-secondary border-opacity-25 gap-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="brand-badge-box">
+          <i class="bi bi-cpu text-emerald fs-4"></i>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2">
+            <h4 class="fw-extrabold m-0 tracking-tight text-white font-heading">SwiftMatch<span class="text-emerald">.AI</span></h4>
+            <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2 py-0-5 small border border-emerald-subtle">
+              v1.0 Hackathon Build
+            </span>
+          </div>
+          <small class="text-muted d-block" style="font-size: 0.75rem;">
+            Enterprise SME Procurement Matching • Powered by Kasi-eCo Verified Network
+          </small>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="d-flex align-items-center gap-2">
+        <div class="btn-group p-1 glass-toggle-group">
+          <button type="button" 
+                  class="btn btn-sm" 
+                  [ngClass]="selectedTab === 'match' ? 'btn-emerald active shadow-sm' : 'text-muted'"
+                  (click)="selectedTab = 'match'">
+            <i class="bi bi-lightning-charge me-1"></i> Procurement Matcher
+          </button>
+          <button type="button" 
+                  class="btn btn-sm" 
+                  [ngClass]="selectedTab === 'ecosystem' ? 'btn-emerald active shadow-sm' : 'text-muted'"
+                  (click)="selectedTab = 'ecosystem'">
+            <i class="bi bi-graph-up-arrow me-1"></i> YES Impact Dashboard
+          </button>
+        </div>
+
+        <a href="http://localhost:4200" target="_blank" class="btn btn-sm btn-glass text-light d-none d-md-inline-flex align-items-center gap-1">
+          <i class="bi bi-shop text-emerald"></i>
+          <span>View Kasi-eCo Portal</span>
+          <i class="bi bi-box-arrow-up-right ms-1 text-muted" style="font-size: 0.7rem;"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TAB 1: CORPORATE PROCUREMENT MATCHER                   -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="selectedTab === 'match'">
+      
+      <!-- ── Section A: Executive Command Bar ── -->
+      <section class="glass-command-panel p-4 p-lg-5 mb-4 position-relative overflow-hidden">
+        
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+          <div class="d-inline-flex align-items-center gap-2 glass-pill px-3 py-1">
+            <span class="pulse-dot"></span>
+            <span class="text-uppercase fw-bold text-light" style="font-size: 0.72rem; letter-spacing: 0.08em;">
+              Challenge 4: SME Opportunity Matching Engine
+            </span>
+          </div>
+          <small class="text-muted">
+            <i class="bi bi-shield-check text-emerald me-1"></i> POPIA-Compliant & Verified Baseline
+          </small>
+        </div>
+
+        <h1 class="display-6 fw-extrabold text-white mb-2 font-heading">
+          AI Sourcing for <span class="gradient-text-emerald">Verified Township Makers</span>
+        </h1>
+        <p class="text-muted mb-4" style="max-width: 720px; font-size: 0.98rem; line-height: 1.5;">
+          Ingest raw corporate RFQ briefs, compute multi-factor capacity and compliance feasibility across vetted youth-owned enterprises, and dispatch direct WhatsApp proposals in seconds.
+        </p>
+
+        <!-- Command Input Box -->
+        <div class="command-input-container p-2 mb-3">
+          <!-- Status notice -->
+          <div *ngIf="claudeStatusNotice" class="alert alert-info py-1-5 px-3 mb-2 small d-flex align-items-center gap-2 rounded-2" style="background: rgba(14, 165, 233, 0.15); border-color: rgba(14, 165, 233, 0.3); color: #38bdf8;">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>{{ claudeStatusNotice }}</span>
+          </div>
+
+          <div class="d-flex align-items-start gap-2">
+            <span class="pt-2 ps-2 text-emerald fs-4">
+              <i class="bi bi-stars"></i>
+            </span>
+            <textarea class="form-control border-0 bg-transparent text-white p-2 command-textarea" 
+                      rows="3" 
+                      [(ngModel)]="rfqText" 
+                      placeholder="Describe what your organization needs (e.g. 150 bespoke leather conference folios in Sandton, budget R85k)..."></textarea>
+          </div>
+
+          <!-- Parameter Strips -->
+          <div class="row g-2 px-2 pt-2 border-top border-secondary border-opacity-25 align-items-center">
+            <div class="col-6 col-md-2">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-transparent border-0 text-muted">Qty:</span>
+                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="requiredQuantity">
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-transparent border-0 text-muted">Budget: R</span>
+                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="budgetZAR">
+              </div>
+            </div>
+            <div class="col-6 col-md-2">
+              <div class="input-group input-group-sm">
+                <span class="input-group-text bg-transparent border-0 text-muted">Days:</span>
+                <input type="number" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded" [(ngModel)]="maxTurnaroundDays">
+              </div>
+            </div>
+            <div class="col-12 col-md-5 d-flex gap-2 justify-content-end">
+              <button class="btn btn-sm btn-glass text-light px-3 py-2 fw-semibold d-flex align-items-center gap-1"
+                      (click)="smartParseWithClaude()"
+                      [disabled]="isClaudeParsing"
+                      title="Claude 3.5 Sonnet extracts parameters from natural text">
+                <span *ngIf="isClaudeParsing" class="spinner-border spinner-border-sm text-info"></span>
+                <i *ngIf="!isClaudeParsing" class="bi bi-magic text-info"></i>
+                <span style="font-size: 0.8rem;">{{ isClaudeParsing ? 'Parsing...' : 'Claude Parse' }}</span>
+              </button>
+
+              <button class="btn btn-emerald px-3 py-2 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 flex-grow-1" 
+                      (click)="executeMatch()" 
+                      [disabled]="isMatching">
+                <span *ngIf="isMatching" class="spinner-border spinner-border-sm"></span>
+                <i *ngIf="!isMatching" class="bi bi-lightning-charge-fill"></i>
+                <span>{{ isMatching ? 'Vectorizing...' : 'Run Match Engine' }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Preset Pills (Judge Demo Accelerators) -->
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <small class="text-muted fw-bold me-1 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+            Demo Presets:
+          </small>
+          <button *ngFor="let preset of presetRfqs" 
+                  type="button" 
+                  class="btn btn-sm preset-pill text-nowrap"
+                  (click)="applyPreset(preset)">
+            <span class="text-emerald me-1">⚡</span>
+            <span>{{ preset.title.split(':')[0] }}</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ── Section B: Results Grid + Explainability Split ── -->
+      <div class="row g-4" *ngIf="hasMatched">
+        
+        <!-- Left: Ranked Candidate Cards (7 Cols) -->
+        <div class="col-lg-7">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="fw-bold m-0 text-white font-heading d-flex align-items-center gap-2">
+              <i class="bi bi-trophy text-warning"></i>
+              Ranked Supplier Matches
+              <span class="badge bg-dark border border-secondary text-light rounded-pill px-2 py-0-5" style="font-size: 0.72rem;">
+                {{ matches.length }} Candidates
+              </span>
+            </h5>
+            <small class="text-muted">Ranked by Multi-Factor Fit</small>
+          </div>
+
+          <div class="d-flex flex-column gap-3">
+            <div *ngFor="let item of matches; let i = index" 
+                 class="glass-card match-card p-4 position-relative"
+                 [ngClass]="{'active-match': selectedMatch?.sme?.id === item.sme.id}"
+                 (click)="selectMatchForAudit(item)">
+              
+              <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start gap-3">
+                
+                <!-- SME Profile Info -->
+                <div class="d-flex gap-3">
+                  <div class="sme-avatar-stage">
+                    <img [src]="item.sme.image" alt="{{ item.sme.businessName }}" class="sme-thumb">
+                    <span class="rank-badge">#{{ i + 1 }}</span>
+                  </div>
+                  <div>
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                      <h5 class="fw-bold text-white mb-0">{{ item.sme.businessName }}</h5>
+                      <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2 py-0-5 small" *ngIf="item.sme.youthOwned">
+                        <i class="bi bi-patch-check-fill me-1"></i> Youth Owned
+                      </span>
+                    </div>
+
+                    <p class="text-muted small mb-2">
+                      <i class="bi bi-geo-alt-fill text-emerald me-1"></i>
+                      <span>{{ item.sme.location }} ({{ item.distanceKm }} km from site)</span>
+                      <span class="mx-1">•</span>
+                      <span>Owner: <strong class="text-light">{{ item.sme.owner }} ({{ item.sme.ownerAge }} yrs)</strong></span>
+                    </p>
+
+                    <p class="text-light text-opacity-75 small mb-2 lh-sm line-clamp-2" style="font-size: 0.85rem;">
+                      {{ item.sme.description }}
+                    </p>
+
+                    <!-- Micro Metric Tags -->
+                    <div class="d-flex flex-wrap gap-2 pt-1">
+                      <span class="meta-chip">
+                        <i class="bi bi-box-seam me-1 text-emerald"></i> Cap: {{ item.sme.monthlyCapacityUnits }}/mo
+                      </span>
+                      <span class="meta-chip">
+                        <i class="bi bi-star-fill me-1 text-warning"></i> {{ item.sme.kasiEcoRating }} ({{ item.sme.verifiedOrdersCount }} orders)
+                      </span>
+                      <span class="meta-chip">
+                        <i class="bi bi-people me-1 text-info"></i> {{ item.sme.youthEmployed }} Jobs
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Match Radial Ring Score -->
+                <div class="text-center text-sm-end ms-auto">
+                  <div class="score-circle-wrapper mx-auto" [style.background]="getScoreGradient(item.matchPercentage)">
+                    <div class="score-circle-inner">
+                      <span class="score-number">{{ item.matchPercentage }}%</span>
+                      <small class="score-label">MATCH</small>
+                    </div>
+                  </div>
+
+                  <div class="mt-2 d-flex flex-column gap-1">
+                    <button type="button" 
+                            class="btn btn-sm btn-glass text-light py-1 px-3 text-nowrap"
+                            (click)="selectMatchForAudit(item); $event.stopPropagation()">
+                      <i class="bi bi-search me-1 text-emerald"></i> Audit XAI
+                    </button>
+                    <button type="button" 
+                            class="btn btn-sm btn-whatsapp py-1 px-3 text-nowrap"
+                            (click)="deployToWhatsApp(item); $event.stopPropagation()">
+                      <i class="bi bi-whatsapp me-1"></i> Send RFQ
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Explainable AI (XAI) Audit Drawer (5 Cols) -->
+        <div class="col-lg-5" *ngIf="selectedMatch">
+          <div class="sticky-top" style="top: 20px;">
+            <div class="glass-panel p-4 p-xl-4-5 shadow-lg border-emerald-subtle">
+              
+              <div class="d-flex align-items-center justify-content-between pb-3 mb-3 border-bottom border-secondary border-opacity-25">
+                <div>
+                  <span class="badge bg-emerald-subtle text-emerald rounded-pill px-2-5 py-1 small mb-1">
+                    Responsible AI • Explainability Drawer
+                  </span>
+                  <h5 class="fw-bold text-white mb-0">Audit: {{ selectedMatch.sme.businessName }}</h5>
+                </div>
+                <div class="display-6 fw-extrabold text-emerald font-heading">
+                  {{ selectedMatch.matchPercentage }}%
+                </div>
+              </div>
+
+              <!-- Multi-Factor Radar Progress Bars -->
+              <h6 class="text-uppercase fw-bold text-muted small mb-3 tracking-wide" style="font-size: 0.72rem;">
+                Deterministic Multi-Factor Scoring Matrix
+              </h6>
+
+              <div class="d-flex flex-column gap-2 mb-4">
+                <!-- 1. Semantic Fit -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-light">Semantic Craft & Item Relevance</span>
+                    <strong class="text-emerald">{{ selectedMatch.radarScores.semanticFit }}%</strong>
+                  </div>
+                  <div class="progress progress-dark">
+                    <div class="progress-bar bg-emerald" [style.width.%]="selectedMatch.radarScores.semanticFit"></div>
+                  </div>
+                </div>
+
+                <!-- 2. Capacity Buffer -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-light">Production Capacity & Lead Time</span>
+                    <strong class="text-emerald">{{ selectedMatch.radarScores.productionCapacity }}%</strong>
+                  </div>
+                  <div class="progress progress-dark">
+                    <div class="progress-bar bg-info" [style.width.%]="selectedMatch.radarScores.productionCapacity"></div>
+                  </div>
+                </div>
+
+                <!-- 3. Compliance & Governance -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-light">CIPC & Statutory Tax Compliance</span>
+                    <strong class="text-emerald">{{ selectedMatch.radarScores.complianceStatus }}%</strong>
+                  </div>
+                  <div class="progress progress-dark">
+                    <div class="progress-bar bg-warning" [style.width.%]="selectedMatch.radarScores.complianceStatus"></div>
+                  </div>
+                </div>
+
+                <!-- 4. Geographic Transit Proximity -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-light">Logistical Proximity ({{ selectedMatch.distanceKm }} km)</span>
+                    <strong class="text-emerald">{{ selectedMatch.radarScores.geographicProximity }}%</strong>
+                  </div>
+                  <div class="progress progress-dark">
+                    <div class="progress-bar bg-primary" [style.width.%]="selectedMatch.radarScores.geographicProximity"></div>
+                  </div>
+                </div>
+
+                <!-- 5. Kasi-eCo Verified Order Reputation -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span class="text-light">Past Marketplace Trade Reputation</span>
+                    <strong class="text-emerald">{{ selectedMatch.radarScores.reputationAndOrders }}%</strong>
+                  </div>
+                  <div class="progress progress-dark">
+                    <div class="progress-bar bg-success" [style.width.%]="selectedMatch.radarScores.reputationAndOrders"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- AI Audit Findings -->
+              <div class="mb-3">
+                <h6 class="text-uppercase fw-bold text-muted small mb-2" style="font-size: 0.72rem;">
+                  Positive Match Justifications
+                </h6>
+                <ul class="list-unstyled d-flex flex-column gap-1 small mb-0">
+                  <li *ngFor="let h of selectedMatch.highlights" class="d-flex align-items-start gap-2 text-light">
+                    <i class="bi bi-check-circle-fill text-emerald pt-0-5"></i>
+                    <span>{{ h }}</span>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- AI Gap Advisory (Crucial for Responsible AI) -->
+              <div class="p-3 rounded-3 bg-warning bg-opacity-10 border border-warning border-opacity-25 mb-4" *ngIf="selectedMatch.gaps && selectedMatch.gaps.length > 0">
+                <div class="d-flex align-items-center gap-2 mb-1 text-warning fw-bold small">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <span>Delivery & Compliance Risk Advisory</span>
+                </div>
+                <ul class="list-unstyled mb-0 d-flex flex-column gap-1 small text-light text-opacity-90">
+                  <li *ngFor="let g of selectedMatch.gaps">
+                    • {{ g }}
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Claude AI Deep Audit Narrative -->
+              <div class="mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <span class="badge bg-info-subtle text-info rounded-pill px-2 py-0-5 small" style="font-size: 0.7rem;">
+                    <i class="bi bi-robot me-1"></i> Claude 3.5 Sonnet XAI Audit
+                  </span>
+                  <button type="button" 
+                          class="btn btn-sm btn-glass text-info py-0-5 px-2"
+                          style="font-size: 0.72rem;"
+                          (click)="generateClaudeAudit()"
+                          [disabled]="isClaudeAuditing">
+                    <span *ngIf="isClaudeAuditing" class="spinner-border spinner-border-sm me-1"></span>
+                    <i *ngIf="!isClaudeAuditing" class="bi bi-sparkles me-1"></i>
+                    <span>{{ isClaudeAuditing ? 'Generating...' : (claudeAuditNarrative ? 'Refresh AI Narrative' : 'Deep Explainability') }}</span>
+                  </button>
+                </div>
+
+                <div *ngIf="claudeAuditNarrative" class="p-3 rounded-3 bg-dark border border-info border-opacity-30 small text-light lh-base" style="font-size: 0.82rem; white-space: pre-line;">
+                  {{ claudeAuditNarrative }}
+                </div>
+              </div>
+
+              <!-- Action CTAs -->
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-emerald py-2 fw-bold shadow-sm" (click)="deployToWhatsApp(selectedMatch)">
+                  <i class="bi bi-whatsapp me-1"></i> Deploy Opportunity via WhatsApp
+                </button>
+                <a href="http://localhost:4200" target="_blank" class="btn btn-sm btn-glass text-light py-2">
+                  <i class="bi bi-shop me-1 text-emerald"></i> Verify Live Kasi-eCo Catalog
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- TAB 2: YES ECOSYSTEM IMPACT & MACRO DASHBOARD          -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <div *ngIf="selectedTab === 'ecosystem' && ecosystemMetrics">
+      
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="glass-panel p-4 text-center">
+            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Total Procurement Spend Routed</small>
+            <div class="display-6 fw-extrabold text-emerald mt-1 font-heading">
+              R{{ (ecosystemMetrics.totalMatchedVolumeZAR / 1000000).toFixed(1) }}M
+            </div>
+            <small class="text-light text-opacity-50">Across Sandton Corporate Partners</small>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="glass-panel p-4 text-center">
+            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Youth-Owned SMEs Engaged</small>
+            <div class="display-6 fw-extrabold text-white mt-1 font-heading">
+              {{ ecosystemMetrics.youthSmesEngaged }}
+            </div>
+            <small class="text-light text-opacity-50">Gauteng, Western Cape & KZN</small>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="glass-panel p-4 text-center">
+            <small class="text-muted text-uppercase fw-bold" style="font-size: 0.72rem;">Direct Youth Jobs Sustained</small>
+            <div class="display-6 fw-extrabold text-warning mt-1 font-heading">
+              {{ ecosystemMetrics.youthJobsSustained }}
+            </div>
+            <small class="text-light text-opacity-50">Verified Workshop Artisans</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Demand Sectors -->
+        <div class="col-lg-6">
+          <div class="glass-panel p-4 h-100">
+            <h5 class="fw-bold text-white mb-3 font-heading">Top Corporate Procurement Demand Sectors</h5>
+            <div class="d-flex flex-column gap-3">
+              <div *ngFor="let s of ecosystemMetrics.topSectors">
+                <div class="d-flex justify-content-between small mb-1">
+                  <span class="text-light">{{ s.name }}</span>
+                  <strong class="text-emerald">{{ s.demandPercentage }}%</strong>
+                </div>
+                <div class="progress progress-dark">
+                  <div class="progress-bar bg-emerald" [style.width.%]="s.demandPercentage"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supply Gaps (YES Challenge 4 Explicit Requirement) -->
+        <div class="col-lg-6">
+          <div class="glass-panel p-4 h-100">
+            <h5 class="fw-bold text-white mb-3 font-heading">Ecosystem Capability Gaps (YES Priority Action)</h5>
+            <div class="d-flex flex-column gap-3">
+              <div *ngFor="let gap of ecosystemMetrics.supplyGaps" class="p-3 rounded-3 bg-dark border border-secondary border-opacity-25 d-flex align-items-start gap-3">
+                <i class="bi bi-info-circle-fill text-warning fs-5"></i>
+                <div class="small text-light">
+                  {{ gap }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- LIVE WHATSAPP DISPATCH MODAL (SMARTPHONE SIMULATOR)    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="modal fade show d-block" *ngIf="showWhatsAppModal" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+    <div class="modal-content phone-modal-frame border-0 shadow-lg overflow-hidden">
+      
+      <!-- WhatsApp Top Header -->
+      <div class="p-3 bg-whatsapp-green text-white d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <div class="avatar-circle-sm">
+            <i class="bi bi-shop"></i>
+          </div>
+          <div>
+            <h6 class="fw-bold mb-0" style="font-size: 0.95rem;">{{ activeWhatsAppPayload?.businessName }}</h6>
+            <small style="font-size: 0.7rem; opacity: 0.85;">SwiftMatch AI Automated Opportunity Bot</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close btn-close-white" (click)="closeWhatsAppModal()"></button>
+      </div>
+
+      <!-- WhatsApp Chat Stage -->
+      <div class="p-3 chat-stage d-flex flex-column justify-content-between" style="min-height: 420px; background: #e5ddd5;">
+        
+        <div class="whatsapp-bubble p-3 shadow-sm rounded-3">
+          <div class="fw-bold text-dark small mb-1">
+            <i class="bi bi-robot text-success me-1"></i> SwiftMatch AI Opportunity Ping
+          </div>
+          <p class="text-dark small mb-2 white-space-pre-line lh-base" style="font-size: 0.82rem;">
+            {{ activeWhatsAppPayload?.message }}
+          </p>
+          <div class="text-end text-muted" style="font-size: 0.65rem;">
+            Delivered • Just now <i class="bi bi-check2-all text-primary"></i>
+          </div>
+        </div>
+
+        <!-- Claude AI Tone Adaptation CTA -->
+        <div class="my-2">
+          <button type="button" 
+                  class="btn btn-sm btn-dark w-100 py-1-5 text-white border-0 shadow-sm d-flex align-items-center justify-content-center gap-2"
+                  style="background: #128c7e;"
+                  (click)="draftWithClaude()"
+                  [disabled]="isClaudeDrafting">
+            <span *ngIf="isClaudeDrafting" class="spinner-border spinner-border-sm"></span>
+            <i *ngIf="!isClaudeDrafting" class="bi bi-translate"></i>
+            <span style="font-size: 0.78rem;">{{ isClaudeDrafting ? 'Drafting with Claude...' : 'Adapt Tone & Language (Claude Sonnet)' }}</span>
+          </button>
+        </div>
+
+        <!-- Simulated Response Buttons -->
+        <div class="d-flex flex-column gap-2 pt-2">
+          <button type="button" class="btn btn-success btn-sm py-2 fw-bold" (click)="closeWhatsAppModal()">
+            <i class="bi bi-check-circle-fill me-1"></i> [1] Accept & Request PO
+          </button>
+          <button type="button" class="btn btn-outline-dark btn-sm py-1-5 bg-white" (click)="closeWhatsAppModal()">
+            [2] View Specification Details
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
