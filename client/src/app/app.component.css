@@ -1,4 +1,4 @@
-/* ── Uber for Business Enterprise Topbar & Footer ── */
+/* ── Uber for Business Enterprise Topbar & Footer (Compact Modernist) ── */
 
 .uber-topbar {
   background-color: var(--sm-canvas);
@@ -6,7 +6,7 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  height: 64px;
+  height: 50px;
   display: flex;
   align-items: center;
   transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -16,7 +16,7 @@
   max-width: 1320px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,7 +25,7 @@
 .uber-brand-group {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 20px;
 }
 
 .uber-brand {
@@ -36,37 +36,37 @@
 
 .uber-brand-title {
   font-family: var(--sm-font-heading);
-  font-size: 22px;
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.035em;
   color: #FFFFFF;
 }
 
-/* Nav dropdown pill buttons */
+/* Nav dropdown pill buttons (Compact) */
 .uber-nav-pills {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .uber-pill-btn {
   background: transparent;
-  color: #FFFFFF;
+  color: #D1D1D1;
   border: none;
   border-radius: var(--sm-radius-pill, 9999px);
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 5px 12px;
+  font-size: 12.5px;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .uber-pill-btn i {
-  font-size: 11px;
-  opacity: 0.7;
+  font-size: 10px;
+  opacity: 0.75;
 }
 
 .uber-pill-btn:hover,
@@ -79,41 +79,7 @@
 .uber-right-group {
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-.uber-icon-pill {
-  background: transparent;
-  color: #FFFFFF;
-  border: none;
-  border-radius: var(--sm-radius-pill, 9999px);
-  padding: 6px 12px;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.uber-icon-pill:hover {
-  background-color: #1A1A1A;
-}
-
-.uber-text-link {
-  color: #FFFFFF;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 6px 12px;
-  border-radius: var(--sm-radius-pill, 9999px);
-  transition: color 0.15s ease, background-color 0.15s ease;
-}
-
-.uber-text-link:hover {
-  background-color: #1A1A1A;
-  color: #FFFFFF;
+  gap: 10px;
 }
 
 /* Nav Dropdown Wrapper */
@@ -123,9 +89,9 @@
 
 .uber-nav-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 6px);
   left: 0;
-  width: 280px;
+  width: 270px;
   background-color: #121212;
   border: 1px solid #2B2B2B;
   border-radius: 12px;
@@ -138,18 +104,18 @@
 }
 
 .dropdown-header {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: #737373;
-  padding: 6px 10px;
+  padding: 4px 8px;
 }
 
 .dropdown-item {
   display: flex;
   flex-direction: column;
-  padding: 8px 10px;
+  padding: 7px 10px;
   border-radius: 8px;
   text-decoration: none;
   transition: background-color 0.15s ease;
@@ -160,41 +126,48 @@
 }
 
 .hub-name {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #FFFFFF;
 }
 
 .hub-badge {
-  font-size: 11px;
+  font-size: 10.5px;
   color: #9E9E9E;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* Engine Health Status Chip */
 .uber-engine-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 12px;
+  gap: 6px;
+  font-size: 11px;
   color: #C2C2C2;
   background-color: #141414;
   border: 1px solid #262626;
-  padding: 6px 14px;
+  padding: 4px 10px;
   border-radius: var(--sm-radius-pill, 9999px);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.uber-engine-chip:hover {
+  background-color: #1F1F1F;
+  border-color: #383838;
 }
 
 .engine-live-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background-color: #1BB38A;
-  box-shadow: 0 0 8px #1BB38A;
+  box-shadow: 0 0 6px #1BB38A;
 }
 
 .engine-live-dot.offline {
   background-color: #FBBF24;
-  box-shadow: 0 0 8px #FBBF24;
+  box-shadow: 0 0 6px #FBBF24;
 }
 
 .engine-chip-text strong {
@@ -205,22 +178,189 @@
 .uber-company-pill {
   background-color: #FFFFFF;
   color: #000000;
-  font-size: 13px;
+  border: none;
+  font-size: 11.5px;
   font-weight: 700;
-  padding: 8px 18px;
+  padding: 5px 14px;
   border-radius: var(--sm-radius-pill, 9999px);
   cursor: pointer;
   letter-spacing: -0.01em;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.12);
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.12);
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .uber-company-pill:hover {
   background-color: #EDEDED;
   transform: translateY(-1px);
+}
+
+/* ═════════════════════════════════════════════════════════════
+   MODAL OVERLAYS (INTERACTIVE NAVBAR DIALOGS)
+   ═════════════════════════════════════════════════════════════ */
+
+.uber-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 20px;
+  backdrop-filter: blur(6px);
+}
+
+.uber-modal-sheet {
+  background-color: #121212;
+  border: 1px solid #2B2B2B;
+  border-radius: 16px;
+  max-width: 540px;
+  width: 100%;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  padding: 24px;
+}
+
+.modal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.modal-badge-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--sm-accent);
+}
+
+.btn-modal-close {
+  background: none;
+  border: none;
+  color: #888888;
+  font-size: 24px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-modal-close:hover {
+  color: #FFFFFF;
+}
+
+.modal-headline {
+  font-size: 18px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.modal-sub {
+  font-size: 12px;
+  color: #9E9E9E;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.framework-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.framework-card {
+  background-color: #181818;
+  border: 1px solid #242424;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 4px;
+}
+
+.card-desc {
+  font-size: 11.5px;
+  color: #A3A3A3;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.weights-table {
+  background-color: #181818;
+  border: 1px solid #242424;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.weight-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid #222222;
+}
+
+.weight-row:last-child {
+  border-bottom: none;
+}
+
+.weight-label {
+  color: #CCCCCC;
+}
+
+.weight-val {
+  font-weight: 700;
+  color: var(--sm-accent);
+}
+
+.company-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.company-stat-box {
+  background-color: #181818;
+  border: 1px solid #242424;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.box-label {
+  font-size: 10.5px;
+  color: #888888;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.box-value {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 14px;
+  border-top: 1px solid #222222;
 }
 
 .sm-main {

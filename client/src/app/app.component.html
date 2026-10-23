@@ -12,12 +12,13 @@
         <span class="uber-brand-title">SwiftMatch</span>
       </a>
 
-      <!-- High-Utility Enterprise Navigation Pills -->
+      <!-- High-Utility Enterprise Navigation Pills (Compact) -->
       <nav class="uber-nav-pills d-none d-lg-flex" aria-label="Main Navigation">
-        <button type="button" class="uber-pill-btn active" routerLink="/">
+        <button type="button" class="uber-pill-btn active" (click)="goToWorkspace()">
           <i class="bi bi-grid-1x2-fill"></i>
           <span>Sourcing Workspace</span>
         </button>
+
         <div class="uber-dropdown-wrapper">
           <button type="button" class="uber-pill-btn" (click)="toggleSmmeMenu()">
             <span>384 Township SMMEs</span>
@@ -25,60 +26,203 @@
           </button>
           <div *ngIf="showSmmeMenu" class="uber-nav-dropdown" (click)="showSmmeMenu = false">
             <div class="dropdown-header">Verified Artisan Clusters</div>
-            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+            <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" class="dropdown-item">
               <span class="hub-name">Soweto Craft Hub</span>
               <span class="hub-badge">142 Makers · Leather &amp; Metal</span>
             </a>
-            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+            <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" class="dropdown-item">
               <span class="hub-name">Diepsloot Manufacturing</span>
               <span class="hub-badge">98 Makers · Workwear &amp; PPE</span>
             </a>
-            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+            <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" class="dropdown-item">
               <span class="hub-name">Tembisa Joinery Cluster</span>
               <span class="hub-badge">84 Makers · Timber &amp; Decor</span>
             </a>
-            <a href="http://localhost:4200" target="_blank" class="dropdown-item">
+            <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" class="dropdown-item">
               <span class="hub-name">Alexandra Eco-Packaging</span>
               <span class="hub-badge">60 Makers · Print &amp; Paper</span>
             </a>
           </div>
         </div>
-        <button type="button" class="uber-pill-btn" routerLink="/" fragment="sourcing-form-section">
+
+        <button type="button" class="uber-pill-btn" (click)="scrollToScorecard()">
           <i class="bi bi-bar-chart-steps"></i>
           <span>B-BBEE Scorecard</span>
         </button>
-        <a href="https://github.com/BulelaG/Kasi-eCo" target="_blank" rel="noopener" class="uber-pill-btn">
+
+        <button type="button" class="uber-pill-btn" (click)="openAuditModal()">
           <i class="bi bi-shield-check"></i>
           <span>Audit &amp; Governance</span>
-        </a>
+        </button>
       </nav>
     </div>
 
-    <!-- Right: Engine Status, Currency, and Corporate User Pill -->
+    <!-- Right: Engine Status Chip and Corporate Account Pill -->
     <div class="uber-right-group">
-      <!-- Live Semantic Engine Health Chip -->
-      <div class="uber-engine-chip" [title]="engineReady ? 'MiniLM semantic embeddings online' : 'Lexical deterministic fallback'">
+      <!-- Live Semantic Engine Health Chip (Clickable for Tech Specs) -->
+      <button type="button" 
+              class="uber-engine-chip" 
+              (click)="openEngineModal()"
+              title="MiniLM-L6-v2 vector embeddings online. Click to inspect AI architecture.">
         <span class="engine-live-dot" [class.offline]="!engineReady"></span>
         <span class="engine-chip-text">
           <strong>{{ poolSize ?? '384' }} SMMEs</strong>
           <span class="d-none d-xl-inline"> · {{ engineReady ? 'Engine Online' : 'Warming Up' }}</span>
         </span>
-      </div>
+      </button>
 
-      <!-- Currency & Jurisdiction -->
-      <span class="uber-icon-pill" title="Jurisdiction: South Africa (ZAR)">
-        <span>🇿🇦 ZA · ZAR</span>
-      </span>
-
-      <!-- Corporate Account Pill (Solid White Pill with Black Text) -->
-      <div class="uber-company-pill" title="Authenticated Corporate Procurement Session">
+      <!-- Corporate Account Pill (Solid White Pill with Black Text, Clickable) -->
+      <button type="button" 
+              class="uber-company-pill" 
+              (click)="openCompanyModal()"
+              title="Authenticated Corporate Procurement Session. Click to view account details.">
         <i class="bi bi-building"></i>
         <span>Standard Bank ESD</span>
-      </div>
+      </button>
     </div>
 
   </div>
 </header>
+
+<!-- ═════════════════════════════════════════════════════════════
+     MODAL: AUDIT & GOVERNANCE FRAMEWORK
+     ═════════════════════════════════════════════════════════════ -->
+<div *ngIf="showAuditModal" class="uber-modal-backdrop" (click)="closeAuditModal()">
+  <div class="uber-modal-sheet" (click)="$event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-badge-title">
+        <i class="bi bi-shield-check"></i>
+        <span>SWIFTMATCH COMPLIANCE &amp; GOVERNANCE FRAMEWORK</span>
+      </div>
+      <button type="button" class="btn-modal-close" (click)="closeAuditModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <h3 class="modal-headline">Audit-Ready Preferential Procurement</h3>
+      <p class="modal-sub">
+        Every supplier on SwiftMatch AI is audited against statutory compliance and dti Broad-Based Black Economic Empowerment (B-BBEE) requirements.
+      </p>
+
+      <div class="framework-grid">
+        <div class="framework-card">
+          <div class="card-icon"><i class="bi bi-lock-fill"></i></div>
+          <div class="card-title">POPIA Data Protection</div>
+          <p class="card-desc">Artisan mobile contacts and personal details are cryptographically masked (e.g. 082 ••• 4192) and released only upon mutual procurement contract agreement.</p>
+        </div>
+
+        <div class="framework-card">
+          <div class="card-icon"><i class="bi bi-patch-check-fill"></i></div>
+          <div class="card-title">dti Code Series 400 &amp; 500</div>
+          <p class="card-desc">Recognised at 135% preferential spend under Level 1 EME thresholds. Directly earns points toward Enterprise and Supplier Development scorecards.</p>
+        </div>
+
+        <div class="framework-card">
+          <div class="card-icon"><i class="bi bi-building-check"></i></div>
+          <div class="card-title">CIPC &amp; SARS Verification</div>
+          <p class="card-desc">Live cross-referencing of CIPC enterprise registration numbers and SARS Tax Compliance PINs to prevent audit disallowances.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-primary-sm" (click)="closeAuditModal()">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     MODAL: MINILM SEMANTIC VECTOR ENGINE SPEC
+     ═════════════════════════════════════════════════════════════ -->
+<div *ngIf="showEngineModal" class="uber-modal-backdrop" (click)="closeEngineModal()">
+  <div class="uber-modal-sheet" (click)="$event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-badge-title">
+        <i class="bi bi-cpu-fill"></i>
+        <span>AI ARCHITECTURE &amp; DETERMINISTIC SCORING</span>
+      </div>
+      <button type="button" class="btn-modal-close" (click)="closeEngineModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <h3 class="modal-headline">Hybrid Embeddings &amp; 5-Factor Scoring</h3>
+      <p class="modal-sub">
+        SwiftMatch pairs 384-dimensional dense sentence embeddings with transparent, audit-ready deterministic weighting.
+      </p>
+
+      <div class="weights-table">
+        <div class="weight-row">
+          <span class="weight-label">Semantic Similarity (MiniLM-L6-v2)</span>
+          <span class="weight-val">35%</span>
+        </div>
+        <div class="weight-row">
+          <span class="weight-label">Sector &amp; Capability Alignment</span>
+          <span class="weight-val">20%</span>
+        </div>
+        <div class="weight-row">
+          <span class="weight-label">Proximity Logistics Decay</span>
+          <span class="weight-val">15%</span>
+        </div>
+        <div class="weight-row">
+          <span class="weight-label">Monthly Workshop Capacity Ratio</span>
+          <span class="weight-val">15%</span>
+        </div>
+        <div class="weight-row">
+          <span class="weight-label">B-BBEE Level &amp; Youth Ownership</span>
+          <span class="weight-val">15%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-primary-sm" (click)="closeEngineModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════════════════════
+     MODAL: CORPORATE BUYER ACCOUNT (STANDARD BANK ESD)
+     ═════════════════════════════════════════════════════════════ -->
+<div *ngIf="showCompanyModal" class="uber-modal-backdrop" (click)="closeCompanyModal()">
+  <div class="uber-modal-sheet" (click)="$event.stopPropagation()">
+    <div class="modal-top">
+      <div class="modal-badge-title">
+        <i class="bi bi-building"></i>
+        <span>CORPORATE ENTERPRISE PORTAL</span>
+      </div>
+      <button type="button" class="btn-modal-close" (click)="closeCompanyModal()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <h3 class="modal-headline">Standard Bank ESD Account</h3>
+      <p class="modal-sub">
+        Authenticated enterprise procurement seat connected to YES 4 Youth partner network.
+      </p>
+
+      <div class="company-stats-grid">
+        <div class="company-stat-box">
+          <span class="box-label">Annual ESD Spend Target</span>
+          <strong class="box-value">R 14,500,000</strong>
+        </div>
+        <div class="company-stat-box">
+          <span class="box-label">Current Pipeline Spend</span>
+          <strong class="box-value text-accent">R 3,420,000</strong>
+        </div>
+        <div class="company-stat-box">
+          <span class="box-label">Township SMME Preference</span>
+          <strong class="box-value">Level 1 EME (135%)</strong>
+        </div>
+        <div class="company-stat-box">
+          <span class="box-label">Jurisdiction</span>
+          <strong class="box-value">South Africa (dti Codes)</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn-primary-sm" (click)="closeCompanyModal()">Done</button>
+    </div>
+  </div>
+</div>
 
 <main class="sm-main" id="main-content" tabindex="-1">
   <router-outlet></router-outlet>
