@@ -65,6 +65,9 @@ export class HomeComponent implements OnInit {
   isGeneratingAudit: boolean = false;
   claudeAuditNarrative: string | null = null;
   claudeAuditSource: string | null = null;
+  activeDetailTab: 'feasibility' | 'bbbee' | 'bom' | 'claude' = 'feasibility';
+  candidateFilter: 'all' | 'eligible' = 'all';
+  showAuditMemo: boolean = false;
 
   // Responsible AI model card
   modelCard: any = null;
@@ -75,6 +78,10 @@ export class HomeComponent implements OnInit {
   activeMatch: any = null;
   makerAccepted: boolean = false;
   makerDeclined: boolean = false;
+  makerCounterOffered: boolean = false;
+  showCounterOfferModal: boolean = false;
+  counterOfferDays: number = 28;
+  counterOfferNotes: string = '';
   dispatchFeedback: string | null = null;
   whatsappDraft: string | null = null;
   whatsappSource: string | null = null;
@@ -121,6 +128,18 @@ export class HomeComponent implements OnInit {
     if (this.requireYouthOwned) reqs.push('youthOwned');
     if (this.requireCoida) reqs.push('coidaRegistered');
     return reqs;
+  }
+
+  get unitBudgetZAR(): number {
+    if (!this.requiredQuantity || this.requiredQuantity <= 0) return 0;
+    return Math.round((this.budgetZAR || 0) / this.requiredQuantity);
+  }
+
+  get filteredMatches(): any[] {
+    if (this.candidateFilter === 'eligible') {
+      return this.matches.filter(m => m.eligible);
+    }
+    return this.matches;
   }
 
   private buildPayload(): MatchRequest {
@@ -285,6 +304,55 @@ export class HomeComponent implements OnInit {
   selectCandidate(match: any): void {
     this.selectedMatch = match;
     this.claudeAuditNarrative = null;
+    this.claudeAuditSource = null;
+    this.bomData = null;
+    this.bbbeeData = null;
+    if (this.activeDetailTab === 'bbbee') {
+      this.loadBbbeeScore();
+    } else if (this.activeDetailTab === 'bom') {
+      this.loadBomEstimate();
+    }
+  }
+
+  setDetailTab(tab: 'feasibility' | 'bbbee' | 'bom' | 'claude'): void {
+    this.activeDetailTab = tab;
+    if (tab === 'bbbee' && !this.bbbeeData) {
+      this.loadBbbeeScore();
+    } else if (tab === 'bom' && !this.bomData) {
+      this.loadBomEstimate();
+    } else if (tab === 'claude' && !this.claudeAuditNarrative) {
+      this.generateClaudeDeepAudit(this.selectedMatch || this.featuredMatch);
+    }
+  }
+
+  openAuditMemo(): void {
+    this.showAuditMemo = true;
+  }
+
+  closeAuditMemo(): void {
+    this.showAuditMemo = false;
+  }
+
+  printAuditMemo(): void {
+    window.print();
+  }
+
+  openCounterOffer(): void {
+    this.counterOfferDays = (this.maxTurnaroundDays || 21) + 7;
+    this.counterOfferNotes = `Proposing ${this.counterOfferDays} days to ensure hand-stitched premium craftsmanship with full QA.`;
+    this.showCounterOfferModal = true;
+  }
+
+  closeCounterOffer(): void {
+    this.showCounterOfferModal = false;
+  }
+
+  submitCounterOffer(): void {
+    this.showCounterOfferModal = false;
+    this.makerCounterOffered = true;
+    this.makerAccepted = false;
+    this.makerDeclined = false;
+    this.dispatchFeedback = `Negotiated proposal sent to buyer: ${this.counterOfferDays} days turnaround requested. The corporate ESD officer has been notified.`;
   }
 
   openMakerExperience(match: any): void {
@@ -292,6 +360,8 @@ export class HomeComponent implements OnInit {
     this.activeMaker = match.sme;
     this.makerAccepted = false;
     this.makerDeclined = false;
+    this.makerCounterOffered = false;
+    this.showCounterOfferModal = false;
     this.dispatchFeedback = null;
     this.whatsappDraft = null;
     this.whatsappSource = null;
@@ -447,7 +517,8 @@ export class HomeComponent implements OnInit {
       requiredQuantity: this.requiredQuantity,
       maxTurnaroundDays: this.maxTurnaroundDays
     };
-    this.matchService.estimateBom({ rfq, smeId: this.featuredMatch?.sme?.id }).subscribe({
+    const currentSme = (this.selectedMatch || this.featuredMatch)?.sme;
+    this.matchService.estimateBom({ rfq, smeId: currentSme?.id }).subscribe({
       next: data => { this.bomData = data; this.isBomLoading = false; },
       error: () => {
         this.isBomLoading = false;
@@ -478,7 +549,8 @@ export class HomeComponent implements OnInit {
   loadBbbeeScore(): void {
     if (this.bbbeeData) { return; }
     this.isBbbeeLoading = true;
-    this.matchService.getBbbeeScore({ budgetZAR: this.budgetZAR, smeId: this.featuredMatch?.sme?.id }).subscribe({
+    const currentSme = (this.selectedMatch || this.featuredMatch)?.sme;
+    this.matchService.getBbbeeScore({ budgetZAR: this.budgetZAR, smeId: currentSme?.id }).subscribe({
       next: data => { this.bbbeeData = data; this.isBbbeeLoading = false; },
       error: () => {
         this.isBbbeeLoading = false;
