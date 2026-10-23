@@ -115,7 +115,7 @@ npm run build                                   # production build
 CHROME_BIN="C:/Program Files/Google/Chrome/Application/chrome.exe" npx ng test --watch=false --browsers=ChromeHeadless
 ```
 
-The client is a single Angular feature (`home/`) with three screens. Shell and screens use semantic landmarks, a skip link, keyboard-operable stepper, tabs and candidate list, `aria-current` / `aria-pressed` / `aria-selected` state, visible focus rings, reduced-motion support, and explicit loading, error and empty states for the shortlist. Verified at 390, 768 and 1280 px with no horizontal overflow; screenshots are in `docs/screens/`.
+The client is a single Angular feature (`home/`) with three screens and three colour themes selectable in the header: Dark (obsidian), Light, and Uber (the Uber Base palette: black primary, white canvas, safety-blue links and focus, green positive states, red errors). Themes are pure CSS token sets on `html[data-theme]`; all component colours derive from those tokens. Shell and screens use semantic landmarks, a skip link, keyboard-operable stepper, tabs and candidate list, `aria-current` / `aria-pressed` / `aria-selected` state, visible focus rings, reduced-motion support, and explicit loading, error and empty states for the shortlist. Verified at 390, 768 and 1280 px with no horizontal overflow; screenshots are in `docs/screens/`.
 
 ### API
 

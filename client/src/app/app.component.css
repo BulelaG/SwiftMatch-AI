@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  border: 1px solid rgba(27, 179, 138, 0.25);
+  border: 1px solid rgba(var(--sm-accent-rgb), 0.25);
 }
 
 .sm-brand-title {
@@ -193,3 +193,24 @@
   background-color: var(--sm-warning);
   box-shadow: 0 0 6px var(--sm-warning);
 }
+
+/* ── Three-way theme switch ── */
+.sm-theme-group {
+  display: inline-flex;
+  border: 1px solid var(--sm-border);
+  border-radius: var(--sm-radius-sm);
+  background-color: var(--sm-canvas);
+  overflow: hidden;
+}
+.sm-theme-group .sm-theme-toggle {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.sm-theme-group .sm-theme-toggle + .sm-theme-toggle { border-left: 1px solid var(--sm-border); }
+.sm-theme-group .sm-theme-toggle[aria-pressed="true"] {
+  background-color: var(--sm-accent);
+  color: var(--sm-on-accent);
+}
+.sm-theme-group .sm-theme-toggle[aria-pressed="true"] i { color: var(--sm-on-accent); }
+html[data-theme="uber"] .sm-live-dot { background-color: var(--sm-positive); box-shadow: 0 0 6px var(--sm-positive); }

@@ -30,7 +30,7 @@
   border-radius: 999px;
   background-color: var(--sm-accent-subtle);
   color: var(--sm-accent);
-  border: 1px solid rgba(27, 179, 138, 0.3);
+  border: 1px solid rgba(var(--sm-accent-rgb), 0.3);
   white-space: nowrap;
 }
 
@@ -431,3 +431,23 @@
   .dossier-tab { flex: 1 1 45%; justify-content: center; }
   .label-row { flex-wrap: wrap; gap: 6px; }
 }
+
+/* ── Uber theme: positive states use Base green instead of the primary colour ── */
+html[data-theme="uber"] .eligibility-chip.ok,
+html[data-theme="uber"] .doc-badge.ready,
+html[data-theme="uber"] .pill-positive,
+html[data-theme="uber"] .eligibility-badge.ok,
+html[data-theme="uber"] .gap-section-label.gap-ok {
+  background-color: var(--sm-positive-subtle);
+  color: var(--sm-positive);
+  border-color: rgba(5, 148, 79, 0.3);
+}
+html[data-theme="uber"] .why-list li i:not(.warn),
+html[data-theme="uber"] .highlights-list li i,
+html[data-theme="uber"] .gap-item.gap-done > .bi,
+html[data-theme="uber"] .text-accent,
+html[data-theme="uber"] .maker-doc-item .text-accent { color: var(--sm-positive); }
+html[data-theme="uber"] .sm-progress-fill, html[data-theme="uber"] .score-bar-fill { background-color: var(--sm-positive); }
+html[data-theme="uber"] .btn-maker-accept { background-color: var(--sm-accent); color: var(--sm-on-accent); border-color: var(--sm-accent); }
+html[data-theme="uber"] .engine-chip { background-color: var(--sm-info-subtle); color: var(--sm-info); border-color: rgba(39, 110, 241, 0.3); }
+html[data-theme="uber"] .wa-bubble, html[data-theme="uber"] .wa-bubble-content { background-color: #E6F2ED; color: #000000; }

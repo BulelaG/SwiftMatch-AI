@@ -14,6 +14,8 @@
   --sm-accent: #1BB38A;
   --sm-accent-hover: #22D39E;
   --sm-accent-subtle: rgba(27, 179, 138, 0.16);
+  --sm-accent-rgb: 27, 179, 138;
+  --sm-on-accent: #0A0F0D;
 
   /* Neutrals & Borders */
   --sm-border: #1F2C27;
@@ -41,7 +43,7 @@
 
   /* Common component elements */
   --sm-code-bg: #151D1A;
-  --sm-highlight-row: rgba(27, 179, 138, 0.12);
+  --sm-highlight-row: rgba(var(--sm-accent-rgb), 0.12);
 }
 
 [data-theme="light"] {
@@ -54,6 +56,8 @@
   --sm-accent: #16745B;
   --sm-accent-hover: #115D48;
   --sm-accent-subtle: #E8F4F0;
+  --sm-accent-rgb: 22, 116, 91;
+  --sm-on-accent: #FFFFFF;
 
   /* Neutrals & Borders */
   --sm-border: #E3E6E4;
@@ -187,7 +191,7 @@ a:hover {
 
 .form-control:focus, .form-select:focus {
   border-color: var(--sm-border-focus);
-  box-shadow: 0 0 0 3px rgba(27, 179, 138, 0.18);
+  box-shadow: 0 0 0 3px rgba(var(--sm-accent-rgb), 0.18);
   background-color: var(--sm-surface);
   color: var(--sm-ink);
 }
@@ -247,7 +251,7 @@ a:hover {
   justify-content: center;
   gap: var(--sm-space-2);
   background-color: var(--sm-accent);
-  color: #0A0F0D;
+  color: var(--sm-on-accent);
   font-family: var(--sm-font-sans);
   font-size: 14px;
   font-weight: 600;
@@ -262,7 +266,7 @@ a:hover {
 .btn-primary-sm:hover:not(:disabled) {
   background-color: var(--sm-accent-hover);
   border-color: var(--sm-accent-hover);
-  color: #060908;
+  color: var(--sm-on-accent);
 }
 
 .btn-primary-sm:disabled {
@@ -314,7 +318,7 @@ a:hover {
 .badge-ready {
   background-color: var(--sm-accent-subtle);
   color: var(--sm-accent);
-  border: 1px solid rgba(27, 179, 138, 0.3);
+  border: 1px solid rgba(var(--sm-accent-rgb), 0.3);
 }
 
 .badge-neutral {
@@ -357,7 +361,7 @@ a:hover {
   padding: 8px 12px;
   border-radius: var(--sm-radius-md);
   background-color: var(--sm-accent);
-  color: #0A0F0D;
+  color: var(--sm-on-accent);
   font-weight: 600;
   text-decoration: none;
   transition: top 0.15s ease;
@@ -383,3 +387,53 @@ h1, h2, h3, h4 {
 .text-accent {
   color: var(--sm-accent);
 }
+
+/* ── Uber theme: Base design system palette (black primary, white canvas, safety blue, positive green) ── */
+html[data-theme="uber"] {
+  --sm-canvas: #FFFFFF;
+  --sm-surface: #FFFFFF;
+  --sm-surface-subtle: #F6F6F6;
+  --sm-ink: #000000;
+  --sm-muted: #545454;
+  --sm-accent: #000000;
+  --sm-accent-hover: #333333;
+  --sm-accent-subtle: #EEEEEE;
+  --sm-accent-rgb: 0, 0, 0;
+  --sm-on-accent: #FFFFFF;
+
+  --sm-border: #E2E2E2;
+  --sm-border-subtle: #EEEEEE;
+  --sm-border-focus: #276EF1;
+  --sm-border-strong: #CBCBCB;
+
+  --sm-danger: #E11900;
+  --sm-danger-subtle: #FFEFED;
+  --sm-warning: #996300;
+  --sm-warning-subtle: #FFF8E1;
+  --sm-info: #276EF1;
+  --sm-info-subtle: #EFF3FE;
+  --sm-positive: #05944F;
+  --sm-positive-subtle: #E6F2ED;
+
+  --sm-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --sm-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --sm-shadow-elevated: 0 12px 28px rgba(0, 0, 0, 0.12);
+
+  --sm-maker-canvas: #F6F6F6;
+  --sm-phone-surface: #FFFFFF;
+  --sm-card-glass: #FFFFFF;
+  --sm-code-bg: #F6F6F6;
+  --sm-highlight-row: #F6F6F6;
+
+  --sm-radius-sm: 4px;
+  --sm-radius-md: 8px;
+  --sm-radius-lg: 12px;
+}
+
+html[data-theme="uber"] a { color: var(--sm-info); }
+html[data-theme="uber"] a:hover { color: #174EB6; }
+html[data-theme="uber"] :focus-visible { outline-color: var(--sm-info); }
+html[data-theme="uber"] .form-control:focus,
+html[data-theme="uber"] .form-select:focus { box-shadow: 0 0 0 2px rgba(39, 110, 241, 0.3); }
+html[data-theme="uber"] .btn-primary-sm { border-radius: var(--sm-radius-md); }
+html[data-theme="uber"] .badge-ready { background-color: var(--sm-positive-subtle); color: var(--sm-positive); border-color: rgba(5, 148, 79, 0.3); }
