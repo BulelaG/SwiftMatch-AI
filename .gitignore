@@ -8,6 +8,9 @@ server/node_modules/
 *.env
 server/.env
 
+# Local embedding model cache (downloaded on first run, ~23 MB)
+server/.model-cache/
+
 # Build outputs
 dist/
 client/dist/

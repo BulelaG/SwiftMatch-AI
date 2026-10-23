@@ -1,7 +1,7 @@
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-     SWIFTMATCH AI â€” ENTERPRISE WORKFLOW STAGE
+<!-- ═════════════════════════════════════════════════════════════
+     SWIFTMATCH AI — ENTERPRISE WORKFLOW STAGE
      Screen 1: Procurement Request  |  Screen 2: Matching Results  |  Screen 3: Maker Experience
-     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+     ═════════════════════════════════════════════════════════════ -->
 
 <div class="sm-workflow-container">
 
@@ -35,9 +35,9 @@
     </div>
   </nav>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- SCREEN 1: CORPORATE PROCUREMENT REQUEST                     -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <div *ngIf="currentScreen === 'request'" class="screen-view">
     <div class="page-container">
 
@@ -283,15 +283,15 @@
             <dl class="meta-list">
               <div class="meta-item">
                 <dt>Pre-Vetted Pool</dt>
-                <dd><strong>384 Verified Makers</strong></dd>
+                <dd><strong>{{ totalEvaluated || 6 }} SME profiles</strong> (pilot, synthetic)</dd>
               </div>
               <div class="meta-item">
                 <dt>Average Turnaround</dt>
-                <dd>14â€“21 Days</dd>
+                <dd>14–21 Days</dd>
               </div>
               <div class="meta-item">
                 <dt>Scoring Model</dt>
-                <dd>Multi-Factor Deterministic</dd>
+                <dd>Sentence embeddings + 5-factor weighted</dd>
               </div>
               <div class="meta-item">
                 <dt>Vendor Compliance</dt>
@@ -305,9 +305,9 @@
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- SCREEN 2: MATCHING RESULTS & EXPLAINABILITY                 -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <div *ngIf="currentScreen === 'results'" class="screen-view">
     <div class="page-container">
 
@@ -326,7 +326,13 @@
           </div>
         </div>
         <div class="ribbon-right">
-          <span class="eval-stat">Evaluated <strong>{{ totalEvaluated }}</strong> vetted suppliers</span>
+          <span class="eval-stat">Evaluated <strong>{{ totalEvaluated }}</strong> suppliers · <strong>{{ eligibleCount }}</strong> eligible</span>
+          <span class="engine-chip" [class.engine-fallback]="engineInfo?.semantic !== 'hybrid-embedding'">
+            <i class="bi bi-cpu"></i> {{ engineLabel }}
+          </span>
+          <span class="site-note" *ngIf="resolvedSite">
+            Delivery site resolved to <strong>{{ resolvedSite.name }}</strong>{{ resolvedSite.resolved ? '' : ' (not recognised, defaulted)' }}
+          </span>
         </div>
       </div>
 
@@ -340,11 +346,16 @@
             <div class="featured-header">
               <div class="featured-badge">
                 <i class="bi bi-star-fill"></i>
-                <span>Featured Best-Fit Supplier â€¢ Rank #1</span>
+                <span>Featured Best-Fit Supplier • Rank #1</span>
               </div>
               <div class="match-score-badge">
                 {{ featuredMatch.matchPercentage }}% Fit
               </div>
+            </div>
+
+            <div *ngIf="!featuredMatch.eligible" class="ineligible-banner">
+              <i class="bi bi-exclamation-octagon-fill"></i>
+              <span>No supplier passed every mandatory check. The top-ranked candidate is <strong>ineligible</strong>: {{ featuredMatch.ineligibilityReasons.join(', ') }} missing. Relax a check or request the document from the maker.</span>
             </div>
 
             <!-- Supplier Profile Strip -->
@@ -356,8 +367,12 @@
                 <h2 class="supplier-name">{{ featuredMatch.sme.businessName }}</h2>
                 <p class="supplier-owner">
                   <span>Founder: <strong>{{ featuredMatch.sme.owner }}</strong> ({{ featuredMatch.sme.ownerAge }} yrs)</span>
-                  <span class="text-sep">â€¢</span>
+                  <span class="text-sep">•</span>
                   <span><i class="bi bi-geo-alt"></i> {{ featuredMatch.sme.location }} ({{ featuredMatch.distanceKm }} km from site)</span>
+                </p>
+                <p class="contact-masked">
+                  <i class="bi bi-shield-lock"></i>
+                  <span>Contact {{ featuredMatch.sme.cellMasked }} · revealed to the buyer only once the maker accepts (POPIA purpose limitation)</span>
                 </p>
                 <p class="supplier-desc">{{ featuredMatch.sme.description }}</p>
               </div>
@@ -375,29 +390,44 @@
                   <span class="metric-label">Monthly Production Capacity</span>
                   <div class="metric-val-row">
                     <strong class="metric-value">{{ featuredMatch.sme.monthlyCapacityUnits }} units/mo</strong>
-                    <span class="metric-pill pill-positive">1.67x Buffer</span>
+                    <span class="metric-pill"
+                          [class.pill-positive]="capacityRatio(featuredMatch) >= 1.2"
+                          [class.pill-warning]="capacityRatio(featuredMatch) < 1.2 && capacityRatio(featuredMatch) >= 0.9"
+                          [class.pill-danger]="capacityRatio(featuredMatch) < 0.9">
+                      {{ capacityRatio(featuredMatch) }}x {{ capacityRatio(featuredMatch) >= 1.2 ? 'buffer' : (capacityRatio(featuredMatch) >= 0.9 ? 'tight' : 'shortfall') }}
+                    </span>
                   </div>
-                  <p class="metric-hint">Comfortably absorbs your {{ requiredQuantity }} unit requirement without factory bottleneck.</p>
+                  <p class="metric-hint" *ngIf="capacityRatio(featuredMatch) >= 1.2">Absorbs your {{ requiredQuantity }} unit requirement without a workshop bottleneck.</p>
+                  <p class="metric-hint" *ngIf="capacityRatio(featuredMatch) < 1.2">Your {{ requiredQuantity }} units use most or all of one month's output. Consider phased delivery.</p>
                 </div>
 
                 <!-- Delivery Suitability -->
                 <div class="reason-metric-card">
                   <span class="metric-label">Delivery Timeline Fit</span>
                   <div class="metric-val-row">
-                    <strong class="metric-value">{{ featuredMatch.sme.averageTurnaroundDays }} Days Avg</strong>
-                    <span class="metric-pill pill-positive">{{ maxTurnaroundDays - featuredMatch.sme.averageTurnaroundDays }} Days Safety Margin</span>
+                    <strong class="metric-value">{{ featuredMatch.sme.averageTurnaroundDays }} days avg</strong>
+                    <span class="metric-pill"
+                          [class.pill-positive]="turnaroundMargin(featuredMatch) >= 0"
+                          [class.pill-danger]="turnaroundMargin(featuredMatch) < 0">
+                      {{ turnaroundMargin(featuredMatch) >= 0 ? (turnaroundMargin(featuredMatch) + ' days safety margin') : ((-turnaroundMargin(featuredMatch)) + ' days over deadline') }}
+                    </span>
                   </div>
-                  <p class="metric-hint">Historical fulfillment average well within your {{ maxTurnaroundDays }}-day delivery window.</p>
+                  <p class="metric-hint" *ngIf="turnaroundMargin(featuredMatch) >= 0">Historical turnaround sits inside your {{ maxTurnaroundDays }}-day window.</p>
+                  <p class="metric-hint" *ngIf="turnaroundMargin(featuredMatch) < 0">Historical turnaround exceeds your {{ maxTurnaroundDays }}-day window. Agree a sample milestone before award.</p>
                 </div>
 
                 <!-- Proximity & Logistics -->
                 <div class="reason-metric-card">
                   <span class="metric-label">Proximity Logistics</span>
                   <div class="metric-val-row">
-                    <strong class="metric-value">{{ featuredMatch.distanceKm }} km to {{ targetLocation }}</strong>
-                    <span class="metric-pill pill-positive">Same Day Courier</span>
+                    <strong class="metric-value">{{ featuredMatch.distanceKm }} km to {{ resolvedSite?.name || targetLocation }}</strong>
+                    <span class="metric-pill"
+                          [class.pill-positive]="featuredMatch.distanceKm <= 150"
+                          [class.pill-warning]="featuredMatch.distanceKm > 150">
+                      {{ logisticsLabel(featuredMatch) }}
+                    </span>
                   </div>
-                  <p class="metric-hint">Low transport risk and reduced logistics carbon footprint.</p>
+                  <p class="metric-hint">Haversine distance from the resolved delivery site to the workshop.</p>
                 </div>
               </div>
 
@@ -416,16 +446,51 @@
                 </ul>
               </div>
 
+              <!-- Score Transparency: every factor, its weight, score and raw evidence -->
+              <div class="score-table-wrap">
+                <div class="highlights-title">How the {{ featuredMatch.matchPercentage }}% was computed</div>
+                <table class="score-table">
+                  <thead>
+                    <tr>
+                      <th>Factor</th>
+                      <th>Weight</th>
+                      <th>Score</th>
+                      <th>Evidence</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let f of factorRows(featuredMatch)">
+                      <td>{{ f.label }}</td>
+                      <td>{{ f.weight }}%</td>
+                      <td>
+                        <span class="score-bar"><span class="score-bar-fill" [style.width.%]="f.score"></span></span>{{ f.score }}%
+                      </td>
+                      <td class="evidence">{{ f.evidence }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="score-formula">score = 0.35·semantic + 0.25·capacity + 0.15·compliance + 0.15·geography + 0.10·reputation · no demographic inputs</div>
+              </div>
+
               <!-- Document Readiness Strip -->
               <div class="docs-readiness-row">
                 <span class="docs-label">Statutory Document Readiness:</span>
                 <div class="docs-badges">
-                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> CIPC Active</span>
-                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> SARS Tax PIN</span>
-                  <span class="doc-badge ready"><i class="bi bi-patch-check-fill"></i> B-BBEE Level 1</span>
-                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance.coidaRegistered" [class.pending]="!featuredMatch.sme.compliance.coidaRegistered">
-                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance.coidaRegistered" [class.bi-clock-history]="!featuredMatch.sme.compliance.coidaRegistered"></i>
-                    {{ featuredMatch.sme.compliance.coidaRegistered ? 'COIDA Good Standing' : 'COIDA Verification Pending' }}
+                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance?.cipcRegistered" [class.pending]="!featuredMatch.sme.compliance?.cipcRegistered">
+                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance?.cipcRegistered" [class.bi-clock-history]="!featuredMatch.sme.compliance?.cipcRegistered"></i>
+                    {{ featuredMatch.sme.compliance?.cipcRegistered ? 'CIPC Active' : 'CIPC Not on Record' }}
+                  </span>
+                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance?.taxPinCompliant" [class.pending]="!featuredMatch.sme.compliance?.taxPinCompliant">
+                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance?.taxPinCompliant" [class.bi-clock-history]="!featuredMatch.sme.compliance?.taxPinCompliant"></i>
+                    {{ featuredMatch.sme.compliance?.taxPinCompliant ? 'SARS Tax PIN' : 'SARS Tax PIN Missing' }}
+                  </span>
+                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance?.bbbeeLevel === 1" [class.pending]="featuredMatch.sme.compliance?.bbbeeLevel !== 1">
+                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance?.bbbeeLevel === 1" [class.bi-clock-history]="featuredMatch.sme.compliance?.bbbeeLevel !== 1"></i>
+                    B-BBEE Level {{ featuredMatch.sme.compliance?.bbbeeLevel || '–' }}
+                  </span>
+                  <span class="doc-badge" [class.ready]="featuredMatch.sme.compliance?.coidaRegistered" [class.pending]="!featuredMatch.sme.compliance?.coidaRegistered">
+                    <i class="bi" [class.bi-patch-check-fill]="featuredMatch.sme.compliance?.coidaRegistered" [class.bi-clock-history]="!featuredMatch.sme.compliance?.coidaRegistered"></i>
+                    {{ featuredMatch.sme.compliance?.coidaRegistered ? 'COIDA Good Standing' : 'COIDA Not on Record' }}
                   </span>
                 </div>
               </div>
@@ -442,9 +507,12 @@
                 <div *ngIf="claudeAuditNarrative" class="claude-narrative-bubble">
                   {{ claudeAuditNarrative }}
                 </div>
+                <span *ngIf="claudeAuditNarrative" class="source-tag">
+                  {{ claudeAuditSource === 'claude' ? 'Generated by Claude from the scores above · review before use' : 'Deterministic template (Claude key not configured)' }}
+                </span>
               </div>
 
-              <!-- â”€â”€ B-BBEE SCORECARD IMPACT PANEL â”€â”€ -->
+              <!-- ── B-BBEE SCORECARD IMPACT PANEL ── -->
               <div class="investor-panel bbbee-panel">
                 <div class="investor-panel-header" (click)="loadBbbeeScore()">
                   <div class="panel-header-left">
@@ -457,7 +525,7 @@
                   <button type="button" class="btn-text-action" *ngIf="!bbbeeData && !isBbbeeLoading" (click)="loadBbbeeScore(); $event.stopPropagation()">
                     <i class="bi bi-calculator"></i> <span>Calculate</span>
                   </button>
-                  <span *ngIf="isBbbeeLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Calculatingâ€¦</span>
+                  <span *ngIf="isBbbeeLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Calculating…</span>
                 </div>
                 <div *ngIf="bbbeeData" class="bbbee-grid">
                   <div class="bbbee-stat-row">
@@ -492,20 +560,20 @@
                 </div>
               </div>
 
-              <!-- â”€â”€ WORKSHOP ECONOMICS / BOM PANEL â”€â”€ -->
+              <!-- ── WORKSHOP ECONOMICS / BOM PANEL ── -->
               <div class="investor-panel bom-panel">
                 <div class="investor-panel-header" (click)="loadBomEstimate()">
                   <div class="panel-header-left">
                     <i class="bi bi-receipt-cutoff"></i>
                     <div>
-                      <h4 class="investor-panel-title">Workshop Economics â€” Bill of Materials</h4>
+                      <h4 class="investor-panel-title">Workshop Economics — Bill of Materials</h4>
                       <p class="investor-panel-desc">AI-estimated cost breakdown with artisan margin protection guardrail.</p>
                     </div>
                   </div>
                   <button type="button" class="btn-text-action" *ngIf="!bomData && !isBomLoading" (click)="loadBomEstimate(); $event.stopPropagation()">
                     <i class="bi bi-calculator"></i> <span>Estimate</span>
                   </button>
-                  <span *ngIf="isBomLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Estimatingâ€¦</span>
+                  <span *ngIf="isBomLoading" class="panel-loading-label"><span class="spinner-border spinner-border-sm"></span> Estimating…</span>
                 </div>
                 <div *ngIf="bomData" class="bom-content">
                   <div class="bom-summary-row">
@@ -550,7 +618,7 @@
 
             <!-- Action Strip -->
             <div class="featured-actions">
-              <button type="button" class="btn-primary-sm" (click)="openMakerExperience(featuredMatch.sme)">
+              <button type="button" class="btn-primary-sm" (click)="openMakerExperience(featuredMatch)">
                 <i class="bi bi-phone"></i>
                 <span>Open Maker Mobile View (WhatsApp Dispatch)</span>
               </button>
@@ -579,6 +647,7 @@
                     <th>Monthly Capacity</th>
                     <th>Site Distance</th>
                     <th>Fit Score</th>
+                    <th>Eligibility</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -590,7 +659,7 @@
                     <td>
                       <div class="table-supplier-cell">
                         <span class="cell-name">{{ m.sme.businessName }}</span>
-                        <span class="cell-sub">{{ m.sme.owner }} â€¢ {{ m.sme.location }}</span>
+                        <span class="cell-sub">{{ m.sme.owner }} • {{ m.sme.location }}</span>
                       </div>
                     </td>
                     <td><span class="category-tag">{{ m.sme.category }}</span></td>
@@ -600,15 +669,75 @@
                       <span class="table-score">{{ m.matchPercentage }}%</span>
                     </td>
                     <td>
+                      <span class="eligibility-badge" [class.ok]="m.eligible" [class.blocked]="!m.eligible"
+                            [title]="m.eligible ? 'All mandatory checks passed' : ('Missing: ' + m.ineligibilityReasons.join(', '))">
+                        <i class="bi" [class.bi-check-circle-fill]="m.eligible" [class.bi-x-octagon-fill]="!m.eligible"></i>
+                        {{ m.eligible ? 'Eligible' : ('Missing ' + m.ineligibilityReasons[0]) }}
+                      </span>
+                    </td>
+                    <td>
                       <button type="button" 
                               class="btn-table-action" 
-                              (click)="openMakerExperience(m.sme)">
+                              (click)="openMakerExperience(m)">
                         View Maker
                       </button>
                     </td>
                   </tr>
                 </tbody>
               </table>
+            </div>
+          </div>
+
+          <!-- Responsible AI: model card -->
+          <div class="investor-panel model-card-panel">
+            <div class="investor-panel-header" (click)="loadModelCard()">
+              <div class="panel-header-left">
+                <i class="bi bi-shield-check"></i>
+                <div>
+                  <h4 class="investor-panel-title">Responsible AI &amp; Data Disclosure</h4>
+                  <p class="investor-panel-desc">What data this engine uses, what it never uses, who reviews it, and where it is wrong.</p>
+                </div>
+              </div>
+              <button type="button" class="btn-text-action" (click)="loadModelCard(); $event.stopPropagation()">
+                <i class="bi" [class.bi-chevron-down]="!showModelCard" [class.bi-chevron-up]="showModelCard"></i>
+                <span>{{ showModelCard ? 'Hide model card' : 'Open model card' }}</span>
+              </button>
+            </div>
+            <div *ngIf="showModelCard && modelCard" class="model-card-grid">
+              <div class="model-card-block">
+                <h5><i class="bi bi-person-check"></i> Human in the loop</h5>
+                <ul><li *ngFor="let x of modelCard.humanInTheLoop">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-database"></i> Data provenance</h5>
+                <p class="model-card-data"><strong>SME profiles:</strong> {{ modelCard.data?.smeProfiles }}</p>
+                <p class="model-card-data"><strong>RFQs:</strong> {{ modelCard.data?.rfqs }}</p>
+                <p class="model-card-data"><strong>Models:</strong> {{ modelCard.embedding?.model }} on-device · {{ modelCard.llm?.model }}{{ modelCard.llm?.configured ? '' : ' (not configured, fallbacks active)' }}</p>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-sliders"></i> Scoring inputs</h5>
+                <ul><li *ngFor="let x of modelCard.scoringInputs">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-slash-circle"></i> Never used in scoring</h5>
+                <ul><li class="excluded" *ngFor="let x of modelCard.excludedInputs">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-scale"></i> Bias &amp; fairness controls</h5>
+                <ul><li *ngFor="let x of modelCard.biasAndFairness">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-lock"></i> Privacy (POPIA)</h5>
+                <ul><li *ngFor="let x of modelCard.privacy">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-exclamation-triangle"></i> Known limitations</h5>
+                <ul><li class="limit" *ngFor="let x of modelCard.limitations">{{ x }}</li></ul>
+              </div>
+              <div class="model-card-block">
+                <h5><i class="bi bi-clipboard-data"></i> Evaluation</h5>
+                <p class="model-card-data">{{ modelCard.evaluation }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -618,9 +747,9 @@
     </div>
   </div>
 
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- SCREEN 3: MAKER EXPERIENCE (MOBILE-FIRST 390px ARTISAN HUB) -->
-  <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <div *ngIf="currentScreen === 'maker'" class="screen-view maker-canvas">
     <div class="maker-viewport-wrapper">
 
@@ -632,7 +761,7 @@
         </button>
         <div class="device-pill">
           <i class="bi bi-phone"></i>
-          <span>Artisan Mobile View â€¢ 390px Optimized</span>
+          <span>Artisan Mobile View • 390px Optimized</span>
         </div>
       </div>
 
@@ -648,12 +777,12 @@
             </div>
             <div class="maker-identity">
               <h1 class="maker-name">{{ activeMaker.businessName }}</h1>
-              <span class="maker-owner-line">{{ activeMaker.owner }} â€¢ {{ activeMaker.location }}</span>
+              <span class="maker-owner-line">{{ activeMaker.owner }} • {{ activeMaker.location }}</span>
             </div>
           </div>
           <div class="maker-badge-row">
             <span class="badge-status badge-ready">YES-Approved SMME</span>
-            <span class="badge-status badge-neutral">Level 1 B-BBEE</span>
+            <span class="badge-status badge-neutral">B-BBEE Level {{ activeMaker.compliance?.bbbeeLevel || '–' }}</span>
           </div>
         </div>
 
@@ -713,6 +842,35 @@
           </div>
         </div>
 
+        <!-- Card: WhatsApp dispatch preview (what the maker actually receives) -->
+        <div class="maker-card wa-preview-card">
+          <h3 class="card-title">WhatsApp message you receive</h3>
+          <p class="gap-card-subtitle">Plain-language draft of the opportunity, written for the maker, not the procurement officer.</p>
+          <div class="wa-actions">
+            <button type="button" class="btn-secondary-sm" (click)="draftWhatsApp()" [disabled]="isDraftingWhatsApp">
+              <span *ngIf="isDraftingWhatsApp" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isDraftingWhatsApp" class="bi bi-whatsapp"></i>
+              <span>{{ isDraftingWhatsApp ? 'Drafting...' : (whatsappDraft ? 'Redraft message' : 'Preview WhatsApp dispatch') }}</span>
+            </button>
+          </div>
+          <div *ngIf="whatsappDraft" class="wa-thread">
+            <div class="wa-bubble">{{ whatsappDraft }}</div>
+            <div class="wa-meta">
+              <span>SwiftMatch AI · to {{ activeMaker.cellMasked }}</span>
+              <span>{{ whatsappSource === 'claude' ? 'drafted by Claude' : 'template draft' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Why you were matched (maker-facing transparency) -->
+        <div class="maker-card" *ngIf="activeMatch">
+          <h3 class="card-title">Why you were matched ({{ activeMatch.matchPercentage }}%)</h3>
+          <ul class="why-list">
+            <li *ngFor="let h of activeMatch.highlights"><i class="bi bi-check-circle-fill"></i><span>{{ h }}</span></li>
+            <li *ngFor="let g of activeMatch.gaps"><i class="bi bi-exclamation-circle-fill" style="color: var(--sm-warning)"></i><span>{{ g }}</span></li>
+          </ul>
+        </div>
+
         <!-- Card: Maker Capacity & Document Readiness -->
         <div class="maker-card">
           <h3 class="card-title">Production Capacity & Workshop Readiness</h3>
@@ -733,24 +891,24 @@
           <!-- Document Status Checklist -->
           <div class="maker-docs-list">
             <div class="maker-doc-item">
-              <i class="bi bi-check-circle-fill text-accent"></i>
+              <i class="bi" [class.bi-check-circle-fill]="activeMaker.compliance?.cipcRegistered" [class.text-accent]="activeMaker.compliance?.cipcRegistered" [class.bi-x-circle-fill]="!activeMaker.compliance?.cipcRegistered" [class.doc-missing]="!activeMaker.compliance?.cipcRegistered"></i>
               <div class="doc-text">
                 <span class="doc-name">CIPC Registration</span>
-                <span class="doc-meta">Verified Active 2026</span>
+                <span class="doc-meta">{{ activeMaker.compliance?.cipcRegistered ? 'On record' : 'Not on record' }}</span>
               </div>
             </div>
             <div class="maker-doc-item">
-              <i class="bi bi-check-circle-fill text-accent"></i>
+              <i class="bi" [class.bi-check-circle-fill]="activeMaker.compliance?.taxPinCompliant" [class.text-accent]="activeMaker.compliance?.taxPinCompliant" [class.bi-x-circle-fill]="!activeMaker.compliance?.taxPinCompliant" [class.doc-missing]="!activeMaker.compliance?.taxPinCompliant"></i>
               <div class="doc-text">
                 <span class="doc-name">SARS Tax Compliance PIN</span>
-                <span class="doc-meta">Good Standing eFiling Verified</span>
+                <span class="doc-meta">{{ activeMaker.compliance?.taxPinCompliant ? 'Good standing on record' : 'Missing: blocks most corporate purchase orders' }}</span>
               </div>
             </div>
             <div class="maker-doc-item">
-              <i class="bi bi-check-circle-fill text-accent"></i>
+              <i class="bi" [class.bi-check-circle-fill]="activeMaker.compliance?.coidaRegistered" [class.text-accent]="activeMaker.compliance?.coidaRegistered" [class.bi-clock-history]="!activeMaker.compliance?.coidaRegistered" [class.doc-pending]="!activeMaker.compliance?.coidaRegistered"></i>
               <div class="doc-text">
-                <span class="doc-name">Verified Bank Account</span>
-                <span class="doc-meta">Direct Electronic Settlement Ready</span>
+                <span class="doc-name">COIDA Letter of Good Standing</span>
+                <span class="doc-meta">{{ activeMaker.compliance?.coidaRegistered ? 'On record' : 'Optional for this RFQ, needed for larger contracts' }}</span>
               </div>
             </div>
           </div>
@@ -761,7 +919,7 @@
           <h3 class="card-title">What happens next?</h3>
           <ol class="next-steps-list">
             <li>SwiftMatch AI verifies PO generation against buyer ESD account.</li>
-            <li>Digital confirmation and specification packet sent to <strong>{{ activeMaker.cell }}</strong> on WhatsApp.</li>
+            <li>Digital confirmation and specification packet sent to <strong>{{ activeMaker.cellMasked }}</strong> on WhatsApp.</li>
             <li>Grassroots field manager from Kasi-eCo hub coordinates quality check & courier collection.</li>
           </ol>
         </div>
@@ -781,18 +939,18 @@
             <div class="gap-section-label gap-ok">
               <i class="bi bi-check-circle-fill"></i> Already in Good Standing
             </div>
-            <div class="gap-item gap-done">
+            <div class="gap-item gap-done" *ngIf="activeMaker?.compliance?.cipcRegistered">
               <i class="bi bi-patch-check-fill"></i>
               <div>
                 <span class="gap-item-title">CIPC Registration</span>
-                <span class="gap-item-action">Verified — No action required</span>
+                <span class="gap-item-action">On record. No action required.</span>
               </div>
             </div>
-            <div class="gap-item gap-done">
+            <div class="gap-item gap-done" *ngIf="activeMaker?.compliance?.taxPinCompliant">
               <i class="bi bi-patch-check-fill"></i>
               <div>
                 <span class="gap-item-title">SARS Tax Compliance PIN</span>
-                <span class="gap-item-action">Good Standing — Renew annually on SARS eFiling</span>
+                <span class="gap-item-action">Good standing. Renew annually on SARS eFiling.</span>
               </div>
             </div>
           </div>
@@ -801,6 +959,13 @@
           <div class="gap-section">
             <div class="gap-section-label gap-warn">
               <i class="bi bi-exclamation-triangle-fill"></i> Gaps to Close for Bigger Contracts
+            </div>
+            <div class="gap-item gap-missing" *ngIf="!activeMaker?.compliance?.taxPinCompliant">
+              <i class="bi bi-x-circle"></i>
+              <div>
+                <span class="gap-item-title">SARS Tax Compliance PIN</span>
+                <span class="gap-item-action">Request a Tax Compliance Status PIN on SARS eFiling. Mandatory for nearly every corporate purchase order.</span>
+              </div>
             </div>
             <div class="gap-item gap-missing" *ngIf="!activeMaker?.compliance?.coidaRegistered">
               <i class="bi bi-clock-history"></i>

@@ -1,0 +1,314 @@
+/* ═════════════════════════════════════════════════════════════
+   SWIFTMATCH AI — Additions: engine chip, eligibility, score
+   transparency table, model card, WhatsApp preview
+   ═════════════════════════════════════════════════════════════ */
+
+.pill-warning {
+  background-color: var(--sm-warning-subtle);
+  color: var(--sm-warning);
+}
+
+.pill-danger {
+  background-color: var(--sm-danger-subtle);
+  color: var(--sm-danger);
+}
+
+.ribbon-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.engine-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background-color: var(--sm-accent-subtle);
+  color: var(--sm-accent);
+  border: 1px solid rgba(27, 179, 138, 0.3);
+  white-space: nowrap;
+}
+
+.engine-chip.engine-fallback {
+  background-color: var(--sm-warning-subtle);
+  color: var(--sm-warning);
+  border-color: rgba(183, 121, 31, 0.3);
+}
+
+.site-note {
+  font-size: 11px;
+  color: var(--sm-muted);
+}
+
+/* Eligibility */
+.eligibility-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.eligibility-badge.ok {
+  background-color: var(--sm-accent-subtle);
+  color: var(--sm-accent);
+}
+
+.eligibility-badge.blocked {
+  background-color: var(--sm-danger-subtle);
+  color: var(--sm-danger);
+}
+
+.ineligible-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--sm-radius-md);
+  background-color: var(--sm-danger-subtle);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--sm-danger);
+  font-size: 12px;
+  margin-bottom: 16px;
+}
+
+.contact-masked {
+  font-size: 12px;
+  color: var(--sm-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Score transparency table */
+.score-table-wrap {
+  border-top: 1px solid var(--sm-border);
+  padding-top: 14px;
+  margin-bottom: 16px;
+}
+
+.score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.score-table th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sm-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--sm-border);
+}
+
+.score-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--sm-border-subtle);
+  color: var(--sm-ink);
+  vertical-align: middle;
+}
+
+.score-table td.evidence {
+  color: var(--sm-muted);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+}
+
+.score-bar {
+  position: relative;
+  height: 6px;
+  width: 110px;
+  background-color: var(--sm-border);
+  border-radius: 3px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.score-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background-color: var(--sm-accent);
+  border-radius: 3px;
+}
+
+.score-formula {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--sm-muted);
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.source-tag {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--sm-muted);
+}
+
+/* Responsible AI model card */
+.model-card-panel {
+  margin-top: 24px;
+}
+
+.model-card-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 16px 20px 20px;
+}
+
+@media (min-width: 900px) {
+  .model-card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.model-card-block h5 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sm-ink);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.model-card-block h5 i {
+  color: var(--sm-accent);
+}
+
+.model-card-block ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.model-card-block li {
+  font-size: 12px;
+  color: var(--sm-muted);
+  line-height: 1.45;
+  padding-left: 12px;
+  position: relative;
+}
+
+.model-card-block li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--sm-border-strong);
+}
+
+.model-card-block li.excluded::before {
+  background-color: var(--sm-danger);
+}
+
+.model-card-block li.limit::before {
+  background-color: var(--sm-warning);
+}
+
+.model-card-data {
+  font-size: 12px;
+  color: var(--sm-muted);
+  line-height: 1.5;
+}
+
+.model-card-data strong {
+  color: var(--sm-ink);
+}
+
+/* WhatsApp preview inside the maker phone frame */
+.wa-preview-card {
+  background-color: var(--sm-phone-surface);
+}
+
+.wa-thread {
+  margin-top: 12px;
+  background-color: var(--sm-surface-subtle);
+  border-radius: var(--sm-radius-lg);
+  padding: 12px;
+}
+
+.wa-bubble {
+  max-width: 100%;
+  background-color: #DCF8C6;
+  color: #0B1A12;
+  border-radius: 10px 10px 10px 2px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  white-space: pre-line;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] .wa-bubble {
+  background-color: #1F4D3A;
+  color: #E9F7EF;
+}
+
+.wa-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--sm-muted);
+}
+
+.wa-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.wa-actions .btn-secondary-sm {
+  font-size: 12px;
+  padding: 7px 12px;
+}
+
+.why-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.why-list li {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--sm-ink);
+  align-items: flex-start;
+}
+
+.why-list li i {
+  color: var(--sm-accent);
+  margin-top: 2px;
+}
+
+.doc-missing { color: var(--sm-danger); }
+.doc-pending { color: var(--sm-warning); }

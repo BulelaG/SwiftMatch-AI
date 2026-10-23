@@ -1,0 +1,217 @@
+{
+  "generatedAt": "2026-10-23T19:57:49.603Z",
+  "smeCount": 6,
+  "testCases": 12,
+  "embedding": {
+    "ready": true,
+    "model": "Xenova/all-MiniLM-L6-v2",
+    "dimensions": 384,
+    "runtime": "onnxruntime (on-device, quantized)",
+    "error": null
+  },
+  "hybridEmbedding": {
+    "top1Accuracy": 1,
+    "mrr": 1,
+    "n": 12
+  },
+  "lexicalBaseline": {
+    "top1Accuracy": 0.583,
+    "mrr": 0.771,
+    "n": 12
+  },
+  "perCase": [
+    {
+      "id": "t01",
+      "note": "preset — leather folios",
+      "expected": "sme_001",
+      "hybrid": {
+        "top": "sme_001",
+        "rank": 1,
+        "score": 87,
+        "cosineToExpected": 0.423
+      },
+      "lexical": {
+        "top": "sme_001",
+        "rank": 1,
+        "score": 89
+      }
+    },
+    {
+      "id": "t02",
+      "note": "preset — timber breakout tables",
+      "expected": "sme_002",
+      "hybrid": {
+        "top": "sme_002",
+        "rank": 1,
+        "score": 96,
+        "cosineToExpected": 0.55
+      },
+      "lexical": {
+        "top": "sme_002",
+        "rank": 1,
+        "score": 93
+      }
+    },
+    {
+      "id": "t03",
+      "note": "preset — eco tote bags",
+      "expected": "sme_003",
+      "hybrid": {
+        "top": "sme_003",
+        "rank": 1,
+        "score": 99,
+        "cosineToExpected": 0.565
+      },
+      "lexical": {
+        "top": "sme_003",
+        "rank": 1,
+        "score": 98
+      }
+    },
+    {
+      "id": "t04",
+      "note": "held-out — no shared vocabulary with leather tags (wallets, hide, stitched)",
+      "expected": "sme_001",
+      "hybrid": {
+        "top": "sme_001",
+        "rank": 1,
+        "score": 75,
+        "cosineToExpected": 0.311
+      },
+      "lexical": {
+        "top": "sme_006",
+        "rank": 2,
+        "score": 82
+      }
+    },
+    {
+      "id": "t05",
+      "note": "held-out — hardwood joinery phrased as 'carpenter', 'reception counter'",
+      "expected": "sme_002",
+      "hybrid": {
+        "top": "sme_002",
+        "rank": 1,
+        "score": 76,
+        "cosineToExpected": 0.406
+      },
+      "lexical": {
+        "top": "sme_001",
+        "rank": 4,
+        "score": 80
+      }
+    },
+    {
+      "id": "t06",
+      "note": "held-out — PPE phrased without 'uniform' or 'workwear'",
+      "expected": "sme_004",
+      "hybrid": {
+        "top": "sme_004",
+        "rank": 1,
+        "score": 65,
+        "cosineToExpected": 0.258
+      },
+      "lexical": {
+        "top": "sme_003",
+        "rank": 2,
+        "score": 76
+      }
+    },
+    {
+      "id": "t07",
+      "note": "held-out — crockery / tableware for a hotel",
+      "expected": "sme_006",
+      "hybrid": {
+        "top": "sme_006",
+        "rank": 1,
+        "score": 82,
+        "cosineToExpected": 0.418
+      },
+      "lexical": {
+        "top": "sme_003",
+        "rank": 2,
+        "score": 82
+      }
+    },
+    {
+      "id": "t08",
+      "note": "held-out — welding job; metal SME fails Tax PIN so must be flagged ineligible but still top of its group",
+      "expected": "sme_005",
+      "hybrid": {
+        "top": "sme_005",
+        "rank": 1,
+        "score": 82,
+        "cosineToExpected": 0.356
+      },
+      "lexical": {
+        "top": "sme_005",
+        "rank": 1,
+        "score": 88
+      }
+    },
+    {
+      "id": "t09",
+      "note": "held-out — printed cartons for e-commerce",
+      "expected": "sme_003",
+      "hybrid": {
+        "top": "sme_003",
+        "rank": 1,
+        "score": 71,
+        "cosineToExpected": 0.368
+      },
+      "lexical": {
+        "top": "sme_003",
+        "rank": 1,
+        "score": 74
+      }
+    },
+    {
+      "id": "t10",
+      "note": "held-out — hospitality staff clothing, Cape Town site favours Khayelitsha",
+      "expected": "sme_004",
+      "hybrid": {
+        "top": "sme_004",
+        "rank": 1,
+        "score": 71,
+        "cosineToExpected": 0.214
+      },
+      "lexical": {
+        "top": "sme_004",
+        "rank": 1,
+        "score": 84
+      }
+    },
+    {
+      "id": "t11",
+      "note": "held-out — hard negative for leather: 'laptop sleeves' with no leather mention, still leather SME",
+      "expected": "sme_001",
+      "hybrid": {
+        "top": "sme_001",
+        "rank": 1,
+        "score": 81,
+        "cosineToExpected": 0.348
+      },
+      "lexical": {
+        "top": "sme_001",
+        "rank": 1,
+        "score": 86
+      }
+    },
+    {
+      "id": "t12",
+      "note": "held-out — outdoor seating, timber vs metal ambiguity (specifies wood)",
+      "expected": "sme_002",
+      "hybrid": {
+        "top": "sme_002",
+        "rank": 1,
+        "score": 77,
+        "cosineToExpected": 0.355
+      },
+      "lexical": {
+        "top": "sme_001",
+        "rank": 2,
+        "score": 80
+      }
+    }
+  ],
+  "durationMs": 805
+}

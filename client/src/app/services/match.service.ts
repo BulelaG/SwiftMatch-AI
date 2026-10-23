@@ -2,6 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface MatchRequest {
+  rfqText: string;
+  category?: string;
+  requiredQuantity: number;
+  budgetZAR: number;
+  maxTurnaroundDays?: number;
+  targetLocation?: string;
+  complianceRequirements?: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -9,6 +19,10 @@ export class MatchService {
   private apiUrl = 'http://localhost:5050/api';
 
   constructor(private http: HttpClient) { }
+
+  getHealth(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/health`);
+  }
 
   getSmes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/smes`);
@@ -18,23 +32,12 @@ export class MatchService {
     return this.http.get<any[]>(`${this.apiUrl}/rfqs`);
   }
 
-  runMatch(payload: {
-    rfqText: string;
-    requiredQuantity: number;
-    budgetZAR: number;
-    maxTurnaroundDays?: number;
-    targetLocation?: string;
-  }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/match`, payload);
+  getModelCard(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/model-card`);
   }
 
-  dispatchWhatsApp(payload: {
-    smeId: string;
-    rfqTitle: string;
-    budgetZAR: number;
-    buyerName: string;
-  }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/whatsapp/dispatch`, payload);
+  runMatch(payload: MatchRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/match`, payload);
   }
 
   getEcosystemMetrics(): Observable<any> {
@@ -46,7 +49,7 @@ export class MatchService {
     return this.http.post<any>(`${this.apiUrl}/claude/parse-rfq`, { rawText });
   }
 
-  getClaudeExplanation(payload: { rfq: any; smeId: string; radarScores: any }): Observable<any> {
+  getClaudeExplanation(payload: { rfq: any; smeId: string; radarScores: any; evidence?: any }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/claude/explain`, payload);
   }
 
@@ -54,7 +57,7 @@ export class MatchService {
     return this.http.post<any>(`${this.apiUrl}/claude/whatsapp`, payload);
   }
 
-  // ── New Investor-Grade Capability Endpoints ──
+  // ── Commercial Panels ──
   estimateBom(payload: { rfq: any; smeId?: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/bom`, payload);
   }

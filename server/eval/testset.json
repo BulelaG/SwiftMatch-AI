@@ -1,0 +1,98 @@
+[
+  {
+    "id": "t01",
+    "note": "preset — leather folios",
+    "rfqText": "Looking for 150 handmade genuine leather conference folios and desk pads for our upcoming leadership summit in Sandton. Must be 100% youth-owned, based in Gauteng, delivery required within 3 weeks. Budget R85,000.",
+    "requiredQuantity": 150, "budgetZAR": 85000, "maxTurnaroundDays": 21, "targetLocation": "Sandton, Gauteng",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_001"
+  },
+  {
+    "id": "t02",
+    "note": "preset — timber breakout tables",
+    "rfqText": "Need 25 custom solid oak and pine timber breakout tables and planter benches for our new Sandton co-working hub. Sustainable local craftsmanship preferred. Budget R120,000. Delivery within 25 days.",
+    "requiredQuantity": 25, "budgetZAR": 120000, "maxTurnaroundDays": 25, "targetLocation": "Sandton, Gauteng",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_002"
+  },
+  {
+    "id": "t03",
+    "note": "preset — eco tote bags",
+    "rfqText": "Urgent requirement for 5,000 branded biodegradable kraft paper retail bags and printed unbleached cotton tote bags. Delivery to Midrand distribution center within 14 days. Budget R95,000.",
+    "requiredQuantity": 5000, "budgetZAR": 95000, "maxTurnaroundDays": 14, "targetLocation": "Midrand, Gauteng",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_003"
+  },
+  {
+    "id": "t04",
+    "note": "held-out — no shared vocabulary with leather tags (wallets, hide, stitched)",
+    "rfqText": "We want 80 hand-stitched executive wallets and passport holders in full-grain hide for a board gifting programme in Rosebank, within a month, around R40,000.",
+    "requiredQuantity": 80, "budgetZAR": 40000, "maxTurnaroundDays": 30, "targetLocation": "Rosebank, Johannesburg",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_001"
+  },
+  {
+    "id": "t05",
+    "note": "held-out — hardwood joinery phrased as 'carpenter', 'reception counter'",
+    "rfqText": "Looking for a carpenter to build 6 hardwood reception counters and 12 matching bookshelves for our Pretoria offices. Budget R90,000, 5 weeks.",
+    "requiredQuantity": 18, "budgetZAR": 90000, "maxTurnaroundDays": 35, "targetLocation": "Pretoria",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_002"
+  },
+  {
+    "id": "t06",
+    "note": "held-out — PPE phrased without 'uniform' or 'workwear'",
+    "rfqText": "Our mine needs 900 reflective safety vests and flame-resistant overalls with embroidered logos delivered to Rustenburg in 3 weeks. Budget R180,000.",
+    "requiredQuantity": 900, "budgetZAR": 180000, "maxTurnaroundDays": 21, "targetLocation": "Rustenburg",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_004"
+  },
+  {
+    "id": "t07",
+    "note": "held-out — crockery / tableware for a hotel",
+    "rfqText": "Boutique hotel in Sandton requires 300 handmade stoneware espresso cups and side plates with a custom glaze for our restaurant relaunch. R60,000, 6 weeks.",
+    "requiredQuantity": 300, "budgetZAR": 60000, "maxTurnaroundDays": 42, "targetLocation": "Sandton",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_006"
+  },
+  {
+    "id": "t08",
+    "note": "held-out — welding job; metal SME fails Tax PIN so must be flagged ineligible but still top of its group",
+    "rfqText": "We need 40 powder-coated steel pallet racks and 10 lockable mesh cages for a Germiston warehouse. 4 weeks, R150,000.",
+    "requiredQuantity": 50, "budgetZAR": 150000, "maxTurnaroundDays": 28, "targetLocation": "Germiston",
+    "complianceRequirements": ["cipcRegistered"],
+    "expectedTop": "sme_005"
+  },
+  {
+    "id": "t09",
+    "note": "held-out — printed cartons for e-commerce",
+    "rfqText": "E-commerce brand needs 12,000 printed recyclable shipping cartons and mailer sleeves, delivered to Kempton Park within two weeks. Budget R110,000.",
+    "requiredQuantity": 12000, "budgetZAR": 110000, "maxTurnaroundDays": 14, "targetLocation": "Kempton Park",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_003"
+  },
+  {
+    "id": "t10",
+    "note": "held-out — hospitality staff clothing, Cape Town site favours Khayelitsha",
+    "rfqText": "New Cape Town hotel needs 220 branded front-of-house shirts, aprons and chef jackets within 18 days. Budget R70,000.",
+    "requiredQuantity": 220, "budgetZAR": 70000, "maxTurnaroundDays": 18, "targetLocation": "Cape Town",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_004"
+  },
+  {
+    "id": "t11",
+    "note": "held-out — hard negative for leather: 'laptop sleeves' with no leather mention, still leather SME",
+    "rfqText": "We'd like 120 branded laptop sleeves and lanyards as onboarding gifts for new graduates at our Sandton campus. R35,000, 3 weeks.",
+    "requiredQuantity": 120, "budgetZAR": 35000, "maxTurnaroundDays": 21, "targetLocation": "Sandton",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_001"
+  },
+  {
+    "id": "t12",
+    "note": "held-out — outdoor seating, timber vs metal ambiguity (specifies wood)",
+    "rfqText": "Campus landscaping project: 15 wooden garden benches and 10 picnic tables for a Midrand office park, weather-treated, delivered in 4 weeks. R75,000.",
+    "requiredQuantity": 25, "budgetZAR": 75000, "maxTurnaroundDays": 28, "targetLocation": "Midrand",
+    "complianceRequirements": ["cipcRegistered", "taxPinCompliant"],
+    "expectedTop": "sme_002"
+  }
+]

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TraderService } from './services/trader.service';
-import { Router } from '@angular/router';
+import { MatchService } from './services/match.service';
 
 @Component({
   selector: 'app-root',
@@ -9,32 +8,23 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit {
   isDarkMode: boolean = true;
-  token = window.sessionStorage.getItem('auth-token');
-  traders: any[] = [];
+  poolSize: number | null = null;
+  engineReady: boolean = false;
 
-  constructor(
-    private traderService: TraderService,
-    private router: Router
-  ) {}
+  constructor(private matchService: MatchService) {}
 
   ngOnInit(): void {
-    // Check saved theme or default to dark
     const saved = localStorage.getItem('swiftmatch-theme');
-    if (saved) {
-      this.isDarkMode = saved === 'dark';
-    } else {
-      this.isDarkMode = true;
-    }
+    this.isDarkMode = saved ? saved === 'dark' : true;
     this.applyTheme();
 
-    this.traderService.getTraders().subscribe(
-      (data: any) => {
-        this.traders = data;
+    this.matchService.getHealth().subscribe({
+      next: h => {
+        this.poolSize = h.smeProfiles ?? null;
+        this.engineReady = !!h.embedding?.ready;
       },
-      (error: any) => {
-        console.error('Error fetching traders', error);
-      }
-    );
+      error: () => { this.poolSize = null; }
+    });
   }
 
   toggleTheme(): void {
@@ -44,16 +34,6 @@ export class AppComponent implements OnInit {
   }
 
   private applyTheme(): void {
-    const theme = this.isDarkMode ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-
-  signout(): void {
-    window.sessionStorage.clear();
-    window.location.replace('login');
-  }
-
-  navigateToTraderDetails(traderId: number): void {
-    this.router.navigate(['/traders', traderId]);
+    document.documentElement.setAttribute('data-theme', this.isDarkMode ? 'dark' : 'light');
   }
 }

@@ -1,0 +1,47 @@
+{
+  "name": "SwiftMatch AI — SME Opportunity Matching",
+  "version": "1.1.0",
+  "purpose": "Rank verified youth-owned township SMEs against a corporate procurement request and explain every ranking so a human procurement officer can audit it.",
+  "humanInTheLoop": [
+    "The engine produces a shortlist, never an award. A procurement officer makes the selection.",
+    "The SME chooses to accept, decline, or ask a question on WhatsApp. Nothing is committed on their behalf.",
+    "Claude-generated text (RFQ extraction, audit narrative, WhatsApp draft) is editable before use and labelled as AI-generated."
+  ],
+  "data": {
+    "smeProfiles": "6 synthetic supplier profiles modelled on real Kasi-eCo marketplace categories (leather, timber, eco-packaging, workwear, metal, ceramics). Names, phone numbers and compliance flags are fictional. No real personal information is processed in this prototype.",
+    "rfqs": "3 synthetic corporate RFQs written for the demo. Buyer names are illustrative.",
+    "ecosystemMetrics": "Illustrative projections, not measured outcomes.",
+    "licences": "all-MiniLM-L6-v2 (Apache-2.0, via @xenova/transformers); Unsplash images (Unsplash licence)."
+  },
+  "scoringInputs": [
+    "Requirement text vs SME capability text (sentence embeddings + tag overlap)",
+    "Monthly production capacity and average turnaround vs required quantity and deadline",
+    "Mandatory statutory checks selected by the buyer (CIPC, SARS Tax PIN, B-BBEE level, COIDA, youth ownership)",
+    "Haversine distance from the resolved delivery site",
+    "Kasi-eCo rating and verified order count"
+  ],
+  "excludedInputs": [
+    "Owner age, gender, name, ethnicity or language — never used in scoring",
+    "Free-text sentiment about the owner",
+    "Any data the SME has not consented to share"
+  ],
+  "biasAndFairness": [
+    "Weights are fixed, published and identical for every supplier.",
+    "Hard compliance filters are only those the buyer explicitly selects; optional checks (e.g. COIDA) affect advice, not eligibility.",
+    "Reputation is capped at 10% so new entrants are not locked out by incumbents' order history.",
+    "Ineligible suppliers are still shown with the exact missing document so they can fix it (right of response), rather than silently excluded."
+  ],
+  "privacy": [
+    "Phone numbers and emails are masked on all corporate screens until the SME accepts an opportunity (POPIA purpose limitation).",
+    "Embeddings run on-device; SME profile text is not sent to a third-party embedding API.",
+    "Only the RFQ text and the SME's business (not personal) fields are sent to Claude, and only when an API key is configured."
+  ],
+  "limitations": [
+    "Prototype dataset is tiny and synthetic; scores are not validated against real award outcomes.",
+    "Embedding similarity measures text relatedness, not product quality. A sample and site visit are still required.",
+    "Compliance flags are self-declared seed data; production would verify against CIPC/SARS APIs.",
+    "The location resolver uses a fixed gazetteer of South African cities; unknown sites default to Sandton and are flagged.",
+    "B-BBEE point estimates are indicative and depend on the buyer's total measured spend."
+  ],
+  "evaluation": "Run `npm run eval` in /server to reproduce Top-1 accuracy and MRR on the held-out RFQ test set (eval/testset.json)."
+}
