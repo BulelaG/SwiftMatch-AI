@@ -19,7 +19,7 @@ export class MatchService {
   // Local dev talks to the server on :5050; any other host is the hosted build.
   private apiUrl = ['localhost', '127.0.0.1'].includes(window.location.hostname)
     ? 'http://localhost:5050/api'
-    : 'https://swiftmatch-ai-api.onrender.com/api';
+    : 'https://swiftmatch-ai-api.vercel.app/api';
 
   constructor(private http: HttpClient) { }
 

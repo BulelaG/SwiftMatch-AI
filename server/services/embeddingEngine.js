@@ -29,7 +29,9 @@ async function loadModel() {
   loadPromise = (async () => {
     // @xenova/transformers is ESM-only; use dynamic import from CommonJS.
     const { pipeline, env } = await import('@xenova/transformers');
-    env.cacheDir = path.join(__dirname, '..', '.model-cache');
+    // Serverless filesystems are read-only except the OS temp dir.
+    env.cacheDir = process.env.MODEL_CACHE_DIR
+      || (process.env.VERCEL ? path.join(require('os').tmpdir(), 'swiftmatch-model-cache') : path.join(__dirname, '..', '.model-cache'));
     env.allowLocalModels = true;
     extractor = await pipeline('feature-extraction', MODEL_ID, { quantized: true });
     console.log(`[EmbeddingEngine] ${MODEL_ID} ready (${DIMENSIONS}-d, quantized ONNX, on-device).`);

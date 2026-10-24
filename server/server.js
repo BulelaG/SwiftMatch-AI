@@ -217,7 +217,10 @@ app.post('/api/bbbee/score', (req, res) => {
   res.json(claude.calculateBbbeePoints(budgetZAR, targetSme));
 });
 
-app.listen(PORT, () => {
+// On Vercel the app is exported and wrapped by the platform; only listen when run directly.
+if (!process.env.VERCEL) app.listen(PORT, () => {
   console.log(`🚀 [SwiftMatch AI Server] running on http://localhost:${PORT}`);
   console.log(`   Claude: ${claude.isConfigured() ? `configured (${claude.MODEL})` : 'NOT configured — deterministic fallbacks active'}`);
 });
+
+module.exports = app;
