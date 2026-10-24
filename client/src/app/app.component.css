@@ -156,6 +156,7 @@
 
 /* Engine Health Status Chip */
 .uber-engine-chip {
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -193,6 +194,7 @@
 
 /* Uber Solid White Corporate Account Pill */
 .uber-company-pill {
+  white-space: nowrap;
   background-color: #FFFFFF;
   color: #000000;
   border: none;
