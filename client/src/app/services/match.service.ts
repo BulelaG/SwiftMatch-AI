@@ -16,7 +16,10 @@ export interface MatchRequest {
   providedIn: 'root'
 })
 export class MatchService {
-  private apiUrl = 'http://localhost:5050/api';
+  // Local dev talks to the server on :5050; any other host is the hosted build.
+  private apiUrl = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+    ? 'http://localhost:5050/api'
+    : 'https://swiftmatch-ai-api.onrender.com/api';
 
   constructor(private http: HttpClient) { }
 

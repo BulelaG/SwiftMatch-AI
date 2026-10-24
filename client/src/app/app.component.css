@@ -65,6 +65,7 @@
 }
 
 .uber-pill-btn {
+  text-decoration: none;
   background: transparent;
   color: #D1D1D1;
   border: none;

@@ -1,0 +1,22 @@
+# Render Blueprint — deploys the SwiftMatch AI matching engine as a persistent
+# Node web service (the on-device MiniLM embedding model needs a long-lived
+# process, which is why this is not a serverless function).
+#
+# Render dashboard › New › Blueprint › pick this repo. The ANTHROPIC_API_KEY
+# value is entered in the dashboard; without it the server runs deterministic
+# fallbacks (still fully functional for the demo).
+services:
+  - type: web
+    name: swiftmatch-ai-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm ci
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.18.0
+      - key: ANTHROPIC_API_KEY
+        sync: false
